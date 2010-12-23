@@ -1,0 +1,19 @@
+===================
+Mailman REST client
+===================
+
+This is the official Python bindings for the GNU Mailman REST API.  In order
+to talk to Mailman, the engine's REST server must be running.  You begin by
+instantiating a client object to access the root of the REST hierarchy,
+providing it the base URL, user name and password (for Basic Auth).
+
+    >>> from mailman.client import Client
+    >>> client = Client('http://localhost:8001/3.0', 'restadmin', 'restpass')
+
+We can retrieve basic information about the server.
+
+    >>> dump(client.system)
+    http_etag: "..."
+    mailman_version: GNU Mailman 3.0... (...)
+    python_version: ...
+    self_link: http://localhost:8001/3.0/system

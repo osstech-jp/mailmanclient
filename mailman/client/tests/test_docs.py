@@ -44,6 +44,22 @@ DOCTEST_FLAGS = (
 
 
 
+def dump(results):
+    if results is None:
+        print None
+        return
+    for key in sorted(results):
+        if key == 'entries':
+            for i, entry in enumerate(results[key]):
+                # entry is a dictionary.
+                print 'entry %d:' % i
+                for entry_key in sorted(entry):
+                    print '    {0}: {1}'.format(entry_key, entry[entry_key])
+        else:
+            print '{0}: {1}'.format(key, results[key])
+
+
+
 def stop():
     """Call into pdb.set_trace()"""
     # Do the import here so that you get the wacky special hacked pdb instead
@@ -64,6 +80,7 @@ def setup(testobj):
     except NameError:
         pass
     testobj.globs['stop'] = stop
+    testobj.globs['dump'] = dump
 
 
 def teardown(testobj):

@@ -17,3 +17,35 @@ We can retrieve basic information about the server.
     mailman_version: GNU Mailman 3.0... (...)
     python_version: ...
     self_link: http://localhost:8001/3.0/system
+
+To start with, there are no known mailing lists.
+
+    >>> client.lists
+    []
+
+
+Domains
+=======
+
+Before new mailing lists can be added, the domain that the list will live in
+must be added.  By default, there are no known domains.
+
+    >>> client.domains
+    []
+
+It's easy to create a new domain, and when you do, a proxy object for that
+domain is returned.
+
+    >>> example_dot_com = client.create_domain('example.com')
+    >>> example_dot_com
+    <Domain "example.com">
+    >>> print example_dot_com.base_url
+    http://example.com
+    >>> print example_dot_com.contact_address
+    postmaster@example.com
+    >>> print example_dot_com.description
+    None
+    >>> print example_dot_com.email_host
+    example.com
+    >>> print example_dot_com.url_host
+    example.com

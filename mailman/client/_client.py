@@ -28,6 +28,7 @@ import json
 
 from base64 import b64encode
 from httplib2 import Http
+from operator import itemgetter
 from urllib import urlencode
 from urllib2 import HTTPError
 from urlparse import urljoin
@@ -81,11 +82,10 @@ class _Connection:
         """
         headers = {
             'User-Agent': 'GNU Mailman REST client v{0}'.format(__version__),
-            'Accept': 'text/plain',
             }
         if data is not None:
             data = urlencode(data, doseq=True)
-            headers['Content-Type'] = 'application/x-www-form-urlencode'
+            headers['Content-Type'] = 'application/x-www-form-urlencoded'
         if method is None:
             if data is None:
                 method = 'GET'
@@ -101,10 +101,10 @@ class _Connection:
         if response.status // 100 != 2:
             raise HTTPError(url, response.status, content, response, None)
         if len(content) == 0:
-            return None
+            return response, None
         # XXX Work around for http://bugs.python.org/issue10038
         content = unicode(content)
-        return json.loads(content)
+        return response, json.loads(content)
 
 
 
@@ -128,4 +128,46 @@ class Client:
 
     @property
     def system(self):
-        return self._connection.call('system')
+        return self._connection.call('system')[1]
+
+    @property
+    def lists(self):
+        response, content = self._connection.call('lists')
+        if 'entries' not in content:
+            return []
+        return sorted(content['entries'], key=itemgetter('fqdn_listname'))
+
+    @property
+    def domains(self):
+        response, content = self._connection.call('domains')
+        if 'entries' not in content:
+            return []
+        return sorted(content['entries'], key=itemgetter('url_host'))
+
+    def create_domain(self, email_host, base_url=None,
+                      description=None, contact_address=None):
+        data = dict(email_host=email_host)
+        if base_url is not None:
+            data['base_url'] = base_url
+        if description is not None:
+            data['description'] = description
+        if contact_address is not None:
+            data['contact_address'] = contact_address
+        response, content = self._connection.call('domains', data)
+        return _Domain(self._connection, response['location'])
+
+
+
+class _Domain:
+    def __init__(self, connection, url):
+        self._connection = connection
+        self._url = url
+        response, content = self._connection.call(url)
+        self.base_url = content['base_url']
+        self.contact_address = content['contact_address']
+        self.description = content['description']
+        self.email_host = content['email_host']
+        self.url_host = content['url_host']
+
+    def __repr__(self):
+        return '<Domain "{0}">'.format(self.email_host)

@@ -156,6 +156,11 @@ class Client:
         response, content = self._connection.call('domains', data)
         return _Domain(self._connection, response['location'])
 
+    def get_domain(self, email_host):
+        response, content = self._connection.call(
+            'domains/{0}'.format(email_host))
+        return _Domain(self._connection, content['self_link'])
+
 
 
 class _Domain:

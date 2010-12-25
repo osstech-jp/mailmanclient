@@ -26,9 +26,13 @@ __all__ = [
 
 
 import os
+import time
 import atexit
+import shutil
 import doctest
+import tempfile
 import unittest
+import subprocess
 
 # pylint: disable-msg=F0401
 from pkg_resources import (
@@ -71,6 +75,26 @@ def stop():
 
 def setup(testobj):
     """Test setup."""
+    # Create a unique database for the running version of Mailman, then start
+    # it up.  It should not yet be running.  This environment variable must be
+    # set to find the installation of Mailman we can run.  Yes, this should be
+    # fixed.
+    testobj._bindir = os.environ.get('MAILMAN_TEST_BINDIR')
+    if testobj._bindir is None:
+        raise RuntimeError('Must set $MAILMAN_TEST_BINDIR to run tests')
+    vardir = testobj._vardir = tempfile.mkdtemp()
+    cfgfile = testobj._cfgfile = os.path.join(vardir, 'client_test.cfg')
+    with open(cfgfile, 'w') as fp:
+        print >> fp, """\
+[mailman]
+layout: tmpdir
+[paths.tmpdir]
+var_dir: {vardir}
+log_dir: /tmp/mmclient/logs
+""".format(vardir=vardir)
+    mailman = os.path.join(testobj._bindir, 'mailman')
+    subprocess.call([mailman, '-C', cfgfile, 'start', '-q'])
+    time.sleep(5)
     # Make sure future statements in our doctests match the Python code.  When
     # run with 2to3, the future import gets removed and these names are not
     # defined.
@@ -85,7 +109,10 @@ def setup(testobj):
 
 def teardown(testobj):
     """Test teardown."""
-    pass
+    mailman = os.path.join(testobj._bindir, 'mailman')
+    subprocess.call([mailman, '-C', testobj._cfgfile, 'stop', '-q'])
+    shutil.rmtree(testobj._vardir)
+    time.sleep(5)
 
 
 

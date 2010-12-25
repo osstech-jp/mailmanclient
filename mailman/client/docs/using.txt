@@ -64,3 +64,57 @@ But you cannot retrieve a non-existent domain.
     Traceback (most recent call last):
     ...
     HTTPError: HTTP Error 404: 404 Not Found
+
+After creating a few more domains, we can print the list of all domains.
+
+    >>> client.create_domain('example.net')
+    <Domain "example.net">
+    >>> client.create_domain('example.org')
+    <Domain "example.org">
+    >>> for email_host in client.domains:
+    ...     print email_host
+    <Domain "example.com">
+    <Domain "example.net">
+    <Domain "example.org">
+
+
+Mailing lists
+=============
+
+Once you have a domain, you can create mailing lists in that domain.
+
+    >>> test_one = example.create_list('test-one')
+    >>> test_one
+    <List "test-one@example.com">
+    >>> print test_one.fqdn_listname
+    test-one@example.com
+    >>> print test_one.host_name
+    example.com
+    >>> print test_one.list_name
+    test-one
+    >>> print test_one.real_name
+    Test-one
+
+You can also retrieve the mailing list after the fact.
+
+    >>> my_list = client.get_list('test-one@example.com')
+    >>> my_list
+    <List "test-one@example.com">
+
+And you can print all the known mailing lists.
+::
+
+    >>> example.create_list('test-two')
+    <List "test-two@example.com">
+    >>> domain = client.get_domain('example.net')
+    >>> domain.create_list('test-three')
+    <List "test-three@example.net">
+    >>> example.create_list('test-three')
+    <List "test-three@example.com">
+    
+    >>> for mlist in client.lists:
+    ...     print mlist
+    <List "test-one@example.com">
+    <List "test-three@example.com">
+    <List "test-three@example.net">
+    <List "test-two@example.com">

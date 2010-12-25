@@ -135,14 +135,18 @@ class Client:
         response, content = self._connection.call('lists')
         if 'entries' not in content:
             return []
-        return sorted(content['entries'], key=itemgetter('fqdn_listname'))
+        return [_List(self._connection, entry['self_link'])
+                for entry in sorted (content['entries'],
+                                     key=itemgetter('fqdn_listname'))]
 
     @property
     def domains(self):
         response, content = self._connection.call('domains')
         if 'entries' not in content:
             return []
-        return sorted(content['entries'], key=itemgetter('url_host'))
+        return [_Domain(self._connection, entry['self_link'])
+                for entry in sorted(content['entries'],
+                                    key=itemgetter('url_host'))]
 
     def create_domain(self, email_host, base_url=None,
                       description=None, contact_address=None):
@@ -161,18 +165,90 @@ class Client:
             'domains/{0}'.format(email_host))
         return _Domain(self._connection, content['self_link'])
 
+    def get_list(self, fqdn_listname):
+        response, content = self._connection.call(
+            'lists/{0}'.format(fqdn_listname))
+        return _List(self._connection, content['self_link'])
+
 
 
 class _Domain:
     def __init__(self, connection, url):
         self._connection = connection
         self._url = url
-        response, content = self._connection.call(url)
-        self.base_url = content['base_url']
-        self.contact_address = content['contact_address']
-        self.description = content['description']
-        self.email_host = content['email_host']
-        self.url_host = content['url_host']
+        self._info = None
 
     def __repr__(self):
         return '<Domain "{0}">'.format(self.email_host)
+
+    def _get_info(self):
+        if self._info is None:
+            response, content = self._connection.call(self._url)
+            self._info = content
+
+    @property
+    def base_url(self):
+        self._get_info()
+        return self._info['base_url']
+
+    @property
+    def contact_address(self):
+        self._get_info()
+        return self._info['contact_address']
+
+    @property
+    def description(self):
+        self._get_info()
+        return self._info['description']
+
+    @property
+    def email_host(self):
+        self._get_info()
+        return self._info['email_host']
+
+    @property
+    def url_host(self):
+        self._get_info()
+        return self._info['url_host']
+
+    def create_list(self, list_name):
+        fqdn_listname = '{0}@{1}'.format(list_name, self.email_host)
+        response, content = self._connection.call(
+            'lists', dict(fqdn_listname=fqdn_listname))
+        return _List(self._connection, response['location'])
+
+
+
+class _List:
+    def __init__(self, connection, url):
+        self._connection = connection
+        self._url = url
+        self._info = None
+
+    def __repr__(self):
+        return '<List "{0}">'.format(self.fqdn_listname)
+
+    def _get_info(self):
+        if self._info is None:
+            response, content = self._connection.call(self._url)
+            self._info = content
+
+    @property
+    def fqdn_listname(self):
+        self._get_info()
+        return self._info['fqdn_listname']
+
+    @property
+    def host_name(self):
+        self._get_info()
+        return self._info['host_name']
+
+    @property
+    def list_name(self):
+        self._get_info()
+        return self._info['list_name']
+
+    @property
+    def real_name(self):
+        self._get_info()
+        return self._info['real_name']

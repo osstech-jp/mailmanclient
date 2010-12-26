@@ -282,6 +282,16 @@ class _List:
                 for entry in sorted(content['entries'],
                                     key=itemgetter('address'))]
 
+    def get_member(self, address):
+        """Get a membership.
+
+        :param address: The email address of the member for this list.
+        :return: A member proxy object.
+        """
+        response, content = self._connection.call(
+            'lists/{0}/member/{1}'.format(self.fqdn_listname, address))
+        return _Member(self._connection, content['self_link'])
+
     def subscribe(self, address, real_name=None):
         """Subscribe an email address to a mailing list.
 
@@ -289,6 +299,7 @@ class _List:
         :type address: str
         :param real_name: The real name of the new member.
         :type real_name: str
+        :return: A member proxy object.
         """
         data = dict(
             fqdn_listname=self.fqdn_listname,
@@ -297,6 +308,15 @@ class _List:
             )
         response, content = self._connection.call('members', data)
         return _Member(self._connection, response['location'])
+
+    def unsubscribe(self, address):
+        """Unsubscribe an email address from a mailing list.
+
+        :param address: The address to unsubscribe.
+        """
+        self._connection.call(
+            'lists/{0}/member/{1}'.format(self.fqdn_listname, address),
+            method='DELETE')
 
 
 
@@ -324,3 +344,12 @@ class _Member:
     def address(self):
         self._get_info()
         return self._info['address']
+
+    def unsubscribe(self):
+        """Unsubscribe the member from a mailing list.
+
+        :param address: The address to unsubscribe.
+        """
+        self._connection.call(
+            'lists/{0}/member/{1}'.format(self.fqdn_listname, self.address),
+            method='DELETE')

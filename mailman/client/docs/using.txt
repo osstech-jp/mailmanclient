@@ -164,3 +164,27 @@ We can also view the memberships for a single mailing list.
     ...     print member
     <Member "anna@example.com" on "test-one@example.com">
     <Member "bill@example.com" on "test-one@example.com">
+
+We can get a single membership too.
+
+    >>> cris = test_two.get_member('cris@example.com')
+    >>> cris
+    <Member "cris@example.com" on "test-two@example.com">
+
+After a while, Anna decides to unsubscribe from the Test One mailing list,
+though she keeps her Test Two membership active.
+
+    >>> test_one.unsubscribe('anna@example.com')
+    >>> for member in client.members:
+    ...     print member
+    <Member "bill@example.com" on "test-one@example.com">
+    <Member "anna@example.com" on "test-two@example.com">
+    <Member "cris@example.com" on "test-two@example.com">
+
+A little later, Cris decides to unsubscribe from the Test Two mailing list.
+
+    >>> cris.unsubscribe()
+    >>> for member in client.members:
+    ...     print member
+    <Member "bill@example.com" on "test-one@example.com">
+    <Member "anna@example.com" on "test-two@example.com">

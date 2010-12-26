@@ -91,10 +91,32 @@ layout: tmpdir
 [paths.tmpdir]
 var_dir: {vardir}
 log_dir: /tmp/mmclient/logs
+[qrunner.archive]
+start: no
+[qrunner.bounces]
+start: no
+[qrunner.command]
+start: no
+[qrunner.in]
+start: no
+[qrunner.lmtp]
+start: no
+[qrunner.news]
+start: no
+[qrunner.out]
+start: no
+[qrunner.pipeline]
+start: no
+[qrunner.retry]
+start: no
+[qrunner.virgin]
+start: no
+[qrunner.digest]
+start: no
 """.format(vardir=vardir)
     mailman = os.path.join(testobj._bindir, 'mailman')
     subprocess.call([mailman, '-C', cfgfile, 'start', '-q'])
-    time.sleep(5)
+    time.sleep(3)
     # Make sure future statements in our doctests match the Python code.  When
     # run with 2to3, the future import gets removed and these names are not
     # defined.
@@ -112,7 +134,7 @@ def teardown(testobj):
     mailman = os.path.join(testobj._bindir, 'mailman')
     subprocess.call([mailman, '-C', testobj._cfgfile, 'stop', '-q'])
     shutil.rmtree(testobj._vardir)
-    time.sleep(5)
+    time.sleep(3)
 
 
 

@@ -111,10 +111,49 @@ And you can print all the known mailing lists.
     <List "test-three@example.net">
     >>> example.create_list('test-three')
     <List "test-three@example.com">
-    
+
     >>> for mlist in client.lists:
     ...     print mlist
     <List "test-one@example.com">
     <List "test-three@example.com">
     <List "test-three@example.net">
     <List "test-two@example.com">
+
+
+Membership
+==========
+
+Email addresses can subscribe to existing mailing lists, becoming members of
+that list.  The address is a unique id for a specific user in the system, and
+a member is a user that is subscribed to a mailing list.  Email addresses need
+not be pre-registered, though the auto-registered user will be unique for each
+email address.
+
+The system starts out with no members.
+
+    >>> client.members
+    []
+
+New members can be easily added; users are automatically registered.
+::
+
+    >>> test_two = client.get_list('test-two@example.com')
+
+    >>> test_one.subscribe('anna@example.com', 'Anna')
+    <Member "anna@example.com" on "test-one@example.com">
+    >>> test_one.subscribe('bill@example.com', 'Bill')
+    <Member "bill@example.com" on "test-one@example.com">
+    >>> test_two.subscribe('anna@example.com')
+    <Member "anna@example.com" on "test-two@example.com">
+    >>> test_two.subscribe('cris@example.com', 'Cris')
+    <Member "cris@example.com" on "test-two@example.com">
+
+We can retrieve all known memberships.  These are sorted first by mailing list
+name, then by email address.
+
+    >>> for member in client.members:
+    ...     print member
+    <Member "anna@example.com" on "test-one@example.com">
+    <Member "bill@example.com" on "test-one@example.com">
+    <Member "anna@example.com" on "test-two@example.com">
+    <Member "cris@example.com" on "test-two@example.com">

@@ -38,6 +38,16 @@ from mailman.client import __version__
 
 
 
+def _member_key(member_dict):
+    """Return the keys for sorting a member.
+
+    :param member_dict: The JSON dictionary for a member.
+    :return: 2-tuple of (fqdn_listname, address)
+    """
+    return (member_dict['fqdn_listname'], member_dict['address'])
+
+
+
 class _Connection:
     """A connection to the REST client."""
 
@@ -148,6 +158,15 @@ class Client:
                 for entry in sorted(content['entries'],
                                     key=itemgetter('url_host'))]
 
+    @property
+    def members(self):
+        response, content = self._connection.call('members')
+        if 'entries' not in content:
+            return []
+        return [_Member(self._connection, entry['self_link'])
+                for entry in sorted(content['entries'],
+                                    key=_member_key)]
+
     def create_domain(self, email_host, base_url=None,
                       description=None, contact_address=None):
         data = dict(email_host=email_host)
@@ -252,3 +271,46 @@ class _List:
     def real_name(self):
         self._get_info()
         return self._info['real_name']
+
+    def subscribe(self, address, real_name=None):
+        """Subscribe an email address to a mailing list.
+
+        :param address: Email address to subscribe to the list.
+        :type address: str
+        :param real_name: The real name of the new member.
+        :type real_name: str
+        """
+        data = dict(
+            fqdn_listname=self.fqdn_listname,
+            address=address,
+            real_name=real_name,
+            )
+        response, content = self._connection.call('members', data)
+        return _Member(self._connection, response['location'])
+
+
+
+class _Member:
+    def __init__(self, connection, url):
+        self._connection = connection
+        self._url = url
+        self._info = None
+
+    def __repr__(self):
+        return '<Member "{0}" on "{1}">'.format(
+            self.address, self.fqdn_listname)
+
+    def _get_info(self):
+        if self._info is None:
+            response, content = self._connection.call(self._url)
+            self._info = content
+
+    @property
+    def fqdn_listname(self):
+        self._get_info()
+        return self._info['fqdn_listname']
+
+    @property
+    def address(self):
+        self._get_info()
+        return self._info['address']

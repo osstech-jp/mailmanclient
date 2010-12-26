@@ -50,5 +50,11 @@ See the Launchpad project page for access to the Bazaar branch, bug report,
 etc.
 
 
+Acknowledgements
+================
+
+Many thanks to Florian Fuchs for his contribution of an initial REST client.
+
+
 .. _`Cheese Shop`: http://pypi.python.org/mailman.client
 .. _Launchpad: https://launchpad.net/mailman.client

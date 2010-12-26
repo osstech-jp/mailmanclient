@@ -157,3 +157,10 @@ name, then by email address.
     <Member "bill@example.com" on "test-one@example.com">
     <Member "anna@example.com" on "test-two@example.com">
     <Member "cris@example.com" on "test-two@example.com">
+
+We can also view the memberships for a single mailing list.
+
+    >>> for member in test_one.members:
+    ...     print member
+    <Member "anna@example.com" on "test-one@example.com">
+    <Member "bill@example.com" on "test-one@example.com">

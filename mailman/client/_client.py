@@ -272,6 +272,16 @@ class _List:
         self._get_info()
         return self._info['real_name']
 
+    @property
+    def members(self):
+        response, content = self._connection.call(
+            'lists/{0}/roster/members'.format(self.fqdn_listname))
+        if 'entries' not in content:
+            return []
+        return [_Member(self._connection, entry['self_link'])
+                for entry in sorted(content['entries'],
+                                    key=itemgetter('address'))]
+
     def subscribe(self, address, real_name=None):
         """Subscribe an email address to a mailing list.
 

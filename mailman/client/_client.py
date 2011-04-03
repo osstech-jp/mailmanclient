@@ -189,6 +189,10 @@ class Client:
             'lists/{0}'.format(fqdn_listname))
         return _List(self._connection, content['self_link'])
 
+    def delete_list(self, fqdn_listname):
+        response, content = self._connection.call(
+            'lists/{0}'.format(fqdn_listname), None, 'DELETE')
+
 
 
 class _Domain:
@@ -282,6 +286,11 @@ class _List:
                 for entry in sorted(content['entries'],
                                     key=itemgetter('address'))]
 
+    @property
+    def settings(self):
+        return _Settings(self._connection,
+            'lists/{0}/config'.format(self.fqdn_listname))
+
     def get_member(self, address):
         """Get a membership.
 
@@ -318,6 +327,10 @@ class _List:
             'lists/{0}/member/{1}'.format(self.fqdn_listname, address),
             method='DELETE')
 
+    def delete(self):
+        response, content = self._connection.call(
+            'lists/{0}'.format(self.fqdn_listname), None, 'DELETE')
+
 
 
 class _Member:
@@ -353,3 +366,50 @@ class _Member:
         self._connection.call(
             'lists/{0}/member/{1}'.format(self.fqdn_listname, self.address),
             method='DELETE')
+
+
+READ_ONLY_ATTRS = ('bounces_address', 'created_at', 'digest_last_sent_at',
+                   'fqdn_listname', 'http_etag', 'host_name', 'join_address',
+                   'last_post_at', 'leave_address', 'list_id', 'list_name',
+                   'next_digest_number', 'no_reply_address', 'owner_address',
+                   'post_id', 'posting_address', 'request_address', 'scheme',
+                   'volume', 'web_host',)
+
+
+class _Settings():
+    def __init__(self, connection, url):
+        self._connection = connection
+        self._url = url
+        self._info = None
+        self._get_info()
+
+    def __repr__(self):
+        return repr(self._info)
+
+    def _get_info(self):
+        if self._info is None:
+            response, content = self._connection.call(self._url)
+            self._info = content
+
+    def __iter__(self):
+        for key in self._info.keys():
+            yield key
+
+    def __getitem__(self, key):
+        return self._info[key]
+
+    def __setitem__(self, key, value):
+        self._info[key] = value
+
+    def __len__(self):
+        return len(self._info)
+
+    def save(self):
+        data = {}
+        for attribute, value in self._info.items():
+            if attribute not in READ_ONLY_ATTRS:
+                data[attribute] = value
+        response, content = self._connection.call(self._url, data, 'PATCH')
+
+
+

@@ -119,6 +119,20 @@ And you can print all the known mailing lists.
     <List "test-three@example.net">
     <List "test-two@example.com">
 
+You can use a list instance to delete the list.
+
+    >>> test_three = client.get_list('test-three@example.net')
+    >>> test_three.delete()
+
+You can also delete a list using the client instance's delete_list method.
+
+    >>> client.delete_list('test-three@example.com')
+
+    >>> for mlist in client.lists:
+    ...     print mlist
+    <List "test-one@example.com">
+    <List "test-two@example.com">
+
 
 Membership
 ==========
@@ -188,3 +202,42 @@ A little later, Cris decides to unsubscribe from the Test Two mailing list.
     ...     print member
     <Member "bill@example.com" on "test-one@example.com">
     <Member "anna@example.com" on "test-two@example.com">
+
+
+List Settings
+=============
+
+We can get all list settings via a lists settings attribute. A proxy object for the settings is returned which behaves much like a dictionary.
+
+    >>> settings = test_one.settings
+    >>> len(settings)
+    48
+
+    >>> for attr in sorted(settings):
+    ...     print attr + ': ' + str(settings[attr])
+    acceptable_aliases: []
+    ...
+    welcome_msg:
+
+    >>> settings['real_name']
+    u'Test-one'
+
+We can access all valid list settings as attributes.
+
+    >>> settings['fqdn_listname']
+    u'test-one@example.com'
+    >>> settings['description']
+    u''
+
+    >>> settings['description'] = u'A very meaningful description.'
+    >>> settings['real_name'] = u'Test Numero Uno'
+
+    >>> settings.save()
+
+    >>> settings_new = test_one.settings
+    >>> settings_new['description']
+    u'A very meaningful description.'
+    >>> settings_new['real_name']
+    u'Test Numero Uno'
+
+

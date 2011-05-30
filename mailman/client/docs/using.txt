@@ -184,6 +184,19 @@ We can get a single membership too.
     >>> cris = test_two.get_member('cris@example.com')
     >>> cris
     <Member "cris@example.com" on "test-two@example.com">
+    >>> print cris.role
+    member
+    >>> print cris.self_link
+    http://localhost:8001/3.0/members/4
+    >>> print cris.user
+    http://localhost:8001/3.0/users/3
+
+If you use an address which is not a member of test_two `ValueError` is raised:
+
+    >>> test_two.unsubscribe('nomember@example.com')
+    Traceback (most recent call last):
+    ...
+    ValueError: nomember@example.com is not a member address of test-two@example.com
 
 After a while, Anna decides to unsubscribe from the Test One mailing list,
 though she keeps her Test Two membership active.
@@ -203,6 +216,13 @@ A little later, Cris decides to unsubscribe from the Test Two mailing list.
     <Member "bill@example.com" on "test-one@example.com">
     <Member "anna@example.com" on "test-two@example.com">
 
+If you try to unsubscribe an address which is not a member address `ValueError` is raised:
+
+    >>> test_one.unsubscribe('nomember@example.com')
+    Traceback (most recent call last):
+    ...
+    ValueError: nomember@example.com is not a member address of test-one@example.com
+
 
 List Settings
 =============
@@ -219,15 +239,14 @@ We can get all list settings via a lists settings attribute. A proxy object for 
     ...
     welcome_msg:
 
-    >>> settings['real_name']
-    u'Test-one'
+    >>> print settings['real_name']
+    Test-one
 
 We can access all valid list settings as attributes.
 
     >>> settings['fqdn_listname']
     u'test-one@example.com'
-    >>> settings['description']
-    u''
+    >>> print settings['description']
 
     >>> settings['description'] = u'A very meaningful description.'
     >>> settings['real_name'] = u'Test Numero Uno'
@@ -235,9 +254,9 @@ We can access all valid list settings as attributes.
     >>> settings.save()
 
     >>> settings_new = test_one.settings
-    >>> settings_new['description']
-    u'A very meaningful description.'
-    >>> settings_new['real_name']
-    u'Test Numero Uno'
+    >>> print settings_new['description']
+    A very meaningful description.
+    >>> print settings_new['real_name']
+    Test Numero Uno
 
 

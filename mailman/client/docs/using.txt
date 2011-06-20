@@ -244,12 +244,12 @@ We can get all list settings via a lists settings attribute. A proxy object for 
 
 We can access all valid list settings as attributes.
 
-    >>> settings['fqdn_listname']
-    u'test-one@example.com'
+    >>> print settings['fqdn_listname']
+    test-one@example.com
     >>> print settings['description']
 
-    >>> settings['description'] = u'A very meaningful description.'
-    >>> settings['real_name'] = u'Test Numero Uno'
+    >>> settings['description'] = 'A very meaningful description.'
+    >>> settings['real_name'] = 'Test Numero Uno'
 
     >>> settings.save()
 

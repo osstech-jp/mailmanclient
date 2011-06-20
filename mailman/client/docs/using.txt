@@ -119,6 +119,20 @@ And you can print all the known mailing lists.
     <List "test-three@example.net">
     <List "test-two@example.com">
 
+You can use a list instance to delete the list.
+
+    >>> test_three = client.get_list('test-three@example.net')
+    >>> test_three.delete()
+
+You can also delete a list using the client instance's delete_list method.
+
+    >>> client.delete_list('test-three@example.com')
+
+    >>> for mlist in client.lists:
+    ...     print mlist
+    <List "test-one@example.com">
+    <List "test-two@example.com">
+
 
 Membership
 ==========
@@ -170,6 +184,19 @@ We can get a single membership too.
     >>> cris = test_two.get_member('cris@example.com')
     >>> cris
     <Member "cris@example.com" on "test-two@example.com">
+    >>> print cris.role
+    member
+    >>> print cris.self_link
+    http://localhost:8001/3.0/members/4
+    >>> print cris.user
+    http://localhost:8001/3.0/users/3
+
+If you use an address which is not a member of test_two `ValueError` is raised:
+
+    >>> test_two.unsubscribe('nomember@example.com')
+    Traceback (most recent call last):
+    ...
+    ValueError: nomember@example.com is not a member address of test-two@example.com
 
 After a while, Anna decides to unsubscribe from the Test One mailing list,
 though she keeps her Test Two membership active.
@@ -188,3 +215,48 @@ A little later, Cris decides to unsubscribe from the Test Two mailing list.
     ...     print member
     <Member "bill@example.com" on "test-one@example.com">
     <Member "anna@example.com" on "test-two@example.com">
+
+If you try to unsubscribe an address which is not a member address `ValueError` is raised:
+
+    >>> test_one.unsubscribe('nomember@example.com')
+    Traceback (most recent call last):
+    ...
+    ValueError: nomember@example.com is not a member address of test-one@example.com
+
+
+List Settings
+=============
+
+We can get all list settings via a lists settings attribute. A proxy object for the settings is returned which behaves much like a dictionary.
+
+    >>> settings = test_one.settings
+    >>> len(settings)
+    48
+
+    >>> for attr in sorted(settings):
+    ...     print attr + ': ' + str(settings[attr])
+    acceptable_aliases: []
+    ...
+    welcome_msg:
+
+    >>> print settings['real_name']
+    Test-one
+
+We can access all valid list settings as attributes.
+
+    >>> print settings['fqdn_listname']
+    test-one@example.com
+    >>> print settings['description']
+
+    >>> settings['description'] = 'A very meaningful description.'
+    >>> settings['real_name'] = 'Test Numero Uno'
+
+    >>> settings.save()
+
+    >>> settings_new = test_one.settings
+    >>> print settings_new['description']
+    A very meaningful description.
+    >>> print settings_new['real_name']
+    Test Numero Uno
+
+

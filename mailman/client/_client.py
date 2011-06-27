@@ -179,7 +179,7 @@ class Client:
         response, content = self._connection.call('domains', data)
         return _Domain(self._connection, response['location'])
 
-    def get_domain(self, email_host, web_host=""):
+    def get_domain(self, email_host, web_host=None):
     """
     get domain by it's email_host, to use web_host instead pass None instead of email_host
     """

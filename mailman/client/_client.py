@@ -180,18 +180,18 @@ class Client:
         return _Domain(self._connection, response['location'])
 
     def get_domain(self, email_host, web_host=None):
-    """
-    get domain by it's email_host, to use web_host instead pass None instead of email_host
-    """
+        """
+        get domain by it's email_host, to use web_host instead pass None instead of email_host
+        """
         if email_host:
-            response, content = self._connection.call(
-                'domains/{0}'.format(email_host))
+            response, content = self._connection.call('domains/{0}'.format(email_host))
             return _Domain(self._connection, content['self_link'])
-        elif web_host:    
+        if web_host:    
             for domain in self.domains:
-                if domain.url_host == web_host: #todo a8 rename to web_host
+                if domain.base_url == web_host: #todo a8 rename to web_host
                     return domain
-                
+            return self.get_domain("no-domain")
+                    
 
     def get_list(self, fqdn_listname):
         response, content = self._connection.call(
@@ -219,7 +219,7 @@ class _Domain:
             self._info = content
 
     @property
-    def base_url(self):
+    def base_url(self):#TODO a8 web_host
         self._get_info()
         return self._info['base_url']
 
@@ -239,7 +239,7 @@ class _Domain:
         return self._info['email_host']
 
     @property
-    def url_host(self):#TODO a8 web_host
+    def url_host(self):
         self._get_info()
         return self._info['url_host']
 

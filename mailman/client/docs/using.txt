@@ -50,9 +50,17 @@ is returned.
     >>> print example_dot_com.url_host
     example.com
 
-You can also get an existing domain independently.
+You can also get an existing domain independently using its mail host.
 
     >>> example = client.get_domain('example.com')
+    >>> example
+    <Domain "example.com">
+    >>> print example_dot_com.base_url
+    http://example.com
+    
+Additionally you can get an existing domain using its web host. 
+
+    >>> example = client.get_domain(None,'example.com')
     >>> example
     <Domain "example.com">
     >>> print example_dot_com.base_url

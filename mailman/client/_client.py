@@ -185,13 +185,13 @@ class Client:
             response, content = self._connection.call(
                 'domains/{0}'.format(email_host))
             return _Domain(self._connection, content['self_link'])
-        if web_host is not None:
+        elif web_host is not None:
             for domain in self.domains:
                 # note: `base_url` property will be renamed to `web_host`
                 # in Mailman3Alpha8
                 if domain.base_url == web_host:
                     return domain
-            return self.get_domain("no-domain")
+            return []
 
     def get_list(self, fqdn_listname):
         response, content = self._connection.call(

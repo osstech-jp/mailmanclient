@@ -60,7 +60,7 @@ You can also get an existing domain independently using its mail host.
     
 Additionally you can get an existing domain using its web host. 
 
-    >>> example = client.get_domain(None,'example.com')
+    >>> example = client.get_domain(web_host='http://example.com')
     >>> example
     <Domain "example.com">
     >>> print example_dot_com.base_url

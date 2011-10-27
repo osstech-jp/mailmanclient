@@ -134,6 +134,14 @@ And you can print all the known mailing lists.
     <List "test-three@example.com">
     <List "test-three@example.net">
     <List "test-two@example.com">
+    
+If you only want to know all lists for a specific domain, use the domain object.
+
+    >>> for mlist in example.lists:
+    ...     print mlist
+    <List "test-one@example.com">
+    <List "test-three@example.com">
+    <List "test-two@example.com">
 
 You can use a list instance to delete the list.
 

@@ -247,6 +247,16 @@ class _Domain:
         self._get_info()
         return self._info['url_host']
 
+    @property
+    def lists(self):
+        response, content = self._connection.call(
+            'domains/{0}/lists'.format(self.mail_host))
+        if 'entries' not in content:
+            return []
+        return [_List(self._connection, entry['self_link'])
+                for entry in sorted (content['entries'],
+                                     key=itemgetter('fqdn_listname'))]
+
     def create_list(self, list_name):
         fqdn_listname = '{0}@{1}'.format(list_name, self.mail_host)
         response, content = self._connection.call(

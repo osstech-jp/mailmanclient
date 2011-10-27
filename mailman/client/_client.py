@@ -117,7 +117,6 @@ class _Connection:
         return response, json.loads(content)
 
 
-
 class Client:
     """Access the Mailman REST API root."""
 
@@ -178,6 +177,9 @@ class Client:
             data['contact_address'] = contact_address
         response, content = self._connection.call('domains', data)
         return _Domain(self._connection, response['location'])
+
+    def delete_domain(self, mail_host):
+        response, content = self._connection.call('domains/{0}'.format(mail_host), None, 'DELETE')
 
     def get_domain(self, mail_host=None, web_host=None):
         """Get domain by its mail_host or its web_host."""
@@ -356,7 +358,6 @@ class _List:
             'lists/{0}'.format(self.fqdn_listname), None, 'DELETE')
 
 
-
 class _Member:
     def __init__(self, connection, url):
         self._connection = connection

@@ -84,6 +84,14 @@ After creating a few more domains, we can print the list of all domains.
     <Domain "example.com">
     <Domain "example.net">
     <Domain "example.org">
+    
+Also, domain can be deleted.
+
+    >>> client.delete_domain('example.org')
+    >>> for mail_host in client.domains:
+    ...     print mail_host
+    <Domain "example.com">
+    <Domain "example.net">
 
 
 Mailing lists

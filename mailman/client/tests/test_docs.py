@@ -91,27 +91,27 @@ layout: tmpdir
 [paths.tmpdir]
 var_dir: {vardir}
 log_dir: /tmp/mmclient/logs
-[qrunner.archive]
+[runner.archive]
 start: no
-[qrunner.bounces]
+[runner.bounces]
 start: no
-[qrunner.command]
+[runner.command]
 start: no
-[qrunner.in]
+[runner.in]
 start: no
-[qrunner.lmtp]
+[runner.lmtp]
 start: no
-[qrunner.news]
+[runner.news]
 start: no
-[qrunner.out]
+[runner.out]
 start: no
-[qrunner.pipeline]
+[runner.pipeline]
 start: no
-[qrunner.retry]
+[runner.retry]
 start: no
-[qrunner.virgin]
+[runner.virgin]
 start: no
-[qrunner.digest]
+[runner.digest]
 start: no
 """.format(vardir=vardir)
     mailman = os.path.join(testobj._bindir, 'mailman')

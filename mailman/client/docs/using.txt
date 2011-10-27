@@ -45,7 +45,7 @@ is returned.
     postmaster@example.com
     >>> print example_dot_com.description
     None
-    >>> print example_dot_com.email_host
+    >>> print example_dot_com.mail_host
     example.com
     >>> print example_dot_com.url_host
     example.com
@@ -79,8 +79,8 @@ After creating a few more domains, we can print the list of all domains.
     <Domain "example.net">
     >>> client.create_domain('example.org')
     <Domain "example.org">
-    >>> for email_host in client.domains:
-    ...     print email_host
+    >>> for mail_host in client.domains:
+    ...     print mail_host
     <Domain "example.com">
     <Domain "example.net">
     <Domain "example.org">
@@ -96,7 +96,7 @@ Once you have a domain, you can create mailing lists in that domain.
     <List "test-one@example.com">
     >>> print test_one.fqdn_listname
     test-one@example.com
-    >>> print test_one.host_name
+    >>> print test_one.mail_host
     example.com
     >>> print test_one.list_name
     test-one
@@ -195,9 +195,9 @@ We can get a single membership too.
     >>> print cris.role
     member
     >>> print cris.self_link
-    http://localhost:8001/3.0/members/4
+    http://localhost:8001/3.0/members/...
     >>> print cris.user
-    http://localhost:8001/3.0/users/3
+    http://localhost:8001/3.0/users/...
 
 If you use an address which is not a member of test_two `ValueError` is raised:
 

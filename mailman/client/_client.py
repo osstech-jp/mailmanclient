@@ -167,9 +167,9 @@ class Client:
                 for entry in sorted(content['entries'],
                                     key=_member_key)]
 
-    def create_domain(self, email_host, base_url=None,
+    def create_domain(self, mail_host, base_url=None,
                       description=None, contact_address=None):
-        data = dict(email_host=email_host)
+        data = dict(mail_host=mail_host)
         if base_url is not None:
             data['base_url'] = base_url
         if description is not None:
@@ -179,11 +179,11 @@ class Client:
         response, content = self._connection.call('domains', data)
         return _Domain(self._connection, response['location'])
 
-    def get_domain(self, email_host=None, web_host=None):
-        """Get domain by its email_host or its web_host."""
-        if email_host is not None:
+    def get_domain(self, mail_host=None, web_host=None):
+        """Get domain by its mail_host or its web_host."""
+        if mail_host is not None:
             response, content = self._connection.call(
-                'domains/{0}'.format(email_host))
+                'domains/{0}'.format(mail_host))
             return _Domain(self._connection, content['self_link'])
         elif web_host is not None:
             for domain in self.domains:
@@ -211,7 +211,7 @@ class _Domain:
         self._info = None
 
     def __repr__(self):
-        return '<Domain "{0}">'.format(self.email_host)
+        return '<Domain "{0}">'.format(self.mail_host)
 
     def _get_info(self):
         if self._info is None:
@@ -236,9 +236,9 @@ class _Domain:
         return self._info['description']
 
     @property
-    def email_host(self):
+    def mail_host(self):
         self._get_info()
-        return self._info['email_host']
+        return self._info['mail_host']
 
     @property
     def url_host(self):
@@ -246,13 +246,12 @@ class _Domain:
         return self._info['url_host']
 
     def create_list(self, list_name):
-        fqdn_listname = '{0}@{1}'.format(list_name, self.email_host)
+        fqdn_listname = '{0}@{1}'.format(list_name, self.mail_host)
         response, content = self._connection.call(
             'lists', dict(fqdn_listname=fqdn_listname))
         return _List(self._connection, response['location'])
 
 
-
 class _List:
     def __init__(self, connection, url):
         self._connection = connection
@@ -273,9 +272,9 @@ class _List:
         return self._info['fqdn_listname']
 
     @property
-    def host_name(self):
+    def mail_host(self):
         self._get_info()
-        return self._info['host_name']
+        return self._info['mail_host']
 
     @property
     def list_name(self):
@@ -289,8 +288,8 @@ class _List:
 
     @property
     def members(self):
-        response, content = self._connection.call(
-            'lists/{0}/roster/members'.format(self.fqdn_listname))
+        data = dict(fqdn_listname=self.fqdn_listname)
+        response, content = self._connection.call('members/find', data)
         if 'entries' not in content:
             return []
         return [_Member(self._connection, entry['self_link'])
@@ -407,7 +406,7 @@ class _Member:
 
 
 READ_ONLY_ATTRS = ('bounces_address', 'created_at', 'digest_last_sent_at',
-                   'fqdn_listname', 'http_etag', 'host_name', 'join_address',
+                   'fqdn_listname', 'http_etag', 'mail_host', 'join_address',
                    'last_post_at', 'leave_address', 'list_id', 'list_name',
                    'next_digest_number', 'no_reply_address', 'owner_address',
                    'post_id', 'posting_address', 'request_address', 'scheme',

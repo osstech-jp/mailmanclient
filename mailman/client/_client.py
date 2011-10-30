@@ -47,7 +47,6 @@ def _member_key(member_dict):
     return (member_dict['fqdn_listname'], member_dict['address'])
 
 
-
 class _Connection:
     """A connection to the REST client."""
 
@@ -166,6 +165,15 @@ class Client:
                 for entry in sorted(content['entries'],
                                     key=_member_key)]
 
+    @property
+    def users(self):
+        response, content = self._connection.call('users')
+        if 'entries' not in content:
+            return []
+        return [_User(self._connection, entry['self_link'])
+                for entry in sorted(content['entries'],
+                                    key=itemgetter('real_name'))]
+
     def create_domain(self, mail_host, base_url=None,
                       description=None, contact_address=None):
         data = dict(mail_host=mail_host)
@@ -195,6 +203,11 @@ class Client:
                     return domain
             return []
 
+    def get_user(self, address):
+        response, content = self._connection.call(
+            'users/{0}'.format(address))
+        return _User(self._connection, content['self_link'])
+
     def get_list(self, fqdn_listname):
         response, content = self._connection.call(
             'lists/{0}'.format(fqdn_listname))
@@ -203,7 +216,6 @@ class Client:
     def delete_list(self, fqdn_listname):
         response, content = self._connection.call(
             'lists/{0}'.format(fqdn_listname), None, 'DELETE')
-
 
 
 class _Domain:
@@ -416,12 +428,61 @@ class _Member:
         self._connection.call(self.self_link, method='DELETE')
 
 
-READ_ONLY_ATTRS = ('bounces_address', 'created_at', 'digest_last_sent_at',
-                   'fqdn_listname', 'http_etag', 'mail_host', 'join_address',
-                   'last_post_at', 'leave_address', 'list_id', 'list_name',
-                   'next_digest_number', 'no_reply_address', 'owner_address',
-                   'post_id', 'posting_address', 'request_address', 'scheme',
-                   'volume', 'web_host',)
+class _User:
+    def __init__(self, connection, url):
+        self._connection = connection
+        self._url = url
+        self._info = None
+        self._addresses = None
+
+    def __repr__(self):
+        return '<User "{0}" ({1})>'.format(
+            self.real_name, self.user_id)
+
+    def _get_info(self):
+        if self._info is None:
+            response, content = self._connection.call(self._url)
+            self._info = content
+
+    def _get_addresses(self):
+        if self._addresses is None:
+            response, content = self._connection.call('users/{0}/addresses'.format(self.user_id))
+            if 'entries' not in content:
+                self._addresses = []
+            self._addresses = content['entries']
+
+    @property
+    def addresses(self):
+        self._get_addresses()
+        return self._addresses
+    
+    @property
+    def real_name(self):
+        self._get_info()
+        return self._info['real_name']
+
+    @property
+    def user_id(self):
+        self._get_info()
+        return self._info['user_id']
+
+    @property
+    def created_on(self):
+        self._get_info()
+        return self._info['created_on']
+
+    @property
+    def self_link(self):
+        self._get_info()
+        return self._info['self_link']
+
+
+LIST_READ_ONLY_ATTRS = ('bounces_address', 'created_at', 'digest_last_sent_at',
+                        'fqdn_listname', 'http_etag', 'mail_host', 'join_address',
+                        'last_post_at', 'leave_address', 'list_id', 'list_name',
+                        'next_digest_number', 'no_reply_address', 'owner_address',
+                        'post_id', 'posting_address', 'request_address', 'scheme',
+                        'volume', 'web_host',)
 
 
 class _Settings():
@@ -455,7 +516,7 @@ class _Settings():
     def save(self):
         data = {}
         for attribute, value in self._info.items():
-            if attribute not in READ_ONLY_ATTRS:
+            if attribute not in LIST_READ_ONLY_ATTRS:
                 data[attribute] = value
         response, content = self._connection.call(self._url, data, 'PATCH')
 

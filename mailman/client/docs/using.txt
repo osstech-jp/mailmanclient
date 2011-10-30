@@ -248,6 +248,30 @@ If you try to unsubscribe an address which is not a member address `ValueError` 
     ValueError: nomember@example.com is not a member address of test-one@example.com
 
 
+Users
+=====
+
+Users are people with one or more list memberhips. To get a list of all users, access the clients user property.
+
+    >>> for user in client.users:
+    ...     print user
+    <User "Anna" (...)>
+    <User "Bill" (...)>
+    <User "Cris" (...)>
+
+A single user can be retrieved using their email address.
+
+    >>> cris = client.get_user('cris@example.com')
+    >>> print cris.real_name
+    Cris
+
+Every user has a list of one or more addresses.
+
+    >>> for address in cris.addresses:
+    ...     print address['email']
+    cris@example.com
+
+
 List Settings
 =============
 

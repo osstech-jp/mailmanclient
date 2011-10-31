@@ -139,6 +139,10 @@ class Client:
         return self._connection.call('system')[1]
 
     @property
+    def preferences(self):
+        return self._connection.call('system/preferences')[1]
+
+    @property
     def lists(self):
         response, content = self._connection.call('lists')
         if 'entries' not in content:
@@ -444,17 +448,9 @@ class _User:
             response, content = self._connection.call(self._url)
             self._info = content
 
-    def _get_addresses(self):
-        if self._addresses is None:
-            response, content = self._connection.call('users/{0}/addresses'.format(self.user_id))
-            if 'entries' not in content:
-                self._addresses = []
-            self._addresses = content['entries']
-
     @property
     def addresses(self):
-        self._get_addresses()
-        return self._addresses
+        return _Addresses(self._connection, self.user_id)
     
     @property
     def real_name(self):
@@ -475,6 +471,42 @@ class _User:
     def self_link(self):
         self._get_info()
         return self._info['self_link']
+
+
+class _Addresses:
+    def __init__(self, connection, user_id):
+        self._connection = connection
+        self._user_id = user_id
+        self._addresses = None
+        self._get_addresses()
+
+    def _get_addresses(self):
+        if self._addresses is None:
+            response, content = self._connection.call('users/{0}/addresses'.format(self._user_id))
+            if 'entries' not in content:
+                self._addresses = []
+            self._addresses = content['entries']
+
+    def __iter__(self):
+        for address in self._addresses:
+            yield _Address(self._connection, address)
+
+
+class _Address:
+    def __init__(self, connection, address):
+        self._connection = connection
+        self._address = address
+
+    def __repr__(self):
+        return self._address['email']
+
+    @property
+    def real_name(self):
+        return self._address['real_name']
+
+    @property
+    def registered_on(self):
+        return self._address['registered_on']
 
 
 LIST_READ_ONLY_ATTRS = ('bounces_address', 'created_at', 'digest_last_sent_at',
@@ -519,6 +551,5 @@ class _Settings():
             if attribute not in LIST_READ_ONLY_ATTRS:
                 data[attribute] = value
         response, content = self._connection.call(self._url, data, 'PATCH')
-
 
 

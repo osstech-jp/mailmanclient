@@ -205,7 +205,9 @@ class Client:
                 # in Mailman3Alpha8
                 if domain.base_url == web_host:
                     return domain
-            return []
+                    break
+            else:
+                return None
 
     def get_user(self, address):
         response, content = self._connection.call(

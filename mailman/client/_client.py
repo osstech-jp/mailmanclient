@@ -547,6 +547,12 @@ class _Settings():
     def __len__(self):
         return len(self._info)
 
+    def get(self, key, default=None):
+        try:
+            return self._info[key]
+        except KeyError:
+            return default
+
     def save(self):
         data = {}
         for attribute, value in self._info.items():

@@ -310,6 +310,11 @@ We can access all valid list settings as attributes.
     >>> print settings_new['real_name']
     Test Numero Uno
 
+The settings object also supports the `get` method of usual Python dictionaries:
+
+    >>> print settings_new.get('OhNoIForGotTheKey', 'HowGoodIPlacedOneUnderTheDoormat')
+    HowGoodIPlacedOneUnderTheDoormat
+
 
 Preferences
 ===========

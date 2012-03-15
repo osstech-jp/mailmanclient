@@ -333,7 +333,12 @@ class _List:
 
     @property
     def held(self):
-        return []
+        response, content = self._connection.call(
+            'lists/{0}/held'.format(self.fqdn_listname), None, 'GET')
+        if 'entries' not in content:
+            return []
+        else:
+            return content['entries']
 
     def get_member(self, address):
         """Get a membership.

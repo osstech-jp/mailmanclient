@@ -3,6 +3,8 @@ Mailman REST client
 ===================
 
     >>> import os
+    >>> import time
+    >>> import subprocess
 
 This is the official Python bindings for the GNU Mailman REST API.  In order
 to talk to Mailman, the engine's REST server must be running.  You begin by
@@ -345,12 +347,7 @@ By default, preferences are not set and fall back to the global system preferenc
 Moderation
 ==========
 
-    >>> mm_bindir = os.environ.get('MAILMAN_TEST_BINDIR')
-
 Messages held for moderation can be listed on a per list basis.
 
     >>> test_one.held
     []
-    
-
-    

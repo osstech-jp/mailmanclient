@@ -140,8 +140,7 @@ def teardown(testobj):
 
 def additional_tests():
     "Run the doc tests (README.txt and docs/*, if any exist)"
-    doctest_files = [
-        os.path.abspath(resource_filename('mailman.client', 'README.txt'))]
+    doctest_files = []
     if resource_exists('mailman.client', 'docs'):
         for name in resource_listdir('mailman.client', 'docs'):
             if name.endswith('.txt'):

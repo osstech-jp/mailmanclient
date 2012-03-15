@@ -2,6 +2,8 @@
 Mailman REST client
 ===================
 
+    >>> import os
+
 This is the official Python bindings for the GNU Mailman REST API.  In order
 to talk to Mailman, the engine's REST server must be running.  You begin by
 instantiating a client object to access the root of the REST hierarchy,
@@ -255,9 +257,9 @@ Users are people with one or more list memberhips. To get a list of all users, a
 
     >>> for user in client.users:
     ...     print user
-    <User "Anna" (...)>
-    <User "Bill" (...)>
-    <User "Cris" (...)>
+    <User "..." (...)>
+    <User "..." (...)>
+    <User "..." (...)>
 
 A single user can be retrieved using their email address.
 
@@ -282,13 +284,13 @@ We can get all list settings via a lists settings attribute. A proxy object for 
 
     >>> settings = test_one.settings
     >>> len(settings)
-    48
+    47
 
     >>> for attr in sorted(settings):
     ...     print attr + ': ' + str(settings[attr])
     acceptable_aliases: []
     ...
-    welcome_msg:
+    welcome_message_uri: mailman:///welcome.txt
 
     >>> print settings['real_name']
     Test-one
@@ -340,3 +342,15 @@ By default, preferences are not set and fall back to the global system preferenc
     True
 
 
+Moderation
+==========
+
+    >>> mm_bindir = os.environ.get('MAILMAN_TEST_BINDIR')
+
+Messages held for moderation can be listed on a per list basis.
+
+    >>> test_one.held
+    []
+    
+
+    

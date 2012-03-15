@@ -176,7 +176,7 @@ class Client:
             return []
         return [_User(self._connection, entry['self_link'])
                 for entry in sorted(content['entries'],
-                                    key=itemgetter('real_name'))]
+                                    key=itemgetter('self_link'))]
 
     def create_domain(self, mail_host, base_url=None,
                       description=None, contact_address=None):
@@ -314,7 +314,7 @@ class _List:
     @property
     def real_name(self):
         self._get_info()
-        return self._info['real_name']
+        return self._info.get('real_name')
 
     @property
     def members(self):
@@ -330,6 +330,10 @@ class _List:
     def settings(self):
         return _Settings(self._connection,
             'lists/{0}/config'.format(self.fqdn_listname))
+
+    @property
+    def held(self):
+        return []
 
     def get_member(self, address):
         """Get a membership.
@@ -457,7 +461,7 @@ class _User:
     @property
     def real_name(self):
         self._get_info()
-        return self._info['real_name']
+        return self._info.get('real_name', None)
 
     @property
     def user_id(self):
@@ -504,7 +508,7 @@ class _Address:
 
     @property
     def real_name(self):
-        return self._address['real_name']
+        return self._address.get('real_name')
 
     @property
     def registered_on(self):

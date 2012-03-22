@@ -6,6 +6,9 @@ Mailman REST client
     >>> import time
     >>> import subprocess
 
+    >>> from mocker import Mocker
+    >>> mocker = Mocker()
+
 This is the official Python bindings for the GNU Mailman REST API.  In order
 to talk to Mailman, the engine's REST server must be running.  You begin by
 instantiating a client object to access the root of the REST hierarchy,
@@ -112,7 +115,7 @@ Once you have a domain, you can create mailing lists in that domain.
     example.com
     >>> print test_one.list_name
     test-one
-    >>> print test_one.real_name
+    >>> print test_one.display_name
     Test-one
 
 You can also retrieve the mailing list after the fact.
@@ -266,14 +269,14 @@ Users are people with one or more list memberhips. To get a list of all users, a
 A single user can be retrieved using their email address.
 
     >>> cris = client.get_user('cris@example.com')
-    >>> print cris.real_name
+    >>> print cris.display_name
     Cris
 
 Every user has a list of one or more addresses. 
 
     >>> for address in cris.addresses:
     ...     print address
-    ...     print address.real_name
+    ...     print address.display_name
     ...     print address.registered_on
     cris@example.com
     Cris
@@ -294,7 +297,7 @@ We can get all list settings via a lists settings attribute. A proxy object for 
     ...
     welcome_message_uri: mailman:///welcome.txt
 
-    >>> print settings['real_name']
+    >>> print settings['display_name']
     Test-one
 
 We can access all valid list settings as attributes.
@@ -304,19 +307,19 @@ We can access all valid list settings as attributes.
     >>> print settings['description']
 
     >>> settings['description'] = 'A very meaningful description.'
-    >>> settings['real_name'] = 'Test Numero Uno'
+    >>> settings['display_name'] = 'Test Numero Uno'
 
     >>> settings.save()
 
     >>> settings_new = test_one.settings
     >>> print settings_new['description']
     A very meaningful description.
-    >>> print settings_new['real_name']
+    >>> print settings_new['display_name']
     Test Numero Uno
 
 The settings object also supports the `get` method of usual Python dictionaries:
 
-    >>> print settings_new.get('OhNoIForGotTheKey', 'HowGoodIPlacedOneUnderTheDoormat')
+    >>> print settings_new.get('OhNoIForgotTheKey', 'HowGoodIPlacedOneUnderTheDoormat')
     HowGoodIPlacedOneUnderTheDoormat
 
 
@@ -347,7 +350,37 @@ By default, preferences are not set and fall back to the global system preferenc
 Moderation
 ==========
 
+    >>> from mailman.client._client import _Connection
+    >>> connection = mocker.patch(_Connection)
+    >>> connection.call('lists/test-one@example.com/held', None, 'GET')
+    <mocker.Mock object at ...>
+    >>> mocker.result([200, {'entries': [
+    ...     {u'data': {
+    ...         u'_mod_subject': u'Something',
+    ...         u'_mod_fqdn_listname': u'test-one@example.com',
+    ...         u'_mod_hold_date': u'2005-08-01T07:49:23',
+    ...         u'_mod_reason': u'Because',
+    ...         u'_mod_sender': u'anne@example.com',
+    ...         },
+    ...      u'id': 123,},
+    ...     ]}])
+    >>> connection.call('lists/test-one@example.com/held/123', dict(action=u'defer'), 'POST')
+    <mocker.Mock object at ...>
+    >>> mocker.result([204, {u'status': 204}])
+    >>> mocker.replay()
+
 Messages held for moderation can be listed on a per list basis.
 
-    >>> test_one.held
-    []
+    >>> held = test_one.held
+    >>> print held[0]['data']['_mod_subject']
+    Something
+    >>> print held[0]['data']['_mod_reason']
+    Because
+    >>> print held[0]['id']
+    123
+
+    >>> result = test_one.defer_message(held[0]['id'])
+    >>> print result
+    204
+
+    >>> mocker.restore()

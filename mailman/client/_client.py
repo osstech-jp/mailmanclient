@@ -312,9 +312,9 @@ class _List:
         return self._info['list_name']
 
     @property
-    def real_name(self):
+    def display_name(self):
         self._get_info()
-        return self._info.get('real_name')
+        return self._info.get('display_name')
 
     @property
     def members(self):
@@ -340,6 +340,40 @@ class _List:
         else:
             return content['entries']
 
+    def moderate_message(self, request_id, action):
+        """Moderate a held message.
+        
+        :param request_id: Id of the held message.
+        :type request_id: Int.
+        :param action: Action to perform on held message.
+        :type action: String.
+        """
+        path = 'lists/{0}/held/{1}'.format(self.fqdn_listname, 
+                                          str(request_id))
+        response, content = self._connection.call(path, dict(action=action),
+                                                  'POST')
+        return response
+
+    def discard_message(self, request_id):
+        """Shortcut for moderate_message.
+        """
+        return self.moderate_message(request_id, 'discard')
+
+    def reject_message(self, request_id):
+        """Shortcut for moderate_message.
+        """
+        return self.moderate_message(request_id, 'reject')
+
+    def defer_message(self, request_id):
+        """Shortcut for moderate_message.
+        """
+        return self.moderate_message(request_id, 'defer')
+
+    def accept_message(self, request_id):
+        """Shortcut for moderate_message.
+        """
+        return self.moderate_message(request_id, 'accept')
+
     def get_member(self, address):
         """Get a membership.
 
@@ -356,19 +390,19 @@ class _List:
             raise ValueError('%s is not a member address of %s' %
                              (address, self.fqdn_listname))
 
-    def subscribe(self, address, real_name=None):
+    def subscribe(self, address, display_name=None):
         """Subscribe an email address to a mailing list.
 
         :param address: Email address to subscribe to the list.
         :type address: str
-        :param real_name: The real name of the new member.
-        :type real_name: str
+        :param display_name: The real name of the new member.
+        :type display_name: str
         :return: A member proxy object.
         """
         data = dict(
             fqdn_listname=self.fqdn_listname,
             subscriber=address,
-            real_name=real_name,
+            display_name=display_name,
             )
         response, content = self._connection.call('members', data)
         return _Member(self._connection, response['location'])
@@ -452,7 +486,7 @@ class _User:
 
     def __repr__(self):
         return '<User "{0}" ({1})>'.format(
-            self.real_name, self.user_id)
+            self.display_name, self.user_id)
 
     def _get_info(self):
         if self._info is None:
@@ -464,9 +498,9 @@ class _User:
         return _Addresses(self._connection, self.user_id)
     
     @property
-    def real_name(self):
+    def display_name(self):
         self._get_info()
-        return self._info.get('real_name', None)
+        return self._info.get('display_name', None)
 
     @property
     def user_id(self):
@@ -512,8 +546,8 @@ class _Address:
         return self._address['email']
 
     @property
-    def real_name(self):
-        return self._address.get('real_name')
+    def display_name(self):
+        return self._address.get('display_name')
 
     @property
     def registered_on(self):

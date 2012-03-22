@@ -48,5 +48,6 @@ setup(
     convert_2to3_doctests=find_doctests(),
     install_requires = [
         'httplib2',
+        'mocker',
         ],
     )

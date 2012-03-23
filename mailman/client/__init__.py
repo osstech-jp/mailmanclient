@@ -25,7 +25,7 @@ __all__ = [
     ]
 
 
-__version__ = '0.1'
+__version__ = '1.0.0a1'
 
 
 from mailman.client._client import Client

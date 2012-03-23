@@ -372,9 +372,9 @@ Moderation
 Messages held for moderation can be listed on a per list basis.
 
     >>> held = test_one.held
-    >>> print held[0]['data']['_mod_subject']
+    >>> print held[0]['subject']
     Something
-    >>> print held[0]['data']['_mod_reason']
+    >>> print held[0]['reason']
     Because
     >>> print held[0]['id']
     123

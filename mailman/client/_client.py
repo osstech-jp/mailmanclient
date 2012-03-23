@@ -333,12 +333,23 @@ class _List:
 
     @property
     def held(self):
+        """Return a list of dicts with held message information.
+        """
         response, content = self._connection.call(
             'lists/{0}/held'.format(self.fqdn_listname), None, 'GET')
         if 'entries' not in content:
             return []
         else:
-            return content['entries']
+            entries = []
+            for entry in content['entries']:
+                msg = dict(subject=entry['data']['_mod_subject'],
+                           fqdn_listname=entry['data']['_mod_fqdn_listname'],
+                           hold_date=entry['data']['_mod_hold_date'],
+                           reason=entry['data']['_mod_reason'],
+                           sender=entry['data']['_mod_sender'],
+                           id=entry['id'])
+                entries.append(msg)
+        return entries
 
     def moderate_message(self, request_id, action):
         """Moderate a held message.

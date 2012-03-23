@@ -483,6 +483,7 @@ class _User:
         self._url = url
         self._info = None
         self._addresses = None
+        self._preferences = None
 
     def __repr__(self):
         return '<User "{0}" ({1})>'.format(
@@ -517,6 +518,10 @@ class _User:
         self._get_info()
         return self._info['self_link']
 
+    @property
+    def preferences(self):
+        return _Preferences(self._connection, self.address)
+
 
 class _Addresses:
     def __init__(self, connection, user_id):
@@ -536,6 +541,23 @@ class _Addresses:
         for address in self._addresses:
             yield _Address(self._connection, address)
 
+class _Preferences:
+    def __init__(self, connection, address):
+        self._connection = connection
+        self._address = address
+        self._preferences = None
+        self._get_preferences()
+
+    def _get_preferences(self):
+        if self._preferences is None:
+            response, content = self._connection.call('addresses/{0}/preferences'.format(self._address))
+            if 'entries' not in content:
+                self._preferences= []
+            self._preferences = content['entries']
+
+    def __iter__(self):
+        for preference in self._preferences:
+            yield _Preference(self._connection, preference)
 
 class _Address:
     def __init__(self, connection, address):

@@ -121,6 +121,8 @@ class _Connection:
             # XXX Work around for http://bugs.python.org/issue10038
             content = unicode(content)
             return response, json.loads(content)
+        except HTTPError:
+            raise
         except IOError:
             raise MailmanConnectionError('Could not connect to Mailman API')
 

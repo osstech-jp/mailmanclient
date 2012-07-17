@@ -21,6 +21,7 @@ from __future__ import absolute_import, unicode_literals
 __metaclass__ = type
 __all__ = [
     'Client',
+    'MailmanConnectionError',
     '__version__',
     ]
 
@@ -28,4 +29,4 @@ __all__ = [
 __version__ = '1.0.0a1'
 
 
-from mailman.client._client import Client
+from mailman.client._client import Client, MailmanConnectionError

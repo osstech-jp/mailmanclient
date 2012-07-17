@@ -21,6 +21,7 @@ from __future__ import absolute_import, unicode_literals
 __metaclass__ = type
 __all__ = [
     'Client',
+    'MailmanConnectionError',
     ]
 
 
@@ -45,6 +46,11 @@ def _member_key(member_dict):
     :return: 2-tuple of (fqdn_listname, address)
     """
     return (member_dict['fqdn_listname'], member_dict['address'])
+
+
+class MailmanConnectionError(Exception):
+    """Custom Exception to catch connection errors."""
+    pass
 
 
 class _Connection:
@@ -104,16 +110,19 @@ class _Connection:
         if self.basic_auth:
             headers['Authorization'] = 'Basic ' + self.basic_auth
         url = urljoin(self.baseurl, path)
-        response, content = Http().request(url, method, data, headers)
-        # If we did not get a 2xx status code, make this look like a urllib2
-        # exception, for backward compatibility.
-        if response.status // 100 != 2:
-            raise HTTPError(url, response.status, content, response, None)
-        if len(content) == 0:
-            return response, None
-        # XXX Work around for http://bugs.python.org/issue10038
-        content = unicode(content)
-        return response, json.loads(content)
+        try:
+            response, content = Http().request(url, method, data, headers)
+            # If we did not get a 2xx status code, make this look like a urllib2
+            # exception, for backward compatibility.
+            if response.status // 100 != 2:
+                raise HTTPError(url, response.status, content, response, None)
+            if len(content) == 0:
+                return response, None
+            # XXX Work around for http://bugs.python.org/issue10038
+            content = unicode(content)
+            return response, json.loads(content)
+        except IOError:
+            raise MailmanConnectionError('Could not connect to Mailman API')
 
 
 class Client:

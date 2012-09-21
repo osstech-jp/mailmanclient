@@ -185,36 +185,36 @@ New members can be easily added; users are automatically registered.
     >>> test_two = client.get_list('test-two@example.com')
 
     >>> test_one.subscribe('anna@example.com', 'Anna')
-    <Member "anna@example.com" on "test-one@example.com">
+    <Member "anna@example.com" on "test-one.example.com">
     >>> test_one.subscribe('bill@example.com', 'Bill')
-    <Member "bill@example.com" on "test-one@example.com">
+    <Member "bill@example.com" on "test-one.example.com">
     >>> test_two.subscribe('anna@example.com')
-    <Member "anna@example.com" on "test-two@example.com">
+    <Member "anna@example.com" on "test-two.example.com">
     >>> test_two.subscribe('cris@example.com', 'Cris')
-    <Member "cris@example.com" on "test-two@example.com">
+    <Member "cris@example.com" on "test-two.example.com">
 
 We can retrieve all known memberships.  These are sorted first by mailing list
 name, then by email address.
 
     >>> for member in client.members:
     ...     print member
-    <Member "anna@example.com" on "test-one@example.com">
-    <Member "bill@example.com" on "test-one@example.com">
-    <Member "anna@example.com" on "test-two@example.com">
-    <Member "cris@example.com" on "test-two@example.com">
+    <Member "anna@example.com" on "test-one.example.com">
+    <Member "bill@example.com" on "test-one.example.com">
+    <Member "anna@example.com" on "test-two.example.com">
+    <Member "cris@example.com" on "test-two.example.com">
 
 We can also view the memberships for a single mailing list.
 
     >>> for member in test_one.members:
     ...     print member
-    <Member "anna@example.com" on "test-one@example.com">
-    <Member "bill@example.com" on "test-one@example.com">
+    <Member "anna@example.com" on "test-one.example.com">
+    <Member "bill@example.com" on "test-one.example.com">
 
 We can get a single membership too.
 
     >>> cris = test_two.get_member('cris@example.com')
     >>> cris
-    <Member "cris@example.com" on "test-two@example.com">
+    <Member "cris@example.com" on "test-two.example.com">
     >>> print cris.role
     member
     >>> print cris.self_link
@@ -235,17 +235,17 @@ though she keeps her Test Two membership active.
     >>> test_one.unsubscribe('anna@example.com')
     >>> for member in client.members:
     ...     print member
-    <Member "bill@example.com" on "test-one@example.com">
-    <Member "anna@example.com" on "test-two@example.com">
-    <Member "cris@example.com" on "test-two@example.com">
+    <Member "bill@example.com" on "test-one.example.com">
+    <Member "anna@example.com" on "test-two.example.com">
+    <Member "cris@example.com" on "test-two.example.com">
 
 A little later, Cris decides to unsubscribe from the Test Two mailing list.
 
     >>> cris.unsubscribe()
     >>> for member in client.members:
     ...     print member
-    <Member "bill@example.com" on "test-one@example.com">
-    <Member "anna@example.com" on "test-two@example.com">
+    <Member "bill@example.com" on "test-one.example.com">
+    <Member "anna@example.com" on "test-two.example.com">
 
 If you try to unsubscribe an address which is not a member address `ValueError` is raised:
 

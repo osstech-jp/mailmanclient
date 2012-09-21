@@ -25,6 +25,7 @@ __all__ = [
     ]
 
 
+import re
 import json
 
 from base64 import b64encode
@@ -45,7 +46,7 @@ def _member_key(member_dict):
     :param member_dict: The JSON dictionary for a member.
     :return: 2-tuple of (fqdn_listname, address)
     """
-    return (member_dict['fqdn_listname'], member_dict['address'])
+    return (member_dict['list_id'], member_dict['address'])
 
 
 class MailmanConnectionError(Exception):
@@ -329,8 +330,8 @@ class _List:
 
     @property
     def members(self):
-        data = dict(fqdn_listname=self.fqdn_listname)
-        response, content = self._connection.call('members/find', data)
+        url = 'lists/{0}/roster/member'.format(self.fqdn_listname)
+        response, content = self._connection.call(url)
         if 'entries' not in content:
             return []
         return [_Member(self._connection, entry['self_link'])
@@ -422,7 +423,7 @@ class _List:
         :return: A member proxy object.
         """
         data = dict(
-            fqdn_listname=self.fqdn_listname,
+            list_id=re.sub(r'@', '.', self.fqdn_listname),
             subscriber=address,
             display_name=display_name,
             )
@@ -459,7 +460,7 @@ class _Member:
 
     def __repr__(self):
         return '<Member "{0}" on "{1}">'.format(
-            self.address, self.fqdn_listname)
+            self.address, self.list_id)
 
     def _get_info(self):
         if self._info is None:
@@ -467,9 +468,9 @@ class _Member:
             self._info = content
 
     @property
-    def fqdn_listname(self):
+    def list_id(self):
         self._get_info()
-        return self._info['fqdn_listname']
+        return self._info['list_id']
 
     @property
     def address(self):

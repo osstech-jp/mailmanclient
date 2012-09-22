@@ -309,6 +309,24 @@ class _List:
             self._info = content
 
     @property
+    def owners(self):
+        url = self._url + '/roster/owner'
+        response, content = self._connection.call(url)
+        if 'entries' not in content:
+            return []
+        else:
+            return [item['address'] for item in content['entries']]
+        
+    @property
+    def moderators(self):
+        url = self._url + '/roster/moderator'
+        response, content = self._connection.call(url)
+        if 'entries' not in content:
+            return []
+        else:
+            return [item['address'] for item in content['entries']]
+
+    @property
     def fqdn_listname(self):
         self._get_info()
         return self._info['fqdn_listname']
@@ -368,6 +386,28 @@ class _List:
                 entries.append(msg)
         return entries
 
+    def add_owner(self, address):
+        self.add_role('owner', address)
+
+    def add_moderator(self, address):
+        self.add_role('moderator', address)
+
+    def add_role(self, role, address):
+        data = dict(list_id=self.list_id,
+                    subscriber=address,
+                    role=role)
+        self._connection.call('members', data)
+
+    def remove_owner(self, address):
+        self.remove_role('owner', address)
+
+    def remove_moderator(self, address):
+        self.remove_role('moderator', address)
+
+    def remove_role(self, role, address):
+        url = 'lists/%s/%s/%s' % (self.fqdn_listname, role, address)
+        self._connection.call(url, method='DELETE')
+        
     def moderate_message(self, request_id, action):
         """Moderate a held message.
         
@@ -471,12 +511,17 @@ class _Member:
         if self._info is None:
             response, content = self._connection.call(self._url)
             self._info = content
-
+        
     @property
     def list_id(self):
         self._get_info()
         return self._info['list_id']
 
+    @property
+    def role(self):
+        self._get_info()
+        return self._info['role']
+        
     @property
     def address(self):
         self._get_info()

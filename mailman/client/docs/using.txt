@@ -347,6 +347,65 @@ By default, preferences are not set and fall back to the global system preferenc
     True
 
 
+Owners and Moderators
+=====================
+
+Owners and moderators are properties of the list object.
+
+    >>> test_one.owners
+    []
+    >>> test_one.moderators
+    []
+
+Owners can be added via the ``add_owner`` method:
+
+    >>> test_one.add_owner('foo@example.com')
+    >>> for owner in test_one.owners:
+    ...     print owner
+    foo@example.com
+
+The owner of the list not automatically added as a member:
+
+    >>> test_one.members
+    [<Member "bill@example.com" on "test-one.example.com">]
+
+Moderators can be added similarly:
+
+    >>> test_one.add_moderator('bar@example.com')
+    >>> for moderator in test_one.moderators:
+    ...     print moderator
+    bar@example.com
+
+Moderators are also not automatically added as members:
+
+    >>> test_one.members
+    [<Member "bill@example.com" on "test-one.example.com">]
+
+Members and owners/moderators are separate entries in in the general members
+list:
+
+    >>> test_one.subscribe('bar@example.com')
+    <Member "bar@example.com" on "test-one.example.com">
+
+    >>> for member in client.members:
+    ...     print '%s: %s' %(member, member.role) 
+    <Member "bar@example.com" on "test-one.example.com">: moderator
+    <Member "bar@example.com" on "test-one.example.com">: member
+    <Member "bill@example.com" on "test-one.example.com">: member
+    <Member "foo@example.com" on "test-one.example.com">: owner
+    <Member "anna@example.com" on "test-two.example.com">: member
+
+Both owners and moderators can be removed:
+
+    >>> test_one.remove_owner('foo@example.com')
+    >>> test_one.owners
+    []
+
+    test_one.remove_moderator('bar@example.com')
+    test_one.moderators
+    []
+
+
 Moderation
 ==========
 

@@ -319,6 +319,11 @@ class _List:
         return self._info['mail_host']
 
     @property
+    def list_id(self):
+        self._get_info()
+        return self._info['list_id']
+
+    @property
     def list_name(self):
         self._get_info()
         return self._info['list_name']
@@ -423,7 +428,7 @@ class _List:
         :return: A member proxy object.
         """
         data = dict(
-            list_id=re.sub(r'@', '.', self.fqdn_listname),
+            list_id=self.list_id,
             subscriber=address,
             display_name=display_name,
             )

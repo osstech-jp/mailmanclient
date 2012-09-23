@@ -221,6 +221,12 @@ class Client:
             else:
                 return None
 
+    def create_user(self, email, password, display_name=''):
+        response, content = self._connection.call(
+            'users', dict(email=email, password=password,
+                          display_name=display_name))
+        return _User(self._connection, response['location'])
+
     def get_user(self, address):
         response, content = self._connection.call(
             'users/{0}'.format(address))
@@ -557,6 +563,7 @@ class _User:
         self._info = None
         self._addresses = None
         self._preferences = None
+        self._cleartext_password = None
 
     def __repr__(self):
         return '<User "{0}" ({1})>'.format(
@@ -575,6 +582,19 @@ class _User:
     def display_name(self):
         self._get_info()
         return self._info.get('display_name', None)
+
+    @display_name.setter
+    def display_name(self, value):
+        self._info['display_name'] = value
+
+    @property
+    def password(self):
+        self._get_info()
+        return self._info.get('password', None)
+
+    @password.setter
+    def password(self, value):
+        self._cleartext_password = value
 
     @property
     def user_id(self):
@@ -595,6 +615,14 @@ class _User:
     def preferences(self):
         return _Preferences(self._connection, self.address)
 
+    def save(self):
+        data = {'display_name': self.display_name}
+        if self._cleartext_password is not None:
+            data['cleartext_password'] = self._cleartext_password
+        self.cleartext_password = None
+        response, content = self._connection.call(self._url,
+                                                  data, method='PATCH')
+        self._info = None
 
 class _Addresses:
     def __init__(self, connection, user_id):
@@ -697,5 +725,3 @@ class _Settings():
             if attribute not in LIST_READ_ONLY_ATTRS:
                 data[attribute] = value
         response, content = self._connection.call(self._url, data, 'PATCH')
-
-

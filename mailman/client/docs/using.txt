@@ -282,6 +282,37 @@ Every user has a list of one or more addresses.
     Cris
     ...
 
+Users can be added using ``create_user``. The display_name is optional:
+    >>> client.create_user(email='ler@primus.org',
+    ...                    password='somepass',
+    ...                    display_name='Ler')
+    <User "Ler" (...)>
+    >>> ler = client.get_user('ler@primus.org')
+    >>> print ler.password
+    $...
+    >>> print ler.display_name
+    Ler
+
+User attributes can be changed through assignment, but you need to call the
+object's ``save`` method to store the changes in the mailman core database.
+
+    >>> ler.display_name = 'Sir Ler'
+    >>> ler.save()
+    >>> ler = client.get_user('ler@primus.org')
+    >>> print ler.display_name
+    Sir Ler
+
+Passwords can be changed as well:
+
+    >>> old_pwd = ler.password
+    >>> ler.password = 'easy'
+    >>> old_pwd == ler.password
+    True
+    >>> ler.save()
+    >>> old_pwd == ler.password
+    False
+
+
 List Settings
 =============
 

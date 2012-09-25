@@ -282,6 +282,32 @@ Every user has a list of one or more addresses.
     Cris
     ...
 
+Addresses can be accessed directly:
+
+    >>> address = client.get_address('cris@example.com')
+    >>> print address
+    cris@example.com
+    >>> print address.display_name
+    Cris
+
+The address has not been verified:
+
+    >>> print address.verified_on is None
+    True
+
+But that can be done via the address object:
+
+    >>> address.verify()
+    >>> address.verified_on is None
+    False
+
+It can also be unverified:
+
+    >>> address.unverify()
+    >>> address.verified_on is None
+    True
+
+
 Users can be added using ``create_user``. The display_name is optional:
     >>> client.create_user(email='ler@primus.org',
     ...                    password='somepass',

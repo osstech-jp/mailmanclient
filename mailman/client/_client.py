@@ -203,7 +203,9 @@ class Client:
         return _Domain(self._connection, response['location'])
 
     def delete_domain(self, mail_host):
-        response, content = self._connection.call('domains/{0}'.format(mail_host), None, 'DELETE')
+        response, content = self._connection.call('domains/{0}'
+                                                  .format(mail_host),
+                                                  None, 'DELETE')
 
     def get_domain(self, mail_host=None, web_host=None):
         """Get domain by its mail_host or its web_host."""
@@ -231,6 +233,11 @@ class Client:
         response, content = self._connection.call(
             'users/{0}'.format(address))
         return _User(self._connection, content['self_link'])
+
+    def get_address(self, address):
+        response, content = self._connection.call(
+            'addresses/{0}'.format(address))
+        return _Address(self._connection, content)
 
     def get_list(self, fqdn_listname):
         response, content = self._connection.call(
@@ -633,7 +640,8 @@ class _Addresses:
 
     def _get_addresses(self):
         if self._addresses is None:
-            response, content = self._connection.call('users/{0}/addresses'.format(self._user_id))
+            response, content = self._connection.call('users/{0}/addresses'
+                                                      .format(self._user_id))
             if 'entries' not in content:
                 self._addresses = []
             self._addresses = content['entries']
@@ -664,24 +672,49 @@ class _Address:
     def __init__(self, connection, address):
         self._connection = connection
         self._address = address
+        self._url = address['self_link']
+        self._info = None
 
     def __repr__(self):
         return self._address['email']
 
+    def _get_info(self):
+        if self._info is None:
+            response, content = self._connection.call(self._url)
+            self._info = content
+
     @property
     def display_name(self):
-        return self._address.get('display_name')
+        self._get_info()
+        return self._info.get('display_name')
 
     @property
     def registered_on(self):
-        return self._address['registered_on']
+        self._get_info()
+        return self._info.get('registered_on')
+
+    @property
+    def verified_on(self):
+        self._get_info()
+        return self._info.get('verified_on')
+
+    def verify(self):
+        self._connection.call('addresses/{0}/verify'
+                              .format(self._address['email']), method='POST')
+        self._info = None
+
+    def unverify(self):
+        self._connection.call('addresses/{0}/unverify'
+                              .format(self._address['email']), method='POST')
+        self._info = None
 
 
 LIST_READ_ONLY_ATTRS = ('bounces_address', 'created_at', 'digest_last_sent_at',
-                        'fqdn_listname', 'http_etag', 'mail_host', 'join_address',
-                        'last_post_at', 'leave_address', 'list_id', 'list_name',
-                        'next_digest_number', 'no_reply_address', 'owner_address',
-                        'post_id', 'posting_address', 'request_address', 'scheme',
+                        'fqdn_listname', 'http_etag', 'mail_host',
+                        'join_address', 'last_post_at', 'leave_address',
+                        'list_id', 'list_name', 'next_digest_number',
+                        'no_reply_address', 'owner_address', 'post_id',
+                        'posting_address', 'request_address', 'scheme',
                         'volume', 'web_host',)
 
 

@@ -36,7 +36,7 @@ from urllib2 import HTTPError
 from urlparse import urljoin
 
 
-from mailman.client import __version__
+from mailmanclient import __version__
 
 
 

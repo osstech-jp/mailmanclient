@@ -141,12 +141,12 @@ def teardown(testobj):
 def additional_tests():
     "Run the doc tests (README.txt and docs/*, if any exist)"
     doctest_files = []
-    if resource_exists('mailman.client', 'docs'):
-        for name in resource_listdir('mailman.client', 'docs'):
+    if resource_exists('mailmanclient', 'docs'):
+        for name in resource_listdir('mailmanclient', 'docs'):
             if name.endswith('.txt'):
                 doctest_files.append(
                     os.path.abspath(
-                        resource_filename('mailman.client', 'docs/%s' % name)))
+                        resource_filename('mailmanclient', 'docs/%s' % name)))
     kwargs = dict(module_relative=False,
                   optionflags=DOCTEST_FLAGS,
                   setUp=setup, tearDown=teardown,

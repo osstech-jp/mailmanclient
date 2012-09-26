@@ -24,25 +24,24 @@ from setuptools import setup, find_packages
 
 
 require_python(0x20600f0)
-__version__ = get_version('mailman/client/__init__.py')
+__version__ = get_version('src/mailmanclient/__init__.py')
 
 
 setup(
-    name='mailman.client',
+    name='mailmanclient',
     version=__version__,
-    namespace_packages=['mailman'],
-    packages=find_packages(),
+    packages=find_packages('src'),
+    package_dir = {'': 'src'},
     include_package_data=True,
     maintainer='Barry Warsaw',
     maintainer_email='barry@list.org',
     description=description('README.txt'),
     long_description=long_description(
-        'mailman/client/README.txt',
-        'mailman/client/NEWS.txt'),
+        'src/mailmanclient/README.txt',
+        'src/mailmanclient/NEWS.txt'),
     license='LGPLv3',
     url='http://launchpad.net/mailman.client',
     download_url='https://launchpad.net/mailman.client/+download',
-    test_suite='mailman.client.tests',
     # Auto-conversion to Python 3.
     use_2to3=True,
     convert_2to3_doctests=find_doctests(),

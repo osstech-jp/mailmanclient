@@ -14,7 +14,7 @@ to talk to Mailman, the engine's REST server must be running.  You begin by
 instantiating a client object to access the root of the REST hierarchy,
 providing it the base URL, user name and password (for Basic Auth).
 
-    >>> from mailman.client import Client
+    >>> from mailmanclient import Client
     >>> client = Client('http://localhost:8001/3.0', 'restadmin', 'restpass')
 
 We can retrieve basic information about the server.
@@ -466,7 +466,7 @@ Both owners and moderators can be removed:
 Moderation
 ==========
 
-    >>> from mailman.client._client import _Connection
+    >>> from mailmanclient._client import _Connection
     >>> connection = mocker.patch(_Connection)
     >>> connection.call('lists/test-one@example.com/held', None, 'GET')
     <mocker.Mock object at ...>

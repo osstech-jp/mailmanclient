@@ -631,6 +631,10 @@ class _User:
                                                   data, method='PATCH')
         self._info = None
 
+    def delete(self):
+        response, content = self._connection.call(self._url, method='DELETE')
+        
+
 class _Addresses:
     def __init__(self, connection, user_id):
         self._connection = connection

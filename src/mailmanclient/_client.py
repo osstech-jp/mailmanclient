@@ -1,4 +1,4 @@
-# Copyright (C) 2010 by the Free Software Foundation, Inc.
+# Copyright (C) 2010-2013 by the Free Software Foundation, Inc.
 #
 # This file is part of mailman.client.
 #
@@ -22,7 +22,7 @@ __metaclass__ = type
 __all__ = [
     'Client',
     'MailmanConnectionError',
-    ]
+]
 
 
 import re
@@ -39,7 +39,6 @@ from urlparse import urljoin
 from mailmanclient import __version__
 
 
-
 def _member_key(member_dict):
     """Return the keys for sorting a member.
 
@@ -98,7 +97,7 @@ class _Connection:
         """
         headers = {
             'User-Agent': 'GNU Mailman REST client v{0}'.format(__version__),
-            }
+        }
         if data is not None:
             data = urlencode(data, doseq=True)
             headers['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -113,8 +112,8 @@ class _Connection:
         url = urljoin(self.baseurl, path)
         try:
             response, content = Http().request(url, method, data, headers)
-            # If we did not get a 2xx status code, make this look like a urllib2
-            # exception, for backward compatibility.
+            # If we did not get a 2xx status code, make this look like a
+            # urllib2 exception, for backward compatibility.
             if response.status // 100 != 2:
                 raise HTTPError(url, response.status, content, response, None)
             if len(content) == 0:
@@ -160,8 +159,8 @@ class Client:
         if 'entries' not in content:
             return []
         return [_List(self._connection, entry['self_link'])
-                for entry in sorted (content['entries'],
-                                     key=itemgetter('fqdn_listname'))]
+                for entry in sorted(content['entries'],
+                                    key=itemgetter('fqdn_listname'))]
 
     @property
     def domains(self):
@@ -242,7 +241,7 @@ class Client:
     def get_list(self, fqdn_listname):
         response, content = self._connection.call(
             'lists/{0}'.format(fqdn_listname))
-        return _List(self._connection, content['self_link'])
+        return _List(self._connection, content['self_link'], content)
 
     def delete_list(self, fqdn_listname):
         response, content = self._connection.call(
@@ -297,8 +296,8 @@ class _Domain:
         if 'entries' not in content:
             return []
         return [_List(self._connection, entry['self_link'])
-                for entry in sorted (content['entries'],
-                                     key=itemgetter('fqdn_listname'))]
+                for entry in sorted(content['entries'],
+                                    key=itemgetter('fqdn_listname'))]
 
     def create_list(self, list_name):
         fqdn_listname = '{0}@{1}'.format(list_name, self.mail_host)
@@ -308,10 +307,12 @@ class _Domain:
 
 
 class _List:
-    def __init__(self, connection, url):
+    def __init__(self, connection, url, data=None):
         self._connection = connection
         self._url = url
         self._info = None
+        if data is not None:
+            self._info = data
 
     def __repr__(self):
         return '<List "{0}">'.format(self.fqdn_listname)
@@ -329,7 +330,7 @@ class _List:
             return []
         else:
             return [item['address'] for item in content['entries']]
-        
+
     @property
     def moderators(self):
         url = self._url + '/roster/moderator'
@@ -377,7 +378,7 @@ class _List:
     @property
     def settings(self):
         return _Settings(self._connection,
-            'lists/{0}/config'.format(self.fqdn_listname))
+                         'lists/{0}/config'.format(self.fqdn_listname))
 
     @property
     def held(self):
@@ -390,13 +391,35 @@ class _List:
         else:
             entries = []
             for entry in content['entries']:
-                msg = dict(subject=entry['data']['_mod_subject'],
-                           fqdn_listname=entry['data']['_mod_fqdn_listname'],
-                           hold_date=entry['data']['_mod_hold_date'],
-                           reason=entry['data']['_mod_reason'],
-                           sender=entry['data']['_mod_sender'],
-                           id=entry['id'])
+                msg = dict(hold_date=entry['hold_date'],
+                           msg=entry['msg'],
+                           reason=entry['reason'],
+                           sender=entry['sender'],
+                           request_id=entry['request_id'],
+                           subject=entry['subject'])
                 entries.append(msg)
+        return entries
+
+    @property
+    def requests(self):
+        """Return a list of dicts with subscription requests.
+        """
+        response, content = self._connection.call(
+            'lists/{0}/requests'.format(self.fqdn_listname), None, 'GET')
+        if 'entries' not in content:
+            return []
+        else:
+            entries = []
+            for entry in content['entries']:
+                request = dict(address=entry['address'],
+                               delivery_mode=entry['delivery_mode'],
+                               display_name=entry['display_name'],
+                               language=entry['language'],
+                               password=entry['password'],
+                               request_id=entry['request_id'],
+                               request_date=entry['when'],
+                               type=entry['type'])
+                entries.append(request)
         return entries
 
     def add_owner(self, address):
@@ -420,17 +443,17 @@ class _List:
     def remove_role(self, role, address):
         url = 'lists/%s/%s/%s' % (self.fqdn_listname, role, address)
         self._connection.call(url, method='DELETE')
-        
+
     def moderate_message(self, request_id, action):
         """Moderate a held message.
-        
+
         :param request_id: Id of the held message.
         :type request_id: Int.
         :param action: Action to perform on held message.
         :type action: String.
         """
-        path = 'lists/{0}/held/{1}'.format(self.fqdn_listname, 
-                                          str(request_id))
+        path = 'lists/{0}/held/{1}'.format(self.fqdn_listname,
+                                           str(request_id))
         response, content = self._connection.call(path, dict(action=action),
                                                   'POST')
         return response
@@ -484,7 +507,7 @@ class _List:
             list_id=self.list_id,
             subscriber=address,
             display_name=display_name,
-            )
+        )
         response, content = self._connection.call('members', data)
         return _Member(self._connection, response['location'])
 
@@ -503,7 +526,6 @@ class _List:
         else:
             raise ValueError('%s is not a member address of %s' %
                              (address, self.fqdn_listname))
-
 
     def delete(self):
         response, content = self._connection.call(
@@ -524,7 +546,7 @@ class _Member:
         if self._info is None:
             response, content = self._connection.call(self._url)
             self._info = content
-        
+
     @property
     def list_id(self):
         self._get_info()
@@ -534,7 +556,7 @@ class _Member:
     def role(self):
         self._get_info()
         return self._info['role']
-        
+
     @property
     def address(self):
         self._get_info()
@@ -584,7 +606,7 @@ class _User:
     @property
     def addresses(self):
         return _Addresses(self._connection, self.user_id)
-    
+
     @property
     def display_name(self):
         self._get_info()
@@ -633,7 +655,7 @@ class _User:
 
     def delete(self):
         response, content = self._connection.call(self._url, method='DELETE')
-        
+
 
 class _Addresses:
     def __init__(self, connection, user_id):
@@ -654,6 +676,7 @@ class _Addresses:
         for address in self._addresses:
             yield _Address(self._connection, address)
 
+
 class _Preferences:
     def __init__(self, connection, address):
         self._connection = connection
@@ -663,14 +686,16 @@ class _Preferences:
 
     def _get_preferences(self):
         if self._preferences is None:
-            response, content = self._connection.call('addresses/{0}/preferences'.format(self._address))
+            response, content = self._connection.call(
+                'addresses/{0}/preferences'.format(self._address))
             if 'entries' not in content:
-                self._preferences= []
+                self._preferences = []
             self._preferences = content['entries']
 
     def __iter__(self):
         for preference in self._preferences:
             yield _Preference(self._connection, preference)
+
 
 class _Address:
     def __init__(self, connection, address):

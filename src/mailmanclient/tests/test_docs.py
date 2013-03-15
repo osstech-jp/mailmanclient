@@ -96,21 +96,21 @@ start: no
 [runner.bounces]
 start: no
 [runner.command]
-start: no
+start: yes
 [runner.in]
-start: no
+start: yes
 [runner.lmtp]
-start: no
+start: yes
 [runner.news]
 start: no
 [runner.out]
-start: no
+start: yes
 [runner.pipeline]
 start: no
 [runner.retry]
 start: no
 [runner.virgin]
-start: no
+start: yes
 [runner.digest]
 start: no
 """.format(vardir=vardir)

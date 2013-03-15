@@ -45,8 +45,5 @@ setup(
     # Auto-conversion to Python 3.
     use_2to3=True,
     convert_2to3_doctests=find_doctests(),
-    install_requires = [
-        'httplib2',
-        'mocker',
-        ],
-    )
+    install_requires=['httplib2'],
+)

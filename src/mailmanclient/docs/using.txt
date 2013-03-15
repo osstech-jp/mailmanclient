@@ -4,10 +4,10 @@ Mailman REST client
 
     >>> import os
     >>> import time
+    >>> import smtplib
     >>> import subprocess
 
-    >>> from mocker import Mocker
-    >>> mocker = Mocker()
+    >>> from mock import patch
 
 This is the official Python bindings for the GNU Mailman REST API.  In order
 to talk to Mailman, the engine's REST server must be running.  You begin by
@@ -64,8 +64,8 @@ You can also get an existing domain independently using its mail host.
     <Domain "example.com">
     >>> print example_dot_com.base_url
     http://example.com
-    
-Additionally you can get an existing domain using its web host. 
+
+Additionally you can get an existing domain using its web host.
 
     >>> example = client.get_domain(web_host='http://example.com')
     >>> example
@@ -91,7 +91,7 @@ After creating a few more domains, we can print the list of all domains.
     <Domain "example.com">
     <Domain "example.net">
     <Domain "example.org">
-    
+
 Also, domain can be deleted.
 
     >>> client.delete_domain('example.org')
@@ -141,7 +141,7 @@ And you can print all the known mailing lists.
     <List "test-three@example.com">
     <List "test-three@example.net">
     <List "test-two@example.com">
-    
+
 If you only want to know all lists for a specific domain, use the domain object.
 
     >>> for mlist in example.lists:
@@ -272,7 +272,7 @@ A single user can be retrieved using their email address.
     >>> print cris.display_name
     Cris
 
-Every user has a list of one or more addresses. 
+Every user has a list of one or more addresses.
 
     >>> for address in cris.addresses:
     ...     print address
@@ -346,7 +346,7 @@ We can get all list settings via a lists settings attribute. A proxy object for 
 
     >>> settings = test_one.settings
     >>> len(settings)
-    47
+    48
 
     >>> for attr in sorted(settings):
     ...     print attr + ': ' + str(settings[attr])
@@ -445,7 +445,7 @@ list:
     <Member "bar@example.com" on "test-one.example.com">
 
     >>> for member in client.members:
-    ...     print '%s: %s' %(member, member.role) 
+    ...     print '%s: %s' %(member, member.role)
     <Member "bar@example.com" on "test-one.example.com">: moderator
     <Member "bar@example.com" on "test-one.example.com">: member
     <Member "bill@example.com" on "test-one.example.com">: member
@@ -466,24 +466,23 @@ Both owners and moderators can be removed:
 Moderation
 ==========
 
-    >>> from mailmanclient._client import _Connection
-    >>> connection = mocker.patch(_Connection)
-    >>> connection.call('lists/test-one@example.com/held', None, 'GET')
-    <mocker.Mock object at ...>
-    >>> mocker.result([200, {'entries': [
-    ...     {u'data': {
-    ...         u'_mod_subject': u'Something',
-    ...         u'_mod_fqdn_listname': u'test-one@example.com',
-    ...         u'_mod_hold_date': u'2005-08-01T07:49:23',
-    ...         u'_mod_reason': u'Because',
-    ...         u'_mod_sender': u'anne@example.com',
-    ...         },
-    ...      u'id': 123,},
-    ...     ]}])
-    >>> connection.call('lists/test-one@example.com/held/123', dict(action=u'defer'), 'POST')
-    <mocker.Mock object at ...>
-    >>> mocker.result([204, {u'status': 204}])
-    >>> mocker.replay()
+Message Moderation
+------------------
+
+    >>> msg = """From: nomember@example.com
+    ... To: test-one@example.com
+    ... Subject: Something
+    ... Message-ID: <moderated_01>
+    ... 
+    ... Some text.
+    ... 
+    ... """
+    >>> server = smtplib.LMTP('localhost', 8024)
+    >>> server.sendmail('nomember@example.com', 'test-one@example.com', msg)
+    {}
+    >>> server.quit()
+    (221, 'Bye')
+    >>> time.sleep(2)
 
 Messages held for moderation can be listed on a per list basis.
 
@@ -491,12 +490,57 @@ Messages held for moderation can be listed on a per list basis.
     >>> print held[0]['subject']
     Something
     >>> print held[0]['reason']
-    Because
-    >>> print held[0]['id']
-    123
+    <BLANKLINE>
+    >>> print held[0]['request_id']
+    1
 
-    >>> result = test_one.defer_message(held[0]['id'])
-    >>> print result
+    >>> print test_one.defer_message(held[0]['request_id'])['status']
     204
 
-    >>> mocker.restore()
+    >>> len(test_one.held)
+    1
+
+    >>> print test_one.discard_message(held[0]['request_id'])['status']
+    204
+
+    >>> len(test_one.held)
+    0
+
+
+Subscription Moderation
+-----------------------
+
+    >>> patcher = patch('mailmanclient._client._Connection.call')
+    >>> mock_call = patcher.start()
+    >>> mock_call.return_value = [None, dict(entries=[
+    ...     dict(address=u'ler@primus.org',
+    ...          delivery_mode=u'regular',
+    ...          display_name=u'Ler',
+    ...          http_etag=u'...',
+    ...          language=u'en',
+    ...          password=u'password',
+    ...          request_id=1,
+    ...          type=u'subscription',
+    ...          when=u'2005-08-01T07:49:23',
+    ...     )
+    ... ])]
+
+    >>> requests = test_one.requests
+    >>> print requests[0]['address']
+    ler@primus.org
+    >>> print requests[0]['delivery_mode']
+    regular
+    >>> print requests[0]['display_name']
+    Ler
+    >>> print requests[0]['language']
+    en
+    >>> print requests[0]['password']
+    password
+    >>> print requests[0]['request_id']
+    1
+    >>> print requests[0]['type']
+    subscription
+    >>> print requests[0]['request_date']
+    2005-08-01T07:49:23
+
+    >>> patcher.stop()

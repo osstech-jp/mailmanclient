@@ -672,29 +672,12 @@ class _Addresses:
                 self._addresses = []
             self._addresses = content['entries']
 
+    def __getitem__(self, key):
+        return _Address(self._connection, self._addresses[key])
+
     def __iter__(self):
         for address in self._addresses:
             yield _Address(self._connection, address)
-
-
-class _Preferences:
-    def __init__(self, connection, address):
-        self._connection = connection
-        self._address = address
-        self._preferences = None
-        self._get_preferences()
-
-    def _get_preferences(self):
-        if self._preferences is None:
-            response, content = self._connection.call(
-                'addresses/{0}/preferences'.format(self._address))
-            if 'entries' not in content:
-                self._preferences = []
-            self._preferences = content['entries']
-
-    def __iter__(self):
-        for preference in self._preferences:
-            yield _Preference(self._connection, preference)
 
 
 class _Address:
@@ -736,6 +719,26 @@ class _Address:
         self._connection.call('addresses/{0}/unverify'
                               .format(self._address['email']), method='POST')
         self._info = None
+
+
+class _Preferences:
+    def __init__(self, connection, address):
+        self._connection = connection
+        self._address = address
+        self._preferences = None
+        self._get_preferences()
+
+    def _get_preferences(self):
+        if self._preferences is None:
+            response, content = self._connection.call(
+                'addresses/{0}/preferences'.format(self._address))
+            if 'entries' not in content:
+                self._preferences = []
+            self._preferences = content['entries']
+
+    def __iter__(self):
+        for preference in self._preferences:
+            yield _Preference(self._connection, preference)
 
 
 LIST_READ_ONLY_ATTRS = ('bounces_address', 'created_at', 'digest_last_sent_at',

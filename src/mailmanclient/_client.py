@@ -575,7 +575,7 @@ class _Member:
     @property
     def user(self):
         self._get_info()
-        return self._info['user']
+        return _User(self._connection, self._info['user'])
 
     def unsubscribe(self):
         """Unsubscribe the member from a mailing list.
@@ -642,7 +642,10 @@ class _User:
 
     @property
     def preferences(self):
-        return _Preferences(self._connection, self.address)
+        if self._preferences is None:
+            path = 'users/{0}/preferences'.format(self.user_id)
+            self._preferences = _Preferences(self._connection, path)
+        return self._preferences
 
     def save(self):
         data = {'display_name': self.display_name}
@@ -722,19 +725,16 @@ class _Address:
 
 
 class _Preferences:
-    def __init__(self, connection, address):
+    def __init__(self, connection, path):
         self._connection = connection
-        self._address = address
+        self._path = path
         self._preferences = None
         self._get_preferences()
 
     def _get_preferences(self):
         if self._preferences is None:
-            response, content = self._connection.call(
-                'addresses/{0}/preferences'.format(self._address))
-            if 'entries' not in content:
-                self._preferences = []
-            self._preferences = content['entries']
+            response, content = self._connection.call(self._path)
+            self._preferences = content
 
     def __iter__(self):
         for preference in self._preferences:
@@ -750,7 +750,7 @@ LIST_READ_ONLY_ATTRS = ('bounces_address', 'created_at', 'digest_last_sent_at',
                         'volume', 'web_host',)
 
 
-class _Settings():
+class _Settings:
     def __init__(self, connection, url):
         self._connection = connection
         self._url = url

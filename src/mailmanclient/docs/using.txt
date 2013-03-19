@@ -212,15 +212,18 @@ We can also view the memberships for a single mailing list.
 
 We can get a single membership too.
 
-    >>> cris = test_two.get_member('cris@example.com')
-    >>> cris
+    >>> cris_test_two = test_two.get_member('cris@example.com')
+    >>> cris_test_two
     <Member "cris@example.com" on "test-two.example.com">
-    >>> print cris.role
+    >>> print cris_test_two.role
     member
-    >>> print cris.self_link
+    >>> print cris_test_two.self_link
     http://localhost:8001/3.0/members/...
-    >>> print cris.user
-    http://localhost:8001/3.0/users/...
+
+The membership object's ``user`` attribute will return a User object:
+
+    >>> cris_test_two.user 
+    <User "Cris" (...)>
 
 If you use an address which is not a member of test_two `ValueError` is raised:
 
@@ -241,7 +244,7 @@ though she keeps her Test Two membership active.
 
 A little later, Cris decides to unsubscribe from the Test Two mailing list.
 
-    >>> cris.unsubscribe()
+    >>> cris_test_two.unsubscribe()
     >>> for member in client.members:
     ...     print member
     <Member "bill@example.com" on "test-one.example.com">

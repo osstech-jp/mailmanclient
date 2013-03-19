@@ -342,6 +342,23 @@ Passwords can be changed as well:
     False
 
 
+User Subscriptions
+------------------
+
+A Users subscriptions can be access through their ``subscriptions`` property.
+
+    >>> bill = client.get_user('bill@example.com')
+    >>> for subscription in bill.subscriptions:
+    ...     print subscription
+    <Member "bill@example.com" on "test-one.example.com">
+
+If all you need are the list ids of all mailing lists a user is subscribed to, you can use the ``subscription_list_ids`` property.
+
+    >>> for list_id in bill.subscription_list_ids:
+    ...     print list_id
+    test-one.example.com
+
+
 List Settings
 =============
 

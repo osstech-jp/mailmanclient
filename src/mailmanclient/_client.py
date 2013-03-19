@@ -591,6 +591,8 @@ class _User:
         self._url = url
         self._info = None
         self._addresses = None
+        self._subscriptions = None
+        self._subscription_list_ids = None
         self._preferences = None
         self._cleartext_password = None
 
@@ -639,6 +641,31 @@ class _User:
     def self_link(self):
         self._get_info()
         return self._info['self_link']
+
+    @property
+    def subscriptions(self):
+        if self._subscriptions is None:
+            subscriptions = []
+            for address in self.addresses:
+                response, content = self._connection.call('members/find',
+                    data={'subscriber': address})
+                try:
+                    for entry in content['entries']:
+                        subscriptions.append(_Member(self._connection,
+                            entry['self_link']))
+                except KeyError:
+                    pass
+            self._subscriptions = subscriptions
+        return self._subscriptions
+
+    @property
+    def subscription_list_ids(self):
+        if self._subscription_list_ids is None:
+            list_ids = []
+            for sub in self.subscriptions:
+                list_ids.append(sub.list_id)
+            self._subscription_list_ids = list_ids
+        return self._subscription_list_ids
 
     @property
     def preferences(self):

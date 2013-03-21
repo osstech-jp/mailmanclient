@@ -543,6 +543,7 @@ class _Member:
         self._connection = connection
         self._url = url
         self._info = None
+        self._preferences = None
 
     def __repr__(self):
         return '<Member "{0}" on "{1}">'.format(
@@ -557,11 +558,6 @@ class _Member:
     def list_id(self):
         self._get_info()
         return self._info['list_id']
-
-    @property
-    def role(self):
-        self._get_info()
-        return self._info['role']
 
     @property
     def address(self):
@@ -582,6 +578,13 @@ class _Member:
     def user(self):
         self._get_info()
         return _User(self._connection, self._info['user'])
+
+    @property
+    def preferences(self):
+        if self._preferences is None:
+            path = '{0}/preferences'.format(self.self_link)
+            self._preferences = _Preferences(self._connection, path)
+        return self._preferences
 
     def unsubscribe(self):
         """Unsubscribe the member from a mailing list.
@@ -762,6 +765,7 @@ class _Preferences:
         self._connection = connection
         self._path = path
         self._preferences = None
+        self.delivery_mode = None
         self._get_preferences()
 
     def _get_preferences(self):
@@ -769,9 +773,12 @@ class _Preferences:
             response, content = self._connection.call(self._path)
             self._preferences = content
 
+    def __getitem__(self, key):
+        return self._preferences[key]
+
     def __iter__(self):
-        for preference in self._preferences:
-            yield _Preferences(self._connection, preference)
+        for key in self._preferences.keys():
+            yield self._preferences[key]
 
 
 LIST_READ_ONLY_ATTRS = ('bounces_address', 'created_at', 'digest_last_sent_at',

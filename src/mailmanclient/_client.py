@@ -39,6 +39,9 @@ from urlparse import urljoin
 from mailmanclient import __version__
 
 
+DEFAULT_PAGE_ITEM_COUNT = 50
+
+
 def _member_key(member_dict):
     """Return the keys for sorting a member.
 
@@ -188,6 +191,9 @@ class Client:
         return [_User(self._connection, entry['self_link'])
                 for entry in sorted(content['entries'],
                                     key=itemgetter('self_link'))]
+
+    def get_user_page(self, count=50, page=1):
+        return _Page(self._connection, 'users', _User, count, page)
 
     def create_domain(self, mail_host, base_url=None,
                       description=None, contact_address=None):
@@ -765,7 +771,7 @@ class _Preferences:
 
     def __iter__(self):
         for preference in self._preferences:
-            yield _Preference(self._connection, preference)
+            yield _Preferences(self._connection, preference)
 
 
 LIST_READ_ONLY_ATTRS = ('bounces_address', 'created_at', 'digest_last_sent_at',
@@ -817,3 +823,53 @@ class _Settings:
             if attribute not in LIST_READ_ONLY_ATTRS:
                 data[attribute] = value
         response, content = self._connection.call(self._url, data, 'PATCH')
+
+
+class _Page:
+    def __init__(self, connection, path, model, count=DEFAULT_PAGE_ITEM_COUNT,
+                 page=1):
+        self._connection = connection
+        self._path = path
+        self._count = count
+        self._page = page
+        self._model = model
+        self._entries = []
+        self._create_page()
+
+    def __getitem__(self, key):
+        return self._entries[key]
+
+    def __iter__(self):
+        for entry in self._entries:
+            yield entry
+
+    def __repr__(self):
+        return '<Page {0} ({1})'.format(self._page, self._model)
+
+    def _create_page(self):
+        self._entries = []
+        # create url
+        path = '{0}?count={1}&page={2}'.format(self._path, self._count,
+                                               self._page)
+        response, content = self._connection.call(path)
+        if 'entries' in content:
+            for entry in content['entries']:
+                self._entries.append(self._model(self._connection,
+                                     entry['self_link']))
+
+    @property
+    def nr(self):
+        return self._page
+
+    @property
+    def next(self):
+        self._page += 1
+        self._create_page()
+        return self
+
+    @property
+    def previous(self):
+        if self._count > 0:
+            self._page -= 1
+            self._create_page()
+            return self

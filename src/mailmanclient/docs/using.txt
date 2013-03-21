@@ -43,13 +43,14 @@ must be added.  By default, there are no known domains.
 It's easy to create a new domain; when you do, a proxy object for that domain
 is returned.
 
-    >>> example_dot_com = client.create_domain('example.com')
+    >>> example_dot_com = client.create_domain('example.com',
+    ...     contact_address='admin@example.com')
     >>> example_dot_com
     <Domain "example.com">
     >>> print example_dot_com.base_url
     http://example.com
     >>> print example_dot_com.contact_address
-    postmaster@example.com
+    admin@example.com
     >>> print example_dot_com.description
     None
     >>> print example_dot_com.mail_host
@@ -269,6 +270,36 @@ Users are people with one or more list memberhips. To get a list of all users, a
     <User "..." (...)>
     <User "..." (...)>
 
+The users can also be paginated:
+
+    >>> page = client.get_user_page(count=2, page=1)
+    >>> page.nr
+    1
+
+    >>> for user in page:
+    ...     print user
+    <User "Anna" (...)>
+    <User "Bill" (...)>
+
+You can get the next or previous pages without calling ``get_userpage`` again.
+
+    >>> page = page.next
+    >>> page.nr
+    2
+
+    >>> for user in page:
+    ...     print user
+    <User "Cris" (...)>
+
+    >>> page = page.previous
+    >>> page.nr
+    1
+
+    >>> for user in page:
+    ...     print user
+    <User "Anna" (...)>
+    <User "Bill" (...)>
+
 A single user can be retrieved using their email address.
 
     >>> cris = client.get_user('cris@example.com')
@@ -345,7 +376,7 @@ Passwords can be changed as well:
 User Subscriptions
 ------------------
 
-A Users subscriptions can be access through their ``subscriptions`` property.
+A User's subscriptions can be access through their ``subscriptions`` property.
 
     >>> bill = client.get_user('bill@example.com')
     >>> for subscription in bill.subscriptions:

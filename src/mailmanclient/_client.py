@@ -892,6 +892,9 @@ class _Page:
     def __repr__(self):
         return '<Page {0} ({1})'.format(self._page, self._model)
 
+    def __len__(self):
+        return len(self._entries)
+
     def _create_page(self):
         self._entries = []
         # create url

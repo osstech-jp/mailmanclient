@@ -148,6 +148,8 @@ List results can be retrieved as pages:
     >>> page = client.get_list_page(count=2, page=1)
     >>> page.nr
     1
+    >>> len(page)
+    2
     >>> for m_list in page:
     ...     print m_list
     <List "test-one@example.com">

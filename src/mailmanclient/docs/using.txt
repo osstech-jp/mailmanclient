@@ -139,9 +139,26 @@ And you can print all the known mailing lists.
     >>> for mlist in client.lists:
     ...     print mlist
     <List "test-one@example.com">
-    <List "test-three@example.com">
-    <List "test-three@example.net">
     <List "test-two@example.com">
+    <List "test-three@example.net">
+    <List "test-three@example.com">
+
+List results can be retrieved as pages:
+
+    >>> page = client.get_list_page(count=2, page=1)
+    >>> page.nr
+    1
+    >>> for m_list in page:
+    ...     print m_list
+    <List "test-one@example.com">
+    <List "test-two@example.com">
+    >>> page = page.next
+    >>> page.nr
+    2
+    >>> for m_list in page:
+    ...     print m_list
+    <List "test-three@example.net">
+    <List "test-three@example.com">
 
 If you only want to know all lists for a specific domain, use the domain object.
 
@@ -209,6 +226,37 @@ We can also view the memberships for a single mailing list.
     >>> for member in test_one.members:
     ...     print member
     <Member "anna@example.com" on "test-one.example.com">
+    <Member "bill@example.com" on "test-one.example.com">
+
+Membership lists can be paginated, to recieve only a part of the result.
+
+    >>> page = client.get_member_page(count=2, page=1)
+    >>> page.nr
+    1
+    >>> for member in page:
+    ...     print member
+    <Member "anna@example.com" on "test-one.example.com">
+    <Member "bill@example.com" on "test-one.example.com">
+
+    >>> page = page.next
+    >>> page.nr
+    2
+    >>> for member in page:
+    ...     print member
+    <Member "anna@example.com" on "test-two.example.com">
+    <Member "cris@example.com" on "test-two.example.com">
+
+    >>> page = test_one.get_member_page(count=1, page=1)
+    >>> page.nr
+    1
+    >>> for member in page:
+    ...     print member
+    <Member "anna@example.com" on "test-one.example.com">
+    >>> page = page.next
+    >>> page.nr
+    2
+    >>> for member in page:
+    ...     print member
     <Member "bill@example.com" on "test-one.example.com">
 
 We can get a single membership too.
@@ -515,10 +563,10 @@ list:
 
     >>> for member in client.members:
     ...     print '%s: %s' %(member, member.role)
+    <Member "foo@example.com" on "test-one.example.com">: owner
     <Member "bar@example.com" on "test-one.example.com">: moderator
     <Member "bar@example.com" on "test-one.example.com">: member
     <Member "bill@example.com" on "test-one.example.com">: member
-    <Member "foo@example.com" on "test-one.example.com">: owner
     <Member "anna@example.com" on "test-two.example.com">: member
 
 Both owners and moderators can be removed:

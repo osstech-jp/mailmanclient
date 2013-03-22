@@ -42,15 +42,6 @@ from mailmanclient import __version__
 DEFAULT_PAGE_ITEM_COUNT = 50
 
 
-def _member_key(member_dict):
-    """Return the keys for sorting a member.
-
-    :param member_dict: The JSON dictionary for a member.
-    :return: 2-tuple of (fqdn_listname, address)
-    """
-    return (member_dict['list_id'], member_dict['address'])
-
-
 class MailmanConnectionError(Exception):
     """Custom Exception to catch connection errors."""
     pass
@@ -162,8 +153,10 @@ class Client:
         if 'entries' not in content:
             return []
         return [_List(self._connection, entry['self_link'])
-                for entry in sorted(content['entries'],
-                                    key=itemgetter('fqdn_listname'))]
+                for entry in content['entries']]
+
+    def get_list_page(self, count=50, page=1):
+        return _Page(self._connection, 'lists', _List, count, page)
 
     @property
     def domains(self):
@@ -180,8 +173,10 @@ class Client:
         if 'entries' not in content:
             return []
         return [_Member(self._connection, entry['self_link'])
-                for entry in sorted(content['entries'],
-                                    key=_member_key)]
+                for entry in content['entries']]
+
+    def get_member_page(self, count=50, page=1):
+        return _Page(self._connection, 'members', _Member, count, page)
 
     @property
     def users(self):
@@ -380,6 +375,10 @@ class _List:
         return [_Member(self._connection, entry['self_link'])
                 for entry in sorted(content['entries'],
                                     key=itemgetter('address'))]
+
+    def get_member_page(self, count=50, page=1):
+        url = 'lists/{0}/roster/member'.format(self.fqdn_listname)
+        return _Page(self._connection, url, _Member, count, page)
 
     @property
     def settings(self):

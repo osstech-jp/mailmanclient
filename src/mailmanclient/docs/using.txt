@@ -15,7 +15,7 @@ instantiating a client object to access the root of the REST hierarchy,
 providing it the base URL, user name and password (for Basic Auth).
 
     >>> from mailmanclient import Client
-    >>> client = Client('http://localhost:8001/3.0', 'restadmin', 'restpass')
+    >>> client = Client('http://localhost:9001/3.0', 'restadmin', 'restpass')
 
 We can retrieve basic information about the server.
 
@@ -23,7 +23,7 @@ We can retrieve basic information about the server.
     http_etag: "..."
     mailman_version: GNU Mailman 3.0... (...)
     python_version: ...
-    self_link: http://localhost:8001/3.0/system
+    self_link: http://localhost:9001/3.0/system
 
 To start with, there are no known mailing lists.
 
@@ -218,8 +218,24 @@ We can get a single membership too.
     <Member "cris@example.com" on "test-two.example.com">
     >>> print cris_test_two.role
     member
-    >>> print cris_test_two.self_link
-    http://localhost:8001/3.0/members/...
+
+A membership has preferences.
+
+    >>> prefs = cris_test_two.preferences
+    >>> print prefs['delivery_mode']
+    regular
+    >>> print prefs['acknowledge_posts']
+    None
+    >>> print prefs['delivery_status']
+    None
+    >>> print prefs['hide_address']
+    None
+    >>> print prefs['preferred_language']
+    None
+    >>> print prefs['receive_list_copy']
+    None
+    >>> print prefs['receive_own_postings']
+    None
 
 The membership object's ``user`` attribute will return a User object:
 
@@ -453,6 +469,8 @@ By default, preferences are not set and fall back to the global system preferenc
     True
     >>> print global_prefs['receive_own_postings']
     True
+
+Preferences can be set, but you have to call ``save`` to make your changes permanent.
 
 
 Owners and Moderators

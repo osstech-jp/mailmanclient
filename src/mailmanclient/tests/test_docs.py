@@ -91,6 +91,8 @@ layout: tmpdir
 [paths.tmpdir]
 var_dir: {vardir}
 log_dir: /tmp/mmclient/logs
+[webservice]
+port: 9001
 [runner.archive]
 start: no
 [runner.bounces]

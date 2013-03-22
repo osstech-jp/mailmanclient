@@ -154,7 +154,7 @@ class Client:
 
     @property
     def preferences(self):
-        return self._connection.call('system/preferences')[1]
+        return _Preferences(self._connection, 'system/preferences')
 
     @property
     def lists(self):
@@ -760,25 +760,62 @@ class _Address:
         self._info = None
 
 
+PREFERENCE_FIELDS = (
+    'acknowledge_posts',
+    'delivery_mode',
+    'delivery_status',
+    'hide_address',
+    'preferred_language',
+    'receive_list_copy',
+    'receive_own_postings', )
+
+
 class _Preferences:
-    def __init__(self, connection, path):
+    def __init__(self, connection, url):
         self._connection = connection
-        self._path = path
+        self._url = url
         self._preferences = None
         self.delivery_mode = None
         self._get_preferences()
 
+    def __repr__(self):
+        return repr(self._preferences)
+
     def _get_preferences(self):
         if self._preferences is None:
-            response, content = self._connection.call(self._path)
+            response, content = self._connection.call(self._url)
             self._preferences = content
+            for key in PREFERENCE_FIELDS:
+                self._preferences[key] = content.get(key)
 
+    def __setitem__(self, key, value):
+        self._preferences[key] = value
+        
     def __getitem__(self, key):
         return self._preferences[key]
 
     def __iter__(self):
         for key in self._preferences.keys():
             yield self._preferences[key]
+
+    def __len__(self):
+        return len(self._preferences)
+
+    def get(self, key, default=None):
+        try:
+            return self._preferences[key]
+        except KeyError:
+            return default
+
+    def keys(self):
+        return self._preferences.keys()
+
+    def save(self):
+        data = {}
+        for key in self._preferences:
+            if self._preferences[key] is not None:
+                data[key] = self._preferences[key]
+        response, content = self._connection.call(self._url, data, 'PUT')
 
 
 LIST_READ_ONLY_ATTRS = ('bounces_address', 'created_at', 'digest_last_sent_at',
@@ -823,6 +860,9 @@ class _Settings:
             return self._info[key]
         except KeyError:
             return default
+
+    def keys(self):
+        return self._info.keys()
 
     def save(self):
         data = {}

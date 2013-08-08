@@ -768,6 +768,7 @@ PREFERENCE_FIELDS = (
     'receive_list_copy',
     'receive_own_postings', )
 
+PREF_READ_ONLY_ATTRS = ('http_etag','self_link')
 
 class _Preferences:
     def __init__(self, connection, url):
@@ -812,9 +813,9 @@ class _Preferences:
     def save(self):
         data = {}
         for key in self._preferences:
-            if self._preferences[key] is not None:
+            if key not in PREF_READ_ONLY_ATTRS and self._preferences[key] is not None:
                 data[key] = self._preferences[key]
-        response, content = self._connection.call(self._url, data, 'PUT')
+        response, content = self._connection.call(self._url, data, 'PATCH')
 
 
 LIST_READ_ONLY_ATTRS = ('bounces_address', 'created_at', 'digest_last_sent_at',

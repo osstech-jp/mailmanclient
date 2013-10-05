@@ -43,11 +43,13 @@ DEFAULT_PAGE_ITEM_COUNT = 50
 
 
 class MailmanConnectionError(Exception):
+
     """Custom Exception to catch connection errors."""
     pass
 
 
 class _Connection:
+
     """A connection to the REST client."""
 
     def __init__(self, baseurl, name=None, password=None):
@@ -122,6 +124,7 @@ class _Connection:
 
 
 class Client:
+
     """Access the Mailman REST API root."""
 
     def __init__(self, baseurl, name=None, password=None):
@@ -248,8 +251,9 @@ class Client:
         response, content = self._connection.call(
             'lists/{0}'.format(fqdn_listname), None, 'DELETE')
 
-
+
 class _Domain:
+
     def __init__(self, connection, url):
         self._connection = connection
         self._url = url
@@ -308,6 +312,7 @@ class _Domain:
 
 
 class _List:
+
     def __init__(self, connection, url, data=None):
         self._connection = connection
         self._url = url
@@ -538,6 +543,7 @@ class _List:
 
 
 class _Member:
+
     def __init__(self, connection, url):
         self._connection = connection
         self._url = url
@@ -594,6 +600,7 @@ class _Member:
 
 
 class _User:
+
     def __init__(self, connection, url):
         self._connection = connection
         self._url = url
@@ -656,11 +663,11 @@ class _User:
             subscriptions = []
             for address in self.addresses:
                 response, content = self._connection.call('members/find',
-                    data={'subscriber': address})
+                                                          data={'subscriber': address})
                 try:
                     for entry in content['entries']:
                         subscriptions.append(_Member(self._connection,
-                            entry['self_link']))
+                                                     entry['self_link']))
                 except KeyError:
                     pass
             self._subscriptions = subscriptions
@@ -696,6 +703,7 @@ class _User:
 
 
 class _Addresses:
+
     def __init__(self, connection, user_id):
         self._connection = connection
         self._user_id = user_id
@@ -719,9 +727,11 @@ class _Addresses:
 
 
 class _Address:
+
     def __init__(self, connection, address):
         self._connection = connection
         self._address = address
+        self._preferences = None
         self._url = address['self_link']
         self._info = None
 
@@ -748,6 +758,13 @@ class _Address:
         self._get_info()
         return self._info.get('verified_on')
 
+    @property
+    def preferences(self):
+        if self._preferences is None:
+            path = 'addresses/{0}/preferences'.format(self._address['email'])
+            self._preferences = _Preferences(self._connection, path)
+        return self._preferences
+
     def verify(self):
         self._connection.call('addresses/{0}/verify'
                               .format(self._address['email']), method='POST')
@@ -768,8 +785,11 @@ PREFERENCE_FIELDS = (
     'receive_list_copy',
     'receive_own_postings', )
 
+PREF_READ_ONLY_ATTRS = ('http_etag', 'self_link')
+
 
 class _Preferences:
+
     def __init__(self, connection, url):
         self._connection = connection
         self._url = url
@@ -789,7 +809,7 @@ class _Preferences:
 
     def __setitem__(self, key, value):
         self._preferences[key] = value
-        
+
     def __getitem__(self, key):
         return self._preferences[key]
 
@@ -812,9 +832,9 @@ class _Preferences:
     def save(self):
         data = {}
         for key in self._preferences:
-            if self._preferences[key] is not None:
+            if key not in PREF_READ_ONLY_ATTRS and self._preferences[key] is not None:
                 data[key] = self._preferences[key]
-        response, content = self._connection.call(self._url, data, 'PUT')
+        response, content = self._connection.call(self._url, data, 'PATCH')
 
 
 LIST_READ_ONLY_ATTRS = ('bounces_address', 'created_at', 'digest_last_sent_at',
@@ -827,6 +847,7 @@ LIST_READ_ONLY_ATTRS = ('bounces_address', 'created_at', 'digest_last_sent_at',
 
 
 class _Settings:
+
     def __init__(self, connection, url):
         self._connection = connection
         self._url = url
@@ -872,6 +893,7 @@ class _Settings:
 
 
 class _Page:
+
     def __init__(self, connection, path, model, count=DEFAULT_PAGE_ITEM_COUNT,
                  page=1):
         self._connection = connection

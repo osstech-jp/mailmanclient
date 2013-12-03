@@ -631,6 +631,7 @@ class _User:
 
     @display_name.setter
     def display_name(self, value):
+        self._get_info()
         self._info['display_name'] = value
 
     @property

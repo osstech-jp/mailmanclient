@@ -522,6 +522,13 @@ By default, preferences are not set and fall back to the global system preferenc
 
 Preferences can be set, but you have to call ``save`` to make your changes permanent.
 
+    >>> prefs = test_two.get_member('anna@example.com').preferences
+    >>> prefs['delivery_status'] = 'by_user'
+    >>> prefs.save()
+    >>> prefs = test_two.get_member('anna@example.com').preferences
+    >>> print prefs['delivery_status']
+    by_user
+
 
 Owners and Moderators
 =====================

@@ -463,7 +463,7 @@ We can get all list settings via a lists settings attribute. A proxy object for 
 
     >>> settings = test_one.settings
     >>> len(settings)
-    48
+    50
 
     >>> for attr in sorted(settings):
     ...     print attr + ': ' + str(settings[attr])

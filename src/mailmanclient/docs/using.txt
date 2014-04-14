@@ -302,6 +302,7 @@ If you use an address which is not a member of test_two `ValueError` is raised:
 After a while, Anna decides to unsubscribe from the Test One mailing list,
 though she keeps her Test Two membership active.
 
+    >>> time.sleep(2)
     >>> test_one.unsubscribe('anna@example.com')
     >>> for member in client.members:
     ...     print member
@@ -336,7 +337,7 @@ Users are people with one or more list memberhips. To get a list of all users, a
     <User "..." (...)>
     <User "..." (...)>
 
-The users can also be paginated:
+The list of users can also be paginated:
 
     >>> page = client.get_user_page(count=2, page=1)
     >>> page.nr
@@ -381,6 +382,21 @@ Every user has a list of one or more addresses.
     cris@example.com
     Cris
     ...
+    
+Multiple addresses can be assigned to a user record:
+
+    >>> cris.add_address('cris.person@example.org')
+    >>> print client.get_address('cris.person@example.org')
+    cris.person@example.org
+
+    >>> for address in cris.addresses:
+    ...     print address
+    cris.person@example.org
+    cris@example.com
+
+
+Addresses
+=========
 
 Addresses can be accessed directly:
 

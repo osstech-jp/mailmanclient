@@ -24,12 +24,11 @@ from setuptools import setup, find_packages
 
 
 require_python(0x20600f0)
-__version__ = get_version('src/mailmanclient/__init__.py')
 
 
 setup(
     name='mailmanclient',
-    version=__version__,
+    version='1.0.0a1',
     packages=find_packages('src'),
     package_dir = {'': 'src'},
     include_package_data=True,

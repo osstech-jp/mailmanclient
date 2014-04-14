@@ -381,6 +381,20 @@ class _List:
                 for entry in sorted(content['entries'],
                                     key=itemgetter('address'))]
 
+    @property
+    def nonmembers(self):
+        url = 'members/find'
+        data = {
+            'role': 'nonmember',
+            'list_id': self.list_id
+        }
+        response, content = self._connection.call(url, data)
+        if 'entries' not in content:
+            return []
+        return [_Member(self._connection, entry['self_link'])
+                for entry in sorted(content['entries'],
+                                    key=itemgetter('address'))]
+
     def get_member_page(self, count=50, page=1):
         url = 'lists/{0}/roster/member'.format(self.fqdn_listname)
         return _Page(self._connection, url, _Member, count, page)
@@ -689,6 +703,12 @@ class _User:
             path = 'users/{0}/preferences'.format(self.user_id)
             self._preferences = _Preferences(self._connection, path)
         return self._preferences
+
+    def add_address(self, email):
+        # Adds another email adress to the user record and returns an 
+        # _Address object.
+        url = '{0}/addresses'.format(self._url)
+        self._connection.call(url, {'email': email})
 
     def save(self):
         data = {'display_name': self.display_name}

@@ -269,6 +269,11 @@ We can get a single membership too.
     >>> print cris_test_two.role
     member
 
+A membership can also be retrieved without instantiating the list object first:
+
+    >>> client.get_member('test-two@example.com', 'cris@example.com')
+    <Member "cris@example.com" on "test-two.example.com">
+
 A membership has preferences.
 
     >>> prefs = cris_test_two.preferences

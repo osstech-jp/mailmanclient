@@ -178,6 +178,9 @@ class Client:
         return [_Member(self._connection, entry['self_link'])
                 for entry in content['entries']]
 
+    def get_member(self, fqdn_listname, subscriber_address):
+        return self.get_list(fqdn_listname).get_member(subscriber_address)
+
     def get_member_page(self, count=50, page=1):
         return _Page(self._connection, 'members', _Member, count, page)
 

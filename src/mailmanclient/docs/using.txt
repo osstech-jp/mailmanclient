@@ -330,6 +330,22 @@ If you try to unsubscribe an address which is not a member address `ValueError` 
     ...
     ValueError: nomember@example.com is not a member address of test-one@example.com
 
+Non-Members
+===========
+
+When someone attempts to post to a list but is not a member, then they are
+listed as a "non-member" of that list so that a moderator can choose how to
+handle their messages going forwards.  In some cases, one might wish to
+accept or reject their future messages automatically.  Just like with regular
+members, they are given a unique id.
+
+The list starts out with no nonmembers.
+
+    >>> test_one.nonmembers
+    []
+
+When someone tries to send a message to the list and they are not a
+subscriber, they get added to the nonmember list.
 
 Users
 =====

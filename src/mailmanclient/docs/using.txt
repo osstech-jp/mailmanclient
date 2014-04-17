@@ -335,7 +335,7 @@ Non-Members
 
 When someone attempts to post to a list but is not a member, then they are
 listed as a "non-member" of that list so that a moderator can choose how to
-handle their messages going forwards.  In some cases, one might wish to
+handle their messages going forward.  In some cases, one might wish to
 accept or reject their future messages automatically.  Just like with regular
 members, they are given a unique id.
 

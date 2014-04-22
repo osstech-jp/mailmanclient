@@ -338,7 +338,7 @@ class _List:
         if 'entries' not in content:
             return []
         else:
-            return [item['address'] for item in content['entries']]
+            return [item['email'] for item in content['entries']]
 
     @property
     def moderators(self):
@@ -347,7 +347,7 @@ class _List:
         if 'entries' not in content:
             return []
         else:
-            return [item['address'] for item in content['entries']]
+            return [item['email'] for item in content['entries']]
 
     @property
     def fqdn_listname(self):
@@ -505,7 +505,7 @@ class _List:
         """
         return self.moderate_message(request_id, 'accept')
 
-    def get_member(self, address):
+    def get_member(self, email):
         """Get a membership.
 
         :param address: The email address of the member for this list.
@@ -514,12 +514,12 @@ class _List:
         # In order to get the member object we need to
         # iterate over the existing member list
         for member in self.members:
-            if member.address == address:
+            if member.email == email:
                 return member
                 break
         else:
             raise ValueError('%s is not a member address of %s' %
-                             (address, self.fqdn_listname))
+                             (email, self.fqdn_listname))
 
     def subscribe(self, address, display_name=None):
         """Subscribe an email address to a mailing list.
@@ -538,7 +538,7 @@ class _List:
         response, content = self._connection.call('members', data)
         return _Member(self._connection, response['location'])
 
-    def unsubscribe(self, address):
+    def unsubscribe(self, email):
         """Unsubscribe an email address from a mailing list.
 
         :param address: The address to unsubscribe.
@@ -547,12 +547,12 @@ class _List:
         # iterate over the existing member list
 
         for member in self.members:
-            if member.address == address:
+            if member.email == email:
                 self._connection.call(member.self_link, method='DELETE')
                 break
         else:
             raise ValueError('%s is not a member address of %s' %
-                             (address, self.fqdn_listname))
+                             (email, self.fqdn_listname))
 
     def delete(self):
         response, content = self._connection.call(
@@ -569,7 +569,7 @@ class _Member:
 
     def __repr__(self):
         return '<Member "{0}" on "{1}">'.format(
-            self.address, self.list_id)
+            self.email, self.list_id)
 
     def _get_info(self):
         if self._info is None:
@@ -584,7 +584,12 @@ class _Member:
     @property
     def address(self):
         self._get_info()
-        return self._info['address']
+        return self._info['email']
+
+    @property
+    def email(self):
+        self._get_info()
+        return self._info['email']
 
     @property
     def self_link(self):

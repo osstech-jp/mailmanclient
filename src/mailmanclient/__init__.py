@@ -26,7 +26,7 @@ __all__ = [
     ]
 
 
-__version__ = '1.0.0a1'
+__version__ = '1.0.0b1'
 
 
 from mailmanclient._client import Client, MailmanConnectionError

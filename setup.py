@@ -28,7 +28,7 @@ require_python(0x20600f0)
 
 setup(
     name='mailmanclient',
-    version='1.0.0a1',
+    version='1.0.0b1',
     packages=find_packages('src'),
     package_dir = {'': 'src'},
     include_package_data=True,

@@ -640,12 +640,7 @@ Message Moderation
     ... Some text.
     ... 
     ... """
-    >>> server = smtplib.LMTP('localhost', 8024)
-    >>> server.sendmail('nomember@example.com', 'test-one@example.com', msg)
-    {}
-    >>> server.quit()
-    (221, 'Bye')
-    >>> time.sleep(2)
+    >>> inject_message('test-one@example.com', msg)
 
 Messages held for moderation can be listed on a per list basis.
 

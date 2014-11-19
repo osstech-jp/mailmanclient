@@ -19,17 +19,37 @@
 
 from __future__ import absolute_import, unicode_literals, print_function
 
+import os
 from urllib2 import HTTPError
 from urlparse import urljoin
 
+from zope.component import getUtility
 from webtest import TestApp
+
+from mailman.config import config
+from mailman.core.chains import process
+from mailman.interfaces.listmanager import IListManager
+from mailman.interfaces.usermanager import IUserManager
+from mailman.testing.helpers import specialized_message_from_string
+from mailman.testing.layers import ConfigLayer
 import mailmanclient
 
 __metaclass__ = type
 __all__ = [
+    "inject_message",
     "FakeMailmanClient",
     ]
 
+
+
+def inject_message(fqdn_listname, msg):
+    mlist = getUtility(IListManager).get(fqdn_listname)
+    user_manager = getUtility(IUserManager)
+    msg = specialized_message_from_string(msg)
+    for sender in msg.senders:
+        if user_manager.get_address(sender) is None:
+            user_manager.create_address(sender)
+    process(mlist, msg, {})
 
 
 #
@@ -49,17 +69,19 @@ class FakeConnection(mailmanclient._client._Connection):
         self.called_paths = []
         from mailman.rest.wsgiapp import make_application
         self.app = TestApp(make_application())
+        if self.basic_auth:
+            self.app.authorization = ('Basic', (self.name, self.password))
+        super(FakeConnection, self).__init__(baseurl, name, password)
 
     def call(self, path, data=None, method=None):
-        self.called_paths.append(path)
+        self.called_paths.append(
+                { "path": path, "data": data, "method": method })
         if method is None:
             if data is None:
                 method = 'GET'
             else:
                 method = 'POST'
         method_fn = getattr(self.app, method.lower())
-        if self.basic_auth:
-            self.app.authorization = ('Basic', (self.name, self.password))
         url = urljoin(self.baseurl, path)
         try:
             kw = {"expect_errors": True}
@@ -96,3 +118,12 @@ class FakeMailmanClient(mailmanclient.Client):
     @property
     def called_paths(self):
         return self._connection.called_paths
+
+    @classmethod
+    def setUp(self):
+        ConfigLayer.setUp()
+
+    @classmethod
+    def tearDown(self):
+        config.create_paths = False # or ConfigLayer.tearDown will create them
+        ConfigLayer.tearDown()

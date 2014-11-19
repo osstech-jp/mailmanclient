@@ -39,15 +39,9 @@ from mock import patch
 # pylint: disable-msg=F0401
 from pkg_resources import (
     resource_filename, resource_exists, resource_listdir, cleanup_resources)
-from zope.component import getUtility
 
 from mailman.config import config
-from mailman.testing.layers import ConfigLayer
-from mailman.interfaces.listmanager import IListManager
-from mailman.interfaces.usermanager import IUserManager
-from mailman.core.chains import process
-from mailman.testing.helpers import specialized_message_from_string
-from mailmanclient.tests.utils import FakeMailmanClient
+from mailmanclient.tests.utils import FakeMailmanClient, inject_message
 
 
 COMMASPACE = ', '
@@ -84,22 +78,11 @@ def stop():
 
 
 
-def inject_message(fqdn_listname, msg):
-    mlist = getUtility(IListManager).get(fqdn_listname)
-    user_manager = getUtility(IUserManager)
-    msg = specialized_message_from_string(msg)
-    for sender in msg.senders:
-        if user_manager.get_address(sender) is None:
-            user_manager.create_address(sender)
-    process(mlist, msg, {})
-
-
-
 def setup(testobj):
     testobj.globs['stop'] = stop
     testobj.globs['dump'] = dump
     testobj.globs['inject_message'] = inject_message
-    ConfigLayer.setUp()
+    FakeMailmanClient.setUp()
     # In unit tests, passwords aren't encrypted. Don't show this in the doctests
     passlib_cfg = os.path.join(config.VAR_DIR, 'passlib.cfg')
     with open(passlib_cfg, 'w') as fp:
@@ -122,8 +105,7 @@ def teardown(testobj):
     """Test teardown."""
     testobj.patcher.stop()
     config.pop('conf_hash_pw')
-    config.create_paths = False # or ConfigLayer.tearDown will create them
-    ConfigLayer.tearDown()
+    FakeMailmanClient.tearDown()
 
 
 

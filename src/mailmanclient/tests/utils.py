@@ -102,7 +102,8 @@ class FakeConnection(mailmanclient._client._Connection):
         except HTTPError:
             raise
         except IOError:
-            raise MailmanConnectionError('Could not connect to Mailman API')
+            raise mailmanclient.MailmanConnectionError(
+                'Could not connect to Mailman API')
 
 
 
@@ -126,4 +127,18 @@ class FakeMailmanClient(mailmanclient.Client):
     @classmethod
     def tearDown(self):
         config.create_paths = False # or ConfigLayer.tearDown will create them
+        ConfigLayer.testTearDown()
         ConfigLayer.tearDown()
+        reset_mailman_config()
+
+def reset_mailman_config():
+    # This is necessary because ConfigLayer.setup/tearDown was designed to be
+    # run only once for the whole test suite, and thus does not reset
+    # everything afterwards
+    for prop in ("switchboards", "rules", "chains", "handlers",
+                 "pipelines", "commands"):
+        getattr(config, prop).clear()
+    from mailman.model.user import uid_factory
+    uid_factory._lockobj = None
+    from mailman.model.member import uid_factory
+    uid_factory._lockobj = None

@@ -30,10 +30,6 @@ from mailmanclient.tests.test_docs import additional_tests
 
 
 if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        print 'Please provide the path to your mailman bin directory.'
-        sys.exit(1)
-    os.environ['MAILMAN_TEST_BINDIR'] = sys.argv[1]
     suite = additional_tests()
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

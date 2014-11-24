@@ -17,7 +17,7 @@
 
 """Test harness for doctests."""
 
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import, unicode_literals, print_function
 
 __metaclass__ = type
 __all__ = [
@@ -33,10 +33,15 @@ import doctest
 import tempfile
 import unittest
 import subprocess
+from textwrap import dedent
 
+from mock import patch
 # pylint: disable-msg=F0401
 from pkg_resources import (
     resource_filename, resource_exists, resource_listdir, cleanup_resources)
+
+from mailman.config import config
+from mailmanclient.tests.utils import FakeMailmanClient, inject_message
 
 
 COMMASPACE = ', '
@@ -50,17 +55,17 @@ DOCTEST_FLAGS = (
 
 def dump(results):
     if results is None:
-        print None
+        print(None)
         return
     for key in sorted(results):
         if key == 'entries':
             for i, entry in enumerate(results[key]):
                 # entry is a dictionary.
-                print 'entry %d:' % i
+                print('entry %d:' % i)
                 for entry_key in sorted(entry):
-                    print '    {0}: {1}'.format(entry_key, entry[entry_key])
+                    print('    {0}: {1}'.format(entry_key, entry[entry_key]))
         else:
-            print '{0}: {1}'.format(key, results[key])
+            print('{0}: {1}'.format(key, results[key]))
 
 
 
@@ -74,69 +79,33 @@ def stop():
 
 
 def setup(testobj):
-    """Test setup."""
-    # Create a unique database for the running version of Mailman, then start
-    # it up.  It should not yet be running.  This environment variable must be
-    # set to find the installation of Mailman we can run.  Yes, this should be
-    # fixed.
-    testobj._bindir = os.environ.get('MAILMAN_TEST_BINDIR')
-    if testobj._bindir is None:
-        raise RuntimeError('Must set $MAILMAN_TEST_BINDIR to run tests')
-    vardir = testobj._vardir = tempfile.mkdtemp()
-    cfgfile = testobj._cfgfile = os.path.join(vardir, 'client_test.cfg')
-    with open(cfgfile, 'w') as fp:
-        print >> fp, """\
-[mailman]
-layout: tmpdir
-[paths.tmpdir]
-var_dir: {vardir}
-log_dir: /tmp/mmclient/logs
-[webservice]
-port: 9001
-[runner.archive]
-start: no
-[runner.bounces]
-start: no
-[runner.command]
-start: yes
-[runner.in]
-start: yes
-[runner.lmtp]
-start: yes
-[runner.news]
-start: no
-[runner.out]
-start: yes
-[runner.pipeline]
-start: no
-[runner.retry]
-start: no
-[runner.virgin]
-start: yes
-[runner.digest]
-start: no
-""".format(vardir=vardir)
-    mailman = os.path.join(testobj._bindir, 'mailman')
-    subprocess.call([mailman, '-C', cfgfile, 'start', '-q'])
-    time.sleep(3)
-    # Make sure future statements in our doctests match the Python code.  When
-    # run with 2to3, the future import gets removed and these names are not
-    # defined.
-    try:
-        testobj.globs['absolute_import'] = absolute_import
-        testobj.globs['unicode_literals'] = unicode_literals
-    except NameError:
-        pass
     testobj.globs['stop'] = stop
     testobj.globs['dump'] = dump
+    testobj.globs['inject_message'] = inject_message
+    FakeMailmanClient.setUp()
+    # In unit tests, passwords aren't encrypted. Don't show this in the doctests
+    passlib_cfg = os.path.join(config.VAR_DIR, 'passlib.cfg')
+    with open(passlib_cfg, 'w') as fp:
+        print(dedent("""
+            [passlib]
+            schemes = sha512_crypt
+            """), file=fp)
+    conf_hash_pw = dedent("""
+    [passwords]
+    configuration: {}
+    """.format(passlib_cfg))
+    config.push('conf_hash_pw', conf_hash_pw)
+    # Use the FakeMailmanClient
+    testobj.patcher = patch("mailmanclient.Client", FakeMailmanClient)
+    fmc = testobj.patcher.start()
 
 
+
 def teardown(testobj):
     """Test teardown."""
-    mailman = os.path.join(testobj._bindir, 'mailman')
-    subprocess.call([mailman, '-C', testobj._cfgfile, 'stop', '-q'])
-    shutil.rmtree(testobj._vardir)
-    time.sleep(3)
+    testobj.patcher.stop()
+    config.pop('conf_hash_pw')
+    FakeMailmanClient.tearDown()
 
 
 

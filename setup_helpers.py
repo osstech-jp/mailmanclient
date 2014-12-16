@@ -133,7 +133,7 @@ def long_description(*filenames):
     for value in filenames:
         if value.endswith('.txt'):
             with open(value) as fp:
-                value = fp.read()
+                value = fp.read().decode('UTF-8')
         res.append(value)
         if not value.endswith(NL):
             res.append('')

@@ -24,9 +24,12 @@ __all__ = [
 
 import os
 import re
+import vcr
+import errno
 import doctest
 import mailmanclient
 
+from contextlib2 import ExitStack
 from mailmanclient.testing.documentation import setup, teardown
 from nose2.events import Plugin
 
@@ -44,12 +47,36 @@ class NosePlugin(Plugin):
         super(NosePlugin, self).__init__()
         self.patterns = []
         self.stderr = False
+        self.record = False
         def set_stderr(ignore):
             self.stderr = True
         self.addArgument(self.patterns, 'P', 'pattern',
                          'Add a test matching pattern')
         self.addFlag(set_stderr, 'E', 'stderr',
                      'Enable stderr logging to sub-runners')
+        def set_record(ignore):
+            self.record = True
+        self.addFlag(set_record, 'R', 'rerecord',
+                     """Force re-recording of test responses.  Requires
+                     Mailman to be running.""")
+        self._data_path = os.path.join(TOPDIR, 'tests', 'data', 'tape.yaml')
+        self._resources = ExitStack()
+
+    def startTestRun(self, event):
+        # Check to see if we're running the test suite in record mode.  If so,
+        # delete any existing recording.
+        if self.record:
+            try:
+                os.remove(self._data_path)
+            except OSError as error:
+                if error.errno != errno.ENOFILE:
+                    raise
+        # This will automatically create the recording file.
+        self._resources.enter_context(vcr.use_cassette(self._data_path))
+
+    def stopTestRun(self, event):
+        # Stop all recording.
+        self._resources.close()
 
     def getTestCaseNames(self, event):
         if len(self.patterns) == 0:

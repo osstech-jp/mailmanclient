@@ -39,15 +39,8 @@ setup(
     license='LGPLv3',
     url='http://launchpad.net/mailman.client',
     download_url='https://launchpad.net/mailman.client/+download',
-    # Auto-conversion to Python 3.
-    use_2to3=True,
-    convert_2to3_doctests=find_doctests(),
     install_requires=[
-        'WebTest',
         'httplib2',
-        'mock',
-        'nose2',
         'six',
-        'vcr',
         ],
     )

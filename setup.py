@@ -1,4 +1,4 @@
-# Copyright (C) 2010 by the Free Software Foundation, Inc.
+# Copyright (C) 2010-2015 by the Free Software Foundation, Inc.
 #
 # This file is part of mailman.client.
 #
@@ -15,11 +15,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailman.client.  If not, see <http://www.gnu.org/licenses/>.
 
-import distribute_setup
-distribute_setup.use_setuptools()
-
 from setup_helpers import (
-    description, find_doctests, get_version, long_description, require_python)
+    description, find_doctests, long_description, require_python)
 from setuptools import setup, find_packages
 
 
@@ -34,7 +31,7 @@ setup(
     include_package_data=True,
     maintainer='Barry Warsaw',
     maintainer_email='barry@list.org',
-    description=description('README.txt'),
+    description=description('README.rst'),
     long_description=long_description(
         'src/mailmanclient/README.txt',
         'src/mailmanclient/NEWS.txt'),

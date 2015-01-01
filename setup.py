@@ -43,9 +43,11 @@ setup(
     use_2to3=True,
     convert_2to3_doctests=find_doctests(),
     install_requires=[
+        'WebTest',
         'httplib2',
         'mock',
-        'WebTest',
         'nose2',
+        'six',
+        'vcr',
         ],
     )

@@ -25,28 +25,25 @@ __all__ = [
 ]
 
 
+import six
 import json
 
 from base64 import b64encode
 from httplib2 import Http
 from mailmanclient import __version__
 from operator import itemgetter
-from urllib import urlencode
-from urllib2 import HTTPError
-from urlparse import urljoin
+from six.moves.urllib_error import HTTPError
+from six.moves.urllib_parse import urlencode, urljoin
 
 
 DEFAULT_PAGE_ITEM_COUNT = 50
 
 
 class MailmanConnectionError(Exception):
-
     """Custom Exception to catch connection errors."""
-    pass
 
 
 class _Connection:
-
     """A connection to the REST client."""
 
     def __init__(self, baseurl, name=None, password=None):
@@ -90,7 +87,7 @@ class _Connection:
         """
         headers = {
             'User-Agent': 'GNU Mailman REST client v{0}'.format(__version__),
-        }
+            }
         if data is not None:
             data = urlencode(data, doseq=True)
             headers['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -112,7 +109,8 @@ class _Connection:
             if len(content) == 0:
                 return response, None
             # XXX Work around for http://bugs.python.org/issue10038
-            content = unicode(content)
+            if isinstance(content, six.binary_type):
+                content = content.decode('utf-8')
             return response, json.loads(content)
         except HTTPError:
             raise
@@ -121,7 +119,6 @@ class _Connection:
 
 
 class Client:
-
     """Access the Mailman REST API root."""
 
     def __init__(self, baseurl, name=None, password=None):
@@ -206,9 +203,8 @@ class Client:
         return _Domain(self._connection, response['location'])
 
     def delete_domain(self, mail_host):
-        response, content = self._connection.call('domains/{0}'
-                                                  .format(mail_host),
-                                                  None, 'DELETE')
+        response, content = self._connection.call(
+            'domains/{0}'.format(mail_host), None, 'DELETE')
 
     def get_domain(self, mail_host=None, web_host=None):
         """Get domain by its mail_host or its web_host."""
@@ -222,13 +218,13 @@ class Client:
                 # in Mailman3Alpha8
                 if domain.base_url == web_host:
                     return domain
-                    break
             else:
                 return None
 
     def create_user(self, email, password, display_name=''):
         response, content = self._connection.call(
-            'users', dict(email=email, password=password,
+            'users', dict(email=email,
+                          password=password,
                           display_name=display_name))
         return _User(self._connection, response['location'])
 
@@ -316,9 +312,7 @@ class _List:
     def __init__(self, connection, url, data=None):
         self._connection = connection
         self._url = url
-        self._info = None
-        if data is not None:
-            self._info = data
+        self._info = data
 
     def __repr__(self):
         return '<List "{0}">'.format(self.fqdn_listname)
@@ -406,8 +400,7 @@ class _List:
 
     @property
     def held(self):
-        """Return a list of dicts with held message information.
-        """
+        """Return a list of dicts with held message information."""
         response, content = self._connection.call(
             'lists/{0}/held'.format(self.fqdn_listname), None, 'GET')
         if 'entries' not in content:
@@ -426,8 +419,7 @@ class _List:
 
     @property
     def requests(self):
-        """Return a list of dicts with subscription requests.
-        """
+        """Return a list of dicts with subscription requests."""
         response, content = self._connection.call(
             'lists/{0}/requests'.format(self.fqdn_listname), None, 'GET')
         if 'entries' not in content:
@@ -476,30 +468,26 @@ class _List:
         :param action: Action to perform on held message.
         :type action: String.
         """
-        path = 'lists/{0}/held/{1}'.format(self.fqdn_listname,
-                                           str(request_id))
-        response, content = self._connection.call(path, dict(action=action),
-                                                  'POST')
+        path = 'lists/{0}/held/{1}'.format(
+            self.fqdn_listname, str(request_id))
+        response, content = self._connection.call(
+            path, dict(action=action), 'POST')
         return response
 
     def discard_message(self, request_id):
-        """Shortcut for moderate_message.
-        """
+        """Shortcut for moderate_message."""
         return self.moderate_message(request_id, 'discard')
 
     def reject_message(self, request_id):
-        """Shortcut for moderate_message.
-        """
+        """Shortcut for moderate_message."""
         return self.moderate_message(request_id, 'reject')
 
     def defer_message(self, request_id):
-        """Shortcut for moderate_message.
-        """
+        """Shortcut for moderate_message."""
         return self.moderate_message(request_id, 'defer')
 
     def accept_message(self, request_id):
-        """Shortcut for moderate_message.
-        """
+        """Shortcut for moderate_message."""
         return self.moderate_message(request_id, 'accept')
 
     def get_member(self, email):
@@ -513,7 +501,6 @@ class _List:
         for member in self.members:
             if member.email == email:
                 return member
-                break
         else:
             raise ValueError('%s is not a member address of %s' %
                              (email, self.fqdn_listname))
@@ -531,7 +518,7 @@ class _List:
             list_id=self.list_id,
             subscriber=address,
             display_name=display_name,
-        )
+            )
         response, content = self._connection.call('members', data)
         return _Member(self._connection, response['location'])
 
@@ -565,8 +552,7 @@ class _Member:
         self._preferences = None
 
     def __repr__(self):
-        return '<Member "{0}" on "{1}">'.format(
-            self.email, self.list_id)
+        return '<Member "{0}" on "{1}">'.format(self.email, self.list_id)
 
     def _get_info(self):
         if self._info is None:
@@ -631,8 +617,7 @@ class _User:
         self._cleartext_password = None
 
     def __repr__(self):
-        return '<User "{0}" ({1})>'.format(
-            self.display_name, self.user_id)
+        return '<User "{0}" ({1})>'.format(self.display_name, self.user_id)
 
     def _get_info(self):
         if self._info is None:
@@ -682,8 +667,8 @@ class _User:
         if self._subscriptions is None:
             subscriptions = []
             for address in self.addresses:
-                response, content = self._connection.call('members/find',
-                                                          data={'subscriber': address})
+                response, content = self._connection.call(
+                    'members/find', data={'subscriber': address})
                 try:
                     for entry in content['entries']:
                         subscriptions.append(_Member(self._connection,
@@ -710,7 +695,7 @@ class _User:
         return self._preferences
 
     def add_address(self, email):
-        # Adds another email adress to the user record and returns an 
+        # Adds another email adress to the user record and returns an
         # _Address object.
         url = '{0}/addresses'.format(self._url)
         self._connection.call(url, {'email': email})
@@ -720,8 +705,8 @@ class _User:
         if self._cleartext_password is not None:
             data['cleartext_password'] = self._cleartext_password
         self.cleartext_password = None
-        response, content = self._connection.call(self._url,
-                                                  data, method='PATCH')
+        response, content = self._connection.call(
+            self._url, data, method='PATCH')
         self._info = None
 
     def delete(self):
@@ -738,8 +723,8 @@ class _Addresses:
 
     def _get_addresses(self):
         if self._addresses is None:
-            response, content = self._connection.call('users/{0}/addresses'
-                                                      .format(self._user_id))
+            response, content = self._connection.call(
+                'users/{0}/addresses'.format(self._user_id))
             if 'entries' not in content:
                 self._addresses = []
             self._addresses = content['entries']
@@ -792,13 +777,13 @@ class _Address:
         return self._preferences
 
     def verify(self):
-        self._connection.call('addresses/{0}/verify'
-                              .format(self._address['email']), method='POST')
+        self._connection.call('addresses/{0}/verify'.format(
+            self._address['email']), method='POST')
         self._info = None
 
     def unverify(self):
-        self._connection.call('addresses/{0}/unverify'
-                              .format(self._address['email']), method='POST')
+        self._connection.call('addresses/{0}/unverify'.format(
+            self._address['email']), method='POST')
         self._info = None
 
 
@@ -809,9 +794,13 @@ PREFERENCE_FIELDS = (
     'hide_address',
     'preferred_language',
     'receive_list_copy',
-    'receive_own_postings', )
+    'receive_own_postings',
+    )
 
-PREF_READ_ONLY_ATTRS = ('http_etag', 'self_link')
+PREF_READ_ONLY_ATTRS = (
+    'http_etag',
+    'self_link',
+    )
 
 
 class _Preferences:
@@ -840,7 +829,7 @@ class _Preferences:
         return self._preferences[key]
 
     def __iter__(self):
-        for key in self._preferences.keys():
+        for key in self._preferences:
             yield self._preferences[key]
 
     def __len__(self):
@@ -858,18 +847,34 @@ class _Preferences:
     def save(self):
         data = {}
         for key in self._preferences:
-            if key not in PREF_READ_ONLY_ATTRS and self._preferences[key] is not None:
+            if (key not in PREF_READ_ONLY_ATTRS
+                    and self._preferences[key] is not None):
                 data[key] = self._preferences[key]
         response, content = self._connection.call(self._url, data, 'PATCH')
 
 
-LIST_READ_ONLY_ATTRS = ('bounces_address', 'created_at', 'digest_last_sent_at',
-                        'fqdn_listname', 'http_etag', 'mail_host',
-                        'join_address', 'last_post_at', 'leave_address',
-                        'list_id', 'list_name', 'next_digest_number',
-                        'no_reply_address', 'owner_address', 'post_id',
-                        'posting_address', 'request_address', 'scheme',
-                        'volume', 'web_host',)
+LIST_READ_ONLY_ATTRS = (
+    'bounces_address',
+    'created_at',
+    'digest_last_sent_at',
+    'fqdn_listname',
+    'http_etag',
+    'join_address',
+    'last_post_at',
+    'leave_address',
+    'list_id',
+    'list_name',
+    'mail_host',
+    'next_digest_number',
+    'no_reply_address',
+    'owner_address',
+    'post_id',
+    'posting_address',
+    'request_address',
+    'scheme',
+    'volume',
+    'web_host',
+    )
 
 
 class _Settings:
@@ -889,7 +894,7 @@ class _Settings:
             self._info = content
 
     def __iter__(self):
-        for key in self._info.keys():
+        for key in self._info:
             yield key
 
     def __getitem__(self, key):
@@ -946,8 +951,8 @@ class _Page:
     def _create_page(self):
         self._entries = []
         # create url
-        path = '{0}?count={1}&page={2}'.format(self._path, self._count,
-                                               self._page)
+        path = '{0}?count={1}&page={2}'.format(
+            self._path, self._count, self._page)
         response, content = self._connection.call(path)
         if 'entries' in content:
             for entry in content['entries']:

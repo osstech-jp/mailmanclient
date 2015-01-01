@@ -16,16 +16,17 @@
 # along with mailman.client.  If not, see <http://www.gnu.org/licenses/>.
 
 from setup_helpers import (
-    description, find_doctests, long_description, require_python)
+    description, find_doctests, get_version, long_description, require_python)
 from setuptools import setup, find_packages
 
 
 require_python(0x20600f0)
+__version__ = get_version('src/mailmanclient/__init__.py')
 
 
 setup(
     name='mailmanclient',
-    version='1.0.0b1',
+    version=__version__,
     packages=find_packages('src'),
     package_dir = {'': 'src'},
     include_package_data=True,
@@ -41,5 +42,10 @@ setup(
     # Auto-conversion to Python 3.
     use_2to3=True,
     convert_2to3_doctests=find_doctests(),
-    install_requires=['httplib2', 'mock', 'WebTest', ],
-)
+    install_requires=[
+        'httplib2',
+        'mock',
+        'WebTest',
+        'nose2',
+        ],
+    )

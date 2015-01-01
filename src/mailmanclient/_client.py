@@ -25,18 +25,15 @@ __all__ = [
 ]
 
 
-import re
 import json
 
 from base64 import b64encode
 from httplib2 import Http
+from mailmanclient import __version__
 from operator import itemgetter
 from urllib import urlencode
 from urllib2 import HTTPError
 from urlparse import urljoin
-
-
-from mailmanclient import __version__
 
 
 DEFAULT_PAGE_ITEM_COUNT = 50

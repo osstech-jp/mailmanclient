@@ -69,7 +69,7 @@ class NosePlugin(Plugin):
             try:
                 os.remove(self._data_path)
             except OSError as error:
-                if error.errno != errno.ENOFILE:
+                if error.errno != errno.ENOENT:
                     raise
         # This will automatically create the recording file.
         self._resources.enter_context(vcr.use_cassette(self._data_path))

@@ -138,7 +138,7 @@ class Client:
 
     @property
     def system(self):
-        return self._connection.call('system')[1]
+        return self._connection.call('system/versions')[1]
 
     @property
     def preferences(self):

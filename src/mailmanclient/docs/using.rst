@@ -23,7 +23,7 @@ We can retrieve basic information about the server.
     http_etag: "..."
     mailman_version: GNU Mailman 3.0... (...)
     python_version: ...
-    self_link: http://localhost:9001/3.0/system
+    self_link: http://localhost:9001/3.0/system/versions
 
 To start with, there are no known mailing lists.
 
@@ -47,15 +47,15 @@ is returned.
     ...     contact_address='admin@example.com')
     >>> example_dot_com
     <Domain "example.com">
-    >>> print example_dot_com.base_url
+    >>> print(example_dot_com.base_url)
     http://example.com
-    >>> print example_dot_com.contact_address
+    >>> print(example_dot_com.contact_address)
     admin@example.com
-    >>> print example_dot_com.description
+    >>> print(example_dot_com.description)
     None
-    >>> print example_dot_com.mail_host
+    >>> print(example_dot_com.mail_host)
     example.com
-    >>> print example_dot_com.url_host
+    >>> print(example_dot_com.url_host)
     example.com
 
 You can also get an existing domain independently using its mail host.
@@ -63,7 +63,7 @@ You can also get an existing domain independently using its mail host.
     >>> example = client.get_domain('example.com')
     >>> example
     <Domain "example.com">
-    >>> print example_dot_com.base_url
+    >>> print(example_dot_com.base_url)
     http://example.com
 
 Additionally you can get an existing domain using its web host.
@@ -71,7 +71,7 @@ Additionally you can get an existing domain using its web host.
     >>> example = client.get_domain(web_host='http://example.com')
     >>> example
     <Domain "example.com">
-    >>> print example_dot_com.base_url
+    >>> print(example_dot_com.base_url)
     http://example.com
 
 But you cannot retrieve a non-existent domain.
@@ -88,7 +88,7 @@ After creating a few more domains, we can print the list of all domains.
     >>> client.create_domain('example.org')
     <Domain "example.org">
     >>> for mail_host in client.domains:
-    ...     print mail_host
+    ...     print(mail_host)
     <Domain "example.com">
     <Domain "example.net">
     <Domain "example.org">
@@ -97,7 +97,7 @@ Also, domain can be deleted.
 
     >>> client.delete_domain('example.org')
     >>> for mail_host in client.domains:
-    ...     print mail_host
+    ...     print(mail_host)
     <Domain "example.com">
     <Domain "example.net">
 
@@ -110,13 +110,13 @@ Once you have a domain, you can create mailing lists in that domain.
     >>> test_one = example.create_list('test-one')
     >>> test_one
     <List "test-one@example.com">
-    >>> print test_one.fqdn_listname
+    >>> print(test_one.fqdn_listname)
     test-one@example.com
-    >>> print test_one.mail_host
+    >>> print(test_one.mail_host)
     example.com
-    >>> print test_one.list_name
+    >>> print(test_one.list_name)
     test-one
-    >>> print test_one.display_name
+    >>> print(test_one.display_name)
     Test-one
 
 You can also retrieve the mailing list after the fact.
@@ -137,7 +137,7 @@ And you can print all the known mailing lists.
     <List "test-three@example.com">
 
     >>> for mlist in client.lists:
-    ...     print mlist
+    ...     print(mlist)
     <List "test-one@example.com">
     <List "test-two@example.com">
     <List "test-three@example.net">
@@ -151,21 +151,22 @@ List results can be retrieved as pages:
     >>> len(page)
     2
     >>> for m_list in page:
-    ...     print m_list
+    ...     print(m_list)
     <List "test-one@example.com">
     <List "test-two@example.com">
     >>> page = page.next
     >>> page.nr
     2
     >>> for m_list in page:
-    ...     print m_list
+    ...     print(m_list)
     <List "test-three@example.net">
     <List "test-three@example.com">
 
-If you only want to know all lists for a specific domain, use the domain object.
+If you only want to know all lists for a specific domain, use the domain
+object.
 
     >>> for mlist in example.lists:
-    ...     print mlist
+    ...     print(mlist)
     <List "test-one@example.com">
     <List "test-three@example.com">
     <List "test-two@example.com">
@@ -180,7 +181,7 @@ You can also delete a list using the client instance's delete_list method.
     >>> client.delete_list('test-three@example.com')
 
     >>> for mlist in client.lists:
-    ...     print mlist
+    ...     print(mlist)
     <List "test-one@example.com">
     <List "test-two@example.com">
 
@@ -217,7 +218,7 @@ We can retrieve all known memberships.  These are sorted first by mailing list
 name, then by email address.
 
     >>> for member in client.members:
-    ...     print member
+    ...     print(member)
     <Member "anna@example.com" on "test-one.example.com">
     <Member "bill@example.com" on "test-one.example.com">
     <Member "anna@example.com" on "test-two.example.com">
@@ -226,7 +227,7 @@ name, then by email address.
 We can also view the memberships for a single mailing list.
 
     >>> for member in test_one.members:
-    ...     print member
+    ...     print(member)
     <Member "anna@example.com" on "test-one.example.com">
     <Member "bill@example.com" on "test-one.example.com">
 
@@ -236,7 +237,7 @@ Membership lists can be paginated, to recieve only a part of the result.
     >>> page.nr
     1
     >>> for member in page:
-    ...     print member
+    ...     print(member)
     <Member "anna@example.com" on "test-one.example.com">
     <Member "bill@example.com" on "test-one.example.com">
 
@@ -244,7 +245,7 @@ Membership lists can be paginated, to recieve only a part of the result.
     >>> page.nr
     2
     >>> for member in page:
-    ...     print member
+    ...     print(member)
     <Member "anna@example.com" on "test-two.example.com">
     <Member "cris@example.com" on "test-two.example.com">
 
@@ -252,13 +253,13 @@ Membership lists can be paginated, to recieve only a part of the result.
     >>> page.nr
     1
     >>> for member in page:
-    ...     print member
+    ...     print(member)
     <Member "anna@example.com" on "test-one.example.com">
     >>> page = page.next
     >>> page.nr
     2
     >>> for member in page:
-    ...     print member
+    ...     print(member)
     <Member "bill@example.com" on "test-one.example.com">
 
 We can get a single membership too.
@@ -266,7 +267,7 @@ We can get a single membership too.
     >>> cris_test_two = test_two.get_member('cris@example.com')
     >>> cris_test_two
     <Member "cris@example.com" on "test-two.example.com">
-    >>> print cris_test_two.role
+    >>> print(cris_test_two.role)
     member
 
 A membership can also be retrieved without instantiating the list object first:
@@ -277,24 +278,24 @@ A membership can also be retrieved without instantiating the list object first:
 A membership has preferences.
 
     >>> prefs = cris_test_two.preferences
-    >>> print prefs['delivery_mode']
+    >>> print(prefs['delivery_mode'])
     regular
-    >>> print prefs['acknowledge_posts']
+    >>> print(prefs['acknowledge_posts'])
     None
-    >>> print prefs['delivery_status']
+    >>> print(prefs['delivery_status'])
     None
-    >>> print prefs['hide_address']
+    >>> print(prefs['hide_address'])
     None
-    >>> print prefs['preferred_language']
+    >>> print(prefs['preferred_language'])
     None
-    >>> print prefs['receive_list_copy']
+    >>> print(prefs['receive_list_copy'])
     None
-    >>> print prefs['receive_own_postings']
+    >>> print(prefs['receive_own_postings'])
     None
 
 The membership object's ``user`` attribute will return a User object:
 
-    >>> cris_test_two.user 
+    >>> cris_test_two.user
     <User "Cris" (...)>
 
 If you use an address which is not a member of test_two `ValueError` is raised:
@@ -302,7 +303,8 @@ If you use an address which is not a member of test_two `ValueError` is raised:
     >>> test_two.unsubscribe('nomember@example.com')
     Traceback (most recent call last):
     ...
-    ValueError: nomember@example.com is not a member address of test-two@example.com
+    ValueError: nomember@example.com is not a member address of
+    test-two@example.com
 
 After a while, Anna decides to unsubscribe from the Test One mailing list,
 though she keeps her Test Two membership active.
@@ -310,7 +312,7 @@ though she keeps her Test Two membership active.
     >>> time.sleep(2)
     >>> test_one.unsubscribe('anna@example.com')
     >>> for member in client.members:
-    ...     print member
+    ...     print(member)
     <Member "bill@example.com" on "test-one.example.com">
     <Member "anna@example.com" on "test-two.example.com">
     <Member "cris@example.com" on "test-two.example.com">
@@ -319,16 +321,19 @@ A little later, Cris decides to unsubscribe from the Test Two mailing list.
 
     >>> cris_test_two.unsubscribe()
     >>> for member in client.members:
-    ...     print member
+    ...     print(member)
     <Member "bill@example.com" on "test-one.example.com">
     <Member "anna@example.com" on "test-two.example.com">
 
-If you try to unsubscribe an address which is not a member address `ValueError` is raised:
+If you try to unsubscribe an address which is not a member address
+`ValueError` is raised:
 
     >>> test_one.unsubscribe('nomember@example.com')
     Traceback (most recent call last):
     ...
-    ValueError: nomember@example.com is not a member address of test-one@example.com
+    ValueError: nomember@example.com is not a member address of
+    test-one@example.com
+
 
 Non-Members
 ===========
@@ -347,13 +352,15 @@ The list starts out with no nonmembers.
 When someone tries to send a message to the list and they are not a
 subscriber, they get added to the nonmember list.
 
+
 Users
 =====
 
-Users are people with one or more list memberhips. To get a list of all users, access the clients user property.
+Users are people with one or more list memberships. To get a list of all users,
+access the clients user property.
 
     >>> for user in client.users:
-    ...     print user
+    ...     print(user)
     <User "..." (...)>
     <User "..." (...)>
     <User "..." (...)>
@@ -365,7 +372,7 @@ The list of users can also be paginated:
     1
 
     >>> for user in page:
-    ...     print user
+    ...     print(user)
     <User "Anna" (...)>
     <User "Bill" (...)>
 
@@ -376,7 +383,7 @@ You can get the next or previous pages without calling ``get_userpage`` again.
     2
 
     >>> for user in page:
-    ...     print user
+    ...     print(user)
     <User "Cris" (...)>
 
     >>> page = page.previous
@@ -384,34 +391,34 @@ You can get the next or previous pages without calling ``get_userpage`` again.
     1
 
     >>> for user in page:
-    ...     print user
+    ...     print(user)
     <User "Anna" (...)>
     <User "Bill" (...)>
 
 A single user can be retrieved using their email address.
 
     >>> cris = client.get_user('cris@example.com')
-    >>> print cris.display_name
+    >>> print(cris.display_name)
     Cris
 
 Every user has a list of one or more addresses.
 
     >>> for address in cris.addresses:
-    ...     print address
-    ...     print address.display_name
-    ...     print address.registered_on
+    ...     print(address)
+    ...     print(address.display_name)
+    ...     print(address.registered_on)
     cris@example.com
     Cris
     ...
-    
+
 Multiple addresses can be assigned to a user record:
 
     >>> cris.add_address('cris.person@example.org')
-    >>> print client.get_address('cris.person@example.org')
+    >>> print(client.get_address('cris.person@example.org'))
     cris.person@example.org
 
     >>> for address in cris.addresses:
-    ...     print address
+    ...     print(address)
     cris.person@example.org
     cris@example.com
 
@@ -422,14 +429,14 @@ Addresses
 Addresses can be accessed directly:
 
     >>> address = client.get_address('cris@example.com')
-    >>> print address
+    >>> print(address)
     cris@example.com
-    >>> print address.display_name
+    >>> print(address.display_name)
     Cris
 
 The address has not been verified:
 
-    >>> print address.verified_on is None
+    >>> print(address.verified_on is None)
     True
 
 But that can be done via the address object:
@@ -451,9 +458,9 @@ Users can be added using ``create_user``. The display_name is optional:
     ...                    display_name='Ler')
     <User "Ler" (...)>
     >>> ler = client.get_user('ler@primus.org')
-    >>> print ler.password
+    >>> print(ler.password)
     $...
-    >>> print ler.display_name
+    >>> print(ler.display_name)
     Ler
 
 User attributes can be changed through assignment, but you need to call the
@@ -462,7 +469,7 @@ object's ``save`` method to store the changes in the mailman core database.
     >>> ler.display_name = 'Sir Ler'
     >>> ler.save()
     >>> ler = client.get_user('ler@primus.org')
-    >>> print ler.display_name
+    >>> print(ler.display_name)
     Sir Ler
 
 Passwords can be changed as well:
@@ -483,39 +490,41 @@ A User's subscriptions can be access through their ``subscriptions`` property.
 
     >>> bill = client.get_user('bill@example.com')
     >>> for subscription in bill.subscriptions:
-    ...     print subscription
+    ...     print(subscription)
     <Member "bill@example.com" on "test-one.example.com">
 
-If all you need are the list ids of all mailing lists a user is subscribed to, you can use the ``subscription_list_ids`` property.
+If all you need are the list ids of all mailing lists a user is subscribed to,
+you can use the ``subscription_list_ids`` property.
 
     >>> for list_id in bill.subscription_list_ids:
-    ...     print list_id
+    ...     print(list_id)
     test-one.example.com
 
 
 List Settings
 =============
 
-We can get all list settings via a lists settings attribute. A proxy object for the settings is returned which behaves much like a dictionary.
+We can get all list settings via a lists settings attribute. A proxy object
+for the settings is returned which behaves much like a dictionary.
 
     >>> settings = test_one.settings
     >>> len(settings)
     50
 
     >>> for attr in sorted(settings):
-    ...     print attr + ': ' + str(settings[attr])
+    ...     print(attr + ': ' + str(settings[attr]))
     acceptable_aliases: []
     ...
     welcome_message_uri: mailman:///welcome.txt
 
-    >>> print settings['display_name']
+    >>> print(settings['display_name'])
     Test-one
 
 We can access all valid list settings as attributes.
 
-    >>> print settings['fqdn_listname']
+    >>> print(settings['fqdn_listname'])
     test-one@example.com
-    >>> print settings['description']
+    >>> print(settings['description'])
 
     >>> settings['description'] = 'A very meaningful description.'
     >>> settings['display_name'] = 'Test Numero Uno'
@@ -523,14 +532,16 @@ We can access all valid list settings as attributes.
     >>> settings.save()
 
     >>> settings_new = test_one.settings
-    >>> print settings_new['description']
+    >>> print(settings_new['description'])
     A very meaningful description.
-    >>> print settings_new['display_name']
+    >>> print(settings_new['display_name'])
     Test Numero Uno
 
-The settings object also supports the `get` method of usual Python dictionaries:
+The settings object also supports the `get` method of usual Python
+dictionaries:
 
-    >>> print settings_new.get('OhNoIForgotTheKey', 'HowGoodIPlacedOneUnderTheDoormat')
+    >>> print(settings_new.get('OhNoIForgotTheKey',
+    ...                        'HowGoodIPlacedOneUnderTheDoormat'))
     HowGoodIPlacedOneUnderTheDoormat
 
 
@@ -539,31 +550,33 @@ Preferences
 
 Preferences can be accessed and set for users, members and addresses.
 
-By default, preferences are not set and fall back to the global system preferences. They're read-only and can be accessed through the client object.
+By default, preferences are not set and fall back to the global system
+preferences. They're read-only and can be accessed through the client object.
 
     >>> global_prefs = client.preferences
-    >>> print global_prefs['acknowledge_posts']
+    >>> print(global_prefs['acknowledge_posts'])
     False
-    >>> print global_prefs['delivery_mode']
+    >>> print(global_prefs['delivery_mode'])
     regular
-    >>> print global_prefs['delivery_status']
+    >>> print(global_prefs['delivery_status'])
     enabled
-    >>> print global_prefs['hide_address']
+    >>> print(global_prefs['hide_address'])
     True
-    >>> print global_prefs['preferred_language']
+    >>> print(global_prefs['preferred_language'])
     en
-    >>> print global_prefs['receive_list_copy']
+    >>> print(global_prefs['receive_list_copy'])
     True
-    >>> print global_prefs['receive_own_postings']
+    >>> print(global_prefs['receive_own_postings'])
     True
 
-Preferences can be set, but you have to call ``save`` to make your changes permanent.
+Preferences can be set, but you have to call ``save`` to make your changes
+permanent.
 
     >>> prefs = test_two.get_member('anna@example.com').preferences
     >>> prefs['delivery_status'] = 'by_user'
     >>> prefs.save()
     >>> prefs = test_two.get_member('anna@example.com').preferences
-    >>> print prefs['delivery_status']
+    >>> print(prefs['delivery_status'])
     by_user
 
 
@@ -581,7 +594,7 @@ Owners can be added via the ``add_owner`` method:
 
     >>> test_one.add_owner('foo@example.com')
     >>> for owner in test_one.owners:
-    ...     print owner
+    ...     print(owner)
     foo@example.com
 
 The owner of the list not automatically added as a member:
@@ -593,7 +606,7 @@ Moderators can be added similarly:
 
     >>> test_one.add_moderator('bar@example.com')
     >>> for moderator in test_one.moderators:
-    ...     print moderator
+    ...     print(moderator)
     bar@example.com
 
 Moderators are also not automatically added as members:
@@ -608,7 +621,7 @@ list:
     <Member "bar@example.com" on "test-one.example.com">
 
     >>> for member in client.members:
-    ...     print '%s: %s' %(member, member.role)
+    ...     print('%s: %s' %(member, member.role))
     <Member "foo@example.com" on "test-one.example.com">: owner
     <Member "bar@example.com" on "test-one.example.com">: moderator
     <Member "bar@example.com" on "test-one.example.com">: member
@@ -636,29 +649,29 @@ Message Moderation
     ... To: test-one@example.com
     ... Subject: Something
     ... Message-ID: <moderated_01>
-    ... 
+    ...
     ... Some text.
-    ... 
+    ...
     ... """
     >>> inject_message('test-one@example.com', msg)
 
 Messages held for moderation can be listed on a per list basis.
 
     >>> held = test_one.held
-    >>> print held[0]['subject']
+    >>> print(held[0]['subject'])
     Something
-    >>> print held[0]['reason']
+    >>> print(held[0]['reason'])
     <BLANKLINE>
-    >>> print held[0]['request_id']
+    >>> print(held[0]['request_id'])
     1
 
-    >>> print test_one.defer_message(held[0]['request_id'])['status']
+    >>> print(test_one.defer_message(held[0]['request_id'])['status'])
     204
 
     >>> len(test_one.held)
     1
 
-    >>> print test_one.discard_message(held[0]['request_id'])['status']
+    >>> print(test_one.discard_message(held[0]['request_id'])['status'])
     204
 
     >>> len(test_one.held)

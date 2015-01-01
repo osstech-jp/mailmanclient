@@ -33,8 +33,8 @@ setup(
     maintainer_email='barry@list.org',
     description=description('README.rst'),
     long_description=long_description(
-        'src/mailmanclient/README.txt',
-        'src/mailmanclient/NEWS.txt'),
+        'src/mailmanclient/README.rst',
+        'src/mailmanclient/NEWS.rst'),
     license='LGPLv3',
     url='http://launchpad.net/mailman.client',
     download_url='https://launchpad.net/mailman.client/+download',

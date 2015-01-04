@@ -1,4 +1,4 @@
 include *.py MANIFEST.in
-global-include *.txt *.rst
+global-include *.txt *.rst *.yaml
 include Makefile
 prune _build

@@ -2,13 +2,6 @@
 Mailman REST client
 ===================
 
-    >>> import os
-    >>> import time
-    >>> import smtplib
-    >>> import subprocess
-
-    >>> from mock import patch
-
 This is the official Python bindings for the GNU Mailman REST API.  In order
 to talk to Mailman, the engine's REST server must be running.  You begin by
 instantiating a client object to access the root of the REST hierarchy,
@@ -73,13 +66,6 @@ Additionally you can get an existing domain using its web host.
     <Domain "example.com">
     >>> print(example_dot_com.base_url)
     http://example.com
-
-But you cannot retrieve a non-existent domain.
-
-    >>> client.get_domain('example.org')
-    Traceback (most recent call last):
-    ...
-    HTTPError: HTTP Error 404: 404 Not Found
 
 After creating a few more domains, we can print the list of all domains.
 
@@ -309,6 +295,7 @@ If you use an address which is not a member of test_two `ValueError` is raised:
 After a while, Anna decides to unsubscribe from the Test One mailing list,
 though she keeps her Test Two membership active.
 
+    >>> import time
     >>> time.sleep(2)
     >>> test_one.unsubscribe('anna@example.com')
     >>> for member in client.members:
@@ -645,6 +632,9 @@ Moderation
 Message Moderation
 ------------------
 
+By injecting a message by a non-member into the incoming queue, we can
+simulate a message being held for moderator approval.
+
     >>> msg = """From: nomember@example.com
     ... To: test-one@example.com
     ... Subject: Something
@@ -653,11 +643,27 @@ Message Moderation
     ... Some text.
     ...
     ... """
-    >>> inject_message('test-one@example.com', msg)
+    >>> inq = client.queues['in']
+    >>> inq.inject('test-one.example.com', msg)
+
+Now wait until the message has been processed.
+
+    >>> while True:
+    ...     if len(inq.files) == 0:
+    ...         break
+    ...     time.sleep(0.1)
+
+It might take a few moments for the message to show up in the moderation
+queue.
+
+    >>> while True:
+    ...     held = test_one.held
+    ...     if len(held) > 0:
+    ...         break
+    ...     time.sleep(0.1)
 
 Messages held for moderation can be listed on a per list basis.
 
-    >>> held = test_one.held
     >>> print(held[0]['subject'])
     Something
     >>> print(held[0]['reason'])

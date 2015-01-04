@@ -68,7 +68,7 @@ class _Connection:
             self.basic_auth = None
         else:
             auth = '{0}:{1}'.format(name, password)
-            self.basic_auth = b64encode(auth)
+            self.basic_auth = b64encode(auth.encode('utf-8')).decode('utf-8')
 
     def call(self, path, data=None, method=None):
         """Make a call to the Mailman REST API.
@@ -143,6 +143,14 @@ class Client:
     @property
     def preferences(self):
         return _Preferences(self._connection, 'system/preferences')
+
+    @property
+    def queues(self):
+        response, content = self._connection.call('queues')
+        queues = {}
+        for entry in content['entries']:
+            queues[entry['name']] = _Queue(self._connection, entry)
+        return queues
 
     @property
     def lists(self):
@@ -975,3 +983,22 @@ class _Page:
             self._page -= 1
             self._create_page()
             return self
+
+
+class _Queue:
+    def __init__(self, connection, entry):
+        self._connection = connection
+        self.name = entry['name']
+        self.url = entry['self_link']
+        self.directory = entry['directory']
+
+    def __repr__(self):
+        return '<Queue: {}>'.format(self.name)
+
+    def inject(self, list_id, text):
+        self._connection.call(self.url, dict(list_id=list_id, text=text))
+
+    @property
+    def files(self):
+        response, content = self._connection.call(self.url)
+        return content['files']

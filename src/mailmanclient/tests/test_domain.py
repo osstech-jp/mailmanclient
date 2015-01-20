@@ -1,4 +1,4 @@
-# Copyright (C) 2010-2015 by the Free Software Foundation, Inc.
+# Copyright (C) 2015 by the Free Software Foundation, Inc.
 #
 # This file is part of mailman.client.
 #
@@ -14,19 +14,34 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailman.client.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Package contents."""
+"""Test domain corner cases."""
 
 from __future__ import absolute_import, print_function, unicode_literals
 
 __metaclass__ = type
 __all__ = [
-    'Client',
-    'MailmanConnectionError',
-    '__version__',
+    'TestDomains',
     ]
 
 
-__version__ = '1.0.0b1'
+import unittest
+
+from mailmanclient import Client
+from six.moves.urllib_error import HTTPError
 
 
-from mailmanclient._client import Client, MailmanConnectionError
+class TestDomains(unittest.TestCase):
+    def setUp(self):
+        self._client = Client(
+            'http://localhost:9001/3.0', 'restadmin', 'restpass')
+
+    def test_no_domain(self):
+        # Trying to get a non-existent domain returns a 404.
+        #
+        # We can't use `with self.assertRaises()` until we drop Python 2.6
+        try:
+            self._client.get_domain('example.org')
+        except HTTPError as error:
+            self.assertEqual(error.code, 404)
+        else:
+            raise AssertionError('Expected HTTPError 404')

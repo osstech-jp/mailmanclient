@@ -1,4 +1,4 @@
-# Copyright (C) 2010 by the Free Software Foundation, Inc.
+# Copyright (C) 2010-2015 by the Free Software Foundation, Inc.
 #
 # This file is part of mailman.client.
 #
@@ -15,34 +15,32 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailman.client.  If not, see <http://www.gnu.org/licenses/>.
 
-import distribute_setup
-distribute_setup.use_setuptools()
-
 from setup_helpers import (
     description, find_doctests, get_version, long_description, require_python)
 from setuptools import setup, find_packages
 
 
 require_python(0x20600f0)
+__version__ = get_version('src/mailmanclient/__init__.py')
 
 
 setup(
     name='mailmanclient',
-    version='1.0.0b1',
+    version=__version__,
     packages=find_packages('src'),
     package_dir = {'': 'src'},
     include_package_data=True,
     maintainer='Barry Warsaw',
     maintainer_email='barry@list.org',
-    description=description('README.txt'),
+    description=description('README.rst'),
     long_description=long_description(
-        'src/mailmanclient/README.txt',
-        'src/mailmanclient/NEWS.txt'),
+        'src/mailmanclient/README.rst',
+        'src/mailmanclient/NEWS.rst'),
     license='LGPLv3',
     url='http://launchpad.net/mailman.client',
     download_url='https://launchpad.net/mailman.client/+download',
-    # Auto-conversion to Python 3.
-    use_2to3=True,
-    convert_2to3_doctests=find_doctests(),
-    install_requires=['httplib2', 'mock', 'WebTest', ],
-)
+    install_requires=[
+        'httplib2',
+        'six',
+        ],
+    )

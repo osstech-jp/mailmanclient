@@ -41,9 +41,8 @@ Project details
 You may download the latest version of the package from the Python
 `Cheese Shop`_ or from Launchpad_.
 
-You can also install it via ``easy_install`` or ``pip``.
+You can also install it via ``pip``.
 
-    % sudo easy_install mailman.client
     % sudo pip install mailman.client
 
 See the Launchpad project page for access to the Bazaar branch, bug report,

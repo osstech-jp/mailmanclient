@@ -1,23 +1,22 @@
-# Copyright (C) 2009, 2010 by Barry A. Warsaw
+# Copyright (C) 2009-2015 by the Free Software Foundation, Inc.
 #
-# This file is part of flufl.i18n
+# This file is part of mailman.client
 #
-# flufl.i18n is free software: you can redistribute it and/or modify it under
-# the terms of the GNU Lesser General Public License as published by the Free
-# Software Foundation, version 3 of the License.
+# mailman.client is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Lesser General Public License as published by the
+# Free Software Foundation, version 3 of the License.
 #
-# flufl.i18n is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
-# for more details.
+# mailman.client is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
+# details.
 #
 # You should have received a copy of the GNU Lesser General Public License
-# along with flufl.i18n.  If not, see <http://www.gnu.org/licenses/>.
+# along with mailman.client.  If not, see <http://www.gnu.org/licenses/>.
 
 """setup.py helper functions."""
 
-from __future__ import absolute_import, unicode_literals
-from __future__ import print_function
+from __future__ import absolute_import, print_function, unicode_literals
 
 
 __metaclass__ = type
@@ -33,6 +32,7 @@ __all__ = [
 import os
 import re
 import sys
+import codecs
 
 
 DEFAULT_VERSION_RE = re.compile(r'(?P<version>\d+\.\d(?:\.\d+)?)')
@@ -131,9 +131,10 @@ def long_description(*filenames):
     """Provide a long description."""
     res = []
     for value in filenames:
-        if value.endswith('.txt'):
-            with open(value) as fp:
-                value = fp.read().decode('UTF-8')
+        base, ext = os.path.splitext(value)
+        if ext in ('.txt', '.rst'):
+            with codecs.open(value, 'r', encoding='utf-8') as fp:
+                value = fp.read()
         res.append(value)
         if not value.endswith(NL):
             res.append('')
@@ -142,6 +143,6 @@ def long_description(*filenames):
 
 def description(filename):
     """Provide a short description."""
-    with open(filename) as fp:
+    with codecs.open(filename, 'r', encoding='utf-8') as fp:
         for line in fp:
             return line.strip()

@@ -2,7 +2,7 @@
 mailman.client - Python bindings for the Mailman 3 REST API
 ===========================================================
 
-This package is called ``mailman.client``. 
+This package is called ``mailman.client``.
 
 
 Requirements
@@ -38,10 +38,9 @@ You can download the latest version of the package either from the Cheeseshop:
     http://pypi.python.org/pypi/mailman.client
 
 or from the Launchpad page above.  Of course you can also just install it with
-``pip`` or ``easy_install`` from the command line::
+``pip`` from the command line::
 
     % sudo pip mailman.client
-    % sudo easy_install mailman.client
 
 You can grab the latest development copy of the code using Bazaar, from the
 Launchpad home page above.  See http://bazaar-vcs.org for details on the
@@ -56,7 +55,7 @@ You may contact the author via barry@python.org.
 Copyright
 =========
 
-Copyright (C) 2010 by The Free Software Foundation, Inc.
+Copyright (C) 2010-2015 by The Free Software Foundation, Inc.
 
 This file is part of mailman.client.
 

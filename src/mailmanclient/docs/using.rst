@@ -10,6 +10,9 @@ providing it the base URL, user name and password (for Basic Auth).
     >>> from mailmanclient import Client
     >>> client = Client('http://localhost:9001/3.0', 'restadmin', 'restpass')
 
+In the above code note that port '9001' is used since mailman's test server
+runs on port '9001', if you are trying on your mailman installation replace
+it with '8001'.
 We can retrieve basic information about the server.
 
     >>> dump(client.system)

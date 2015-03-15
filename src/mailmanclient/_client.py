@@ -458,6 +458,12 @@ class _List:
         content.pop('http_etag')
         return content
 
+    def set_archiver(self, archiver_name, enabled):
+        response, content = self._connection.call(
+            'lists/{0}/archivers'.format(self.list_id),
+            {archiver_name: enabled},
+            method='PATCH')
+
     def add_owner(self, address):
         self.add_role('owner', address)
 

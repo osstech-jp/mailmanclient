@@ -459,6 +459,9 @@ class _List:
         return content
 
     def set_archiver(self, archiver_name, enabled):
+        """
+        Updates the status of a single archiver.
+        """
         response, content = self._connection.call(
             'lists/{0}/archivers'.format(self.list_id),
             {archiver_name: enabled},

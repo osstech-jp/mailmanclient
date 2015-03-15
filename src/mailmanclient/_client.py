@@ -448,8 +448,13 @@ class _List:
 
     @property
     def archivers(self):
+        """
+        Returns a dict of all available archivers, along with their
+        activation status.
+        """
         response, content = self._connection.call(
             'lists/{0}/archivers'.format(self.list_id))
+        # Remove `http_etag` property.
         content.pop('http_etag')
         return content
 

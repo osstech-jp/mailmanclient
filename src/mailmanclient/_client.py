@@ -450,7 +450,8 @@ class _List:
     def archivers(self):
         response, content = self._connection.call(
             'lists/{0}/archivers'.format(self.list_id))
-        return sorted([key for key in content if key != 'http_etag'])
+        content.pop('http_etag')
+        return content
 
     def add_owner(self, address):
         self.add_role('owner', address)

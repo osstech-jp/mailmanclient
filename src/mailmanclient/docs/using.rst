@@ -693,9 +693,12 @@ Archivers
 =========
 
 
-    >>> for archiver in test_one.archivers:
-    ...     print(archiver)
-    mail-archive
-    mhonarc
-    prototype
+Each list object has an `archivers` attribute holding a dictionary which
+contains the activation status of all available archivers.
 
+    >>> archivers =  test_one.archivers
+    >>> for archiver in sorted(archivers.keys()):
+    ...     print('{0}: {1}'.format(archiver, archivers[archiver]))
+    mail-archive: False
+    mhonarc: False
+    prototype: False

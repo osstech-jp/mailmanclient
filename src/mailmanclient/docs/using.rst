@@ -687,3 +687,15 @@ Messages held for moderation can be listed on a per list basis.
 
     >>> len(test_one.held)
     0
+
+
+Archivers
+=========
+
+
+    >>> for archiver in test_one.archivers:
+    ...     print(archiver)
+    mail-archive
+    mhonarc
+    prototype
+

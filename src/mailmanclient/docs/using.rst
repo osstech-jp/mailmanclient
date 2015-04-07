@@ -1,4 +1,4 @@
-j==================
+===================
 Mailman REST client
 ===================
 
@@ -693,18 +693,38 @@ Archivers
 =========
 
 
-Each list object has an ``archivers`` attribute holding a dictionary which
-contains the activation status of all available archivers.
+Each list object has an ``archivers`` attribute.
 
-    >>> archivers =  test_one.archivers
+    >>> archivers = test_one.archivers
+    >>> print(archivers)
+    <Archivers on "test-one.example.com">
+
+The activation status of each available archiver can be accessed like a 
+key in a dictionary.
+
+    >>> archivers = test_one.archivers
     >>> for archiver in sorted(archivers.keys()):
     ...     print('{0}: {1}'.format(archiver, archivers[archiver]))
     mail-archive: True
     mhonarc: True
     prototype: False
 
-Each archiver's status can be changed with the ``set_archiver`` method.
+    >>> archivers['mail-archive']
+    True
+    >>> archivers['mhonarc']
+    True
 
-    >>> test_one.set_archiver('mhonarc', False)
-    >>> test_one.archivers['mhonarc']
+They can also be set like items in dictionary.
+
+    >>> archivers['mail-archive'] = False
+    >>> archivers['mhonarc'] = False
+
+So if we get a new ``archivers`` object from the API (by accessing the 
+list's archiver attribute again), we can see that the archiver stati 
+have now been set.
+
+    >>> archivers = test_one.archivers
+    >>> archivers['mail-archive']
+    False
+    >>> archivers['mhonarc']
     False

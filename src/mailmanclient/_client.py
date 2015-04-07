@@ -452,20 +452,8 @@ class _List:
         Returns a dict of all available archivers, along with their
         activation status.
         """
-        response, content = self._connection.call(
-            'lists/{0}/archivers'.format(self.list_id))
-        # Remove `http_etag` property.
-        content.pop('http_etag')
-        return content
-
-    def set_archiver(self, archiver_name, enabled):
-        """
-        Updates the status of a single archiver.
-        """
-        response, content = self._connection.call(
-            'lists/{0}/archivers'.format(self.list_id),
-            {archiver_name: enabled},
-            method='PATCH')
+        url = 'lists/{0}/archivers'.format(self.list_id)
+        return _ListArchivers(self._connection, url, self)
 
     def add_owner(self, address):
         self.add_role('owner', address)
@@ -570,6 +558,45 @@ class _List:
     def delete(self):
         response, content = self._connection.call(
             'lists/{0}'.format(self.fqdn_listname), None, 'DELETE')
+
+
+class _ListArchivers:
+
+    def __init__(self, connection, url, list_obj):
+        self._connection = connection
+        self._url = url
+        self._list_obj = list_obj
+        self._info = None
+
+    def __repr__(self):
+        self._get_info()
+        return '<Archivers on "{0}">'.format(self._list_obj.list_id)
+
+    def _get_info(self):
+        if self._info is None:
+            response, content = self._connection.call(self._url)
+            # Remove `http_etag` from dictionary.
+            content.pop('http_etag')
+            self._info = content
+
+    def __iter__(self):
+        self._get_info()
+        for archiver in self._info:
+            yield self._info[archiver]
+
+    def __getitem__(self, key):
+        self._get_info()
+        return self._info[key]
+
+    def __setitem__(self, key, value):
+        self._get_info()
+        self._info[key] = value
+        self._connection.call(self._url, self._info, method='PUT')
+
+    def keys(self):
+        self._get_info()
+        for key in self._info:
+            yield key
 
 
 class _Member:

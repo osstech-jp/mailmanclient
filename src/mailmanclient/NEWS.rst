@@ -7,7 +7,8 @@ NEWS for mailman.client
 
  * Port to Python 3.4.
  * Run test suite with `tox`.
- * Use vcrpy for HTTP testing
+ * Use vcrpy for HTTP testing.
+ * Add list archiver access.
 
 
 1.0.0a1 (2014-03-15)

@@ -446,6 +446,14 @@ class _List:
                 entries.append(request)
         return entries
 
+    @property
+    def archivers(self):
+        """
+        Returns a _ListArchivers instance.
+        """
+        url = 'lists/{0}/archivers'.format(self.list_id)
+        return _ListArchivers(self._connection, url, self)
+
     def add_owner(self, address):
         self.add_role('owner', address)
 
@@ -549,6 +557,62 @@ class _List:
     def delete(self):
         response, content = self._connection.call(
             'lists/{0}'.format(self.fqdn_listname), None, 'DELETE')
+
+
+class _ListArchivers:
+    """
+    Represents the activation status for each site-wide available archiver
+    for a given list. 
+    """
+
+    def __init__(self, connection, url, list_obj):
+        """
+        :param connection: An API connection object.
+        :type connection: _Connection.
+        :param url: The API url of the list's archiver endpoint.
+        :param url: str.
+        :param list_obj: The corresponding list object.
+        :type list_obj: _List.
+        """
+        self._connection = connection
+        self._url = url
+        self._list_obj = list_obj
+        self._info = None
+
+    def __repr__(self):
+        self._get_info()
+        return '<Archivers on "{0}">'.format(self._list_obj.list_id)
+
+    def _get_info(self):
+        # Get data from API; only once per instance.
+        if self._info is None:
+            response, content = self._connection.call(self._url)
+            # Remove `http_etag` from dictionary, we only want
+            # the archiver info.
+            content.pop('http_etag')
+            self._info = content
+
+    def __iter__(self):
+        self._get_info()
+        for archiver in self._info:
+            yield self._info[archiver]
+
+    def __getitem__(self, key):
+        self._get_info()
+        # No precautions against KeyError, should behave like a dict.
+        return self._info[key]
+
+    def __setitem__(self, key, value):
+        self._get_info()
+        # No precautions against KeyError, should behave like a dict.
+        self._info[key] = value
+        # Update archiver status via the API.
+        self._connection.call(self._url, self._info, method='PUT')
+
+    def keys(self):
+        self._get_info()
+        for key in self._info:
+            yield key
 
 
 class _Member:

@@ -41,14 +41,11 @@ must be added.  By default, there are no known domains.
 It's easy to create a new domain; when you do, a proxy object for that domain
 is returned.
 
-    >>> example_dot_com = client.create_domain('example.com',
-    ...     contact_address='admin@example.com')
+    >>> example_dot_com = client.create_domain('example.com')
     >>> example_dot_com
     <Domain "example.com">
     >>> print(example_dot_com.base_url)
     http://example.com
-    >>> print(example_dot_com.contact_address)
-    admin@example.com
     >>> print(example_dot_com.description)
     None
     >>> print(example_dot_com.mail_host)
@@ -278,7 +275,7 @@ A membership has preferences.
     >>> print(prefs['hide_address'])
     None
     >>> print(prefs['preferred_language'])
-    None
+    en
     >>> print(prefs['receive_list_copy'])
     None
     >>> print(prefs['receive_own_postings'])

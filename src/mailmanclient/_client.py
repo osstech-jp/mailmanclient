@@ -200,13 +200,12 @@ class Client:
 
     def create_domain(self, mail_host, base_url=None,
                       description=None, contact_address=None):
+        # `contact_address` is deprecated but still accepted.
         data = dict(mail_host=mail_host)
         if base_url is not None:
             data['base_url'] = base_url
         if description is not None:
             data['description'] = description
-        if contact_address is not None:
-            data['contact_address'] = contact_address
         response, content = self._connection.call('domains', data)
         return _Domain(self._connection, response['location'])
 
@@ -435,7 +434,8 @@ class _List:
         else:
             entries = []
             for entry in content['entries']:
-                request = dict(address=entry['address'],
+                request = dict(email=entry['email'],
+                               address=entry['email'],  # Deprecated.
                                delivery_mode=entry['delivery_mode'],
                                display_name=entry['display_name'],
                                language=entry['language'],

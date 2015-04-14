@@ -206,7 +206,7 @@ class Client:
         if description is not None:
             data['description'] = description
         if owner is not None:
-            data[owner] = owner
+            data['owner'] = owner
         response, content = self._connection.call('domains', data)
         return _Domain(self._connection, response['location'])
 

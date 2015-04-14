@@ -199,14 +199,14 @@ class Client:
         return _Page(self._connection, 'users', _User, count, page)
 
     def create_domain(self, mail_host, base_url=None,
-                      description=None, owners=None):
+                      description=None, owner=None):
         data = dict(mail_host=mail_host)
         if base_url is not None:
             data['base_url'] = base_url
         if description is not None:
             data['description'] = description
-        if owners is not None:
-            data[owners] = owners
+        if owner is not None:
+            data[owner] = owner
         response, content = self._connection.call('domains', data)
         return _Domain(self._connection, response['location'])
 

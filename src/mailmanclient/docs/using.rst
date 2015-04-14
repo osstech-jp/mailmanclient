@@ -631,6 +631,21 @@ Both owners and moderators can be removed:
 Moderation
 ==========
 
+
+Subscription Moderation
+-----------------------
+
+Subscription requests can be accessed through the list object's 
+`request` property.
+
+    >>> requests = test_one.requests
+
+Initially there are no requests:
+
+    >>> requests
+    []
+
+
 Message Moderation
 ------------------
 

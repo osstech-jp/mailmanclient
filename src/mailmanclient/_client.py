@@ -385,10 +385,8 @@ class _List:
     @property
     def nonmembers(self):
         url = 'members/find'
-        data = {
-            'role': 'nonmember',
-            'list_id': self.list_id
-        }
+        data = {'role': 'nonmember',
+                'list_id': self.list_id}
         response, content = self._connection.call(url, data)
         if 'entries' not in content:
             return []
@@ -427,6 +425,7 @@ class _List:
     @property
     def requests(self):
         """Return a list of dicts with subscription requests."""
+
         response, content = self._connection.call(
             'lists/{0}/requests'.format(self.fqdn_listname), None, 'GET')
         if 'entries' not in content:
@@ -506,6 +505,33 @@ class _List:
         """Shortcut for moderate_message."""
         return self.moderate_message(request_id, 'accept')
 
+    def moderate_request(self, request_id, action):
+        """
+        Moderate a subscription request.
+
+        :param action: accept|reject|discard|defer
+        :type action: str.
+        """
+        path = 'lists/{0}/requests/{1}'.format(self.list_id, request_id)
+        response, content = self._connection.call(path, {'action': action})
+        return response
+
+    def accept_request(self, request_id):
+        """Shortcut to accept a subscription request."""
+        return self.moderate_request(request_id, 'accept')
+
+    def reject_request(self, request_id):
+        """Shortcut to reject a subscription request."""
+        return self.moderate_request(request_id, 'reject')
+
+    def discard_request(self, request_id):
+        """Shortcut to discard a subscription request."""
+        return self.moderate_request(request_id, 'discard')
+
+    def defer_request(self, request_id):
+        """Shortcut to defer a subscription request."""
+        return self.moderate_request(request_id, 'defer')
+
     def get_member(self, email):
         """Get a membership.
 
@@ -521,12 +547,19 @@ class _List:
             raise ValueError('%s is not a member address of %s' %
                              (email, self.fqdn_listname))
 
-    def subscribe(self, address, display_name=None):
+    def subscribe(self, address, display_name=None, pre_verified=False,
+                  pre_confirmed=False, pre_approved=False):
         """Subscribe an email address to a mailing list.
 
         :param address: Email address to subscribe to the list.
         :type address: str
         :param display_name: The real name of the new member.
+        :param pre_verified: True if the address has been verified.
+        :type pre_verified: bool
+        :param pre_confirmed: True if membership has been approved by the user.
+        :type pre_confirmed: bool
+        :param pre_approved: True if membership is moderator-approved.
+        :type pre_approved: bool
         :type display_name: str
         :return: A member proxy object.
         """
@@ -535,7 +568,19 @@ class _List:
             subscriber=address,
             display_name=display_name,
             )
+        if pre_verified == True:
+            data['pre_verified'] = True
+        if pre_confirmed == True:
+            data['pre_confirmed'] = True
+        if pre_approved == True:
+            data['pre_approved'] = True
         response, content = self._connection.call('members', data)
+        # If a member is not immediately subscribed (i.e. verificatoin,
+        # confirmation or approval need), the response content is returned.
+        if response.status == 202:
+            return content
+        # I the subscription is executed immediately, a member object
+        # is returned.
         return _Member(self._connection, response['location'])
 
     def unsubscribe(self, email):

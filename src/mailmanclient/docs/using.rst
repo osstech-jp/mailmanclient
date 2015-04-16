@@ -192,14 +192,57 @@ New members can be easily added; users are automatically registered.
 ::
 
     >>> test_two = client.get_list('test-two@example.com')
+    >>> print(test_two.settings['subscription_policy'])
+    confirm
 
-    >>> test_one.subscribe('anna@example.com', 'Anna')
+Email addresses need to be verified first, so if we try to subscribe a 
+user, we get a response with a token:
+
+    >>> data = test_one.subscribe('unverified@example.com', 'Unverified')
+    >>> data['token'] is not None
+    True
+    >>> print(data['token_owner'])
+    subscriber
+
+If we know the email address to be valid, we can set the 
+``pre_verified`` flag. However, the list's subscription policy is 
+"confirm", so if we try to subscribe a user, we will also get a token 
+back: 
+
+    >>> data = test_one.subscribe('unconfirmed@example.com',
+    ...                           'Unconfirmed',
+    ...                            pre_verified=True)
+    >>> data['token'] is not None
+    True
+    >>> print(data['token_owner'])
+    subscriber
+
+If we know the user originated the subscription (for example if she or 
+he has been authenticated elsewhere), we can set the ``pre_confirmed`` 
+flag.
+
+The ``pre_approved`` flag is used for lists that require moderator 
+approval and should only be used if the subscription is initiated by a 
+moderator or admin. 
+
+    >>> test_one.subscribe('anna@example.com', 'Anna',
+    ...                    pre_verified=True,
+    ...                    pre_confirmed=True)
     <Member "anna@example.com" on "test-one.example.com">
-    >>> test_one.subscribe('bill@example.com', 'Bill')
+
+    >>> test_one.subscribe('bill@example.com', 'Bill',
+    ...                    pre_verified=True,
+    ...                    pre_confirmed=True)
     <Member "bill@example.com" on "test-one.example.com">
-    >>> test_two.subscribe('anna@example.com')
+
+    >>> test_two.subscribe('anna@example.com',
+    ...                    pre_verified=True,
+    ...                    pre_confirmed=True)
     <Member "anna@example.com" on "test-two.example.com">
-    >>> test_two.subscribe('cris@example.com', 'Cris')
+
+    >>> test_two.subscribe('cris@example.com', 'Cris',
+    ...                    pre_verified=True,
+    ...                    pre_confirmed=True)
     <Member "cris@example.com" on "test-two.example.com">
 
 We can retrieve all known memberships.  These are sorted first by mailing list
@@ -267,7 +310,7 @@ A membership has preferences.
 
     >>> prefs = cris_test_two.preferences
     >>> print(prefs['delivery_mode'])
-    regular
+    None
     >>> print(prefs['acknowledge_posts'])
     None
     >>> print(prefs['delivery_status'])
@@ -275,7 +318,7 @@ A membership has preferences.
     >>> print(prefs['hide_address'])
     None
     >>> print(prefs['preferred_language'])
-    en
+    None
     >>> print(prefs['receive_list_copy'])
     None
     >>> print(prefs['receive_own_postings'])
@@ -356,12 +399,14 @@ access the clients user property.
 
 The list of users can also be paginated:
 
-    >>> page = client.get_user_page(count=2, page=1)
+    >>> page = client.get_user_page(count=4, page=1)
     >>> page.nr
     1
 
     >>> for user in page:
     ...     print(user)
+    <User "Unverified" (...)>
+    <User "Unconfirmed" (...)>
     <User "Anna" (...)>
     <User "Bill" (...)>
 
@@ -381,6 +426,8 @@ You can get the next or previous pages without calling ``get_userpage`` again.
 
     >>> for user in page:
     ...     print(user)
+    <User "Unverified" (...)>
+    <User "Unconfirmed" (...)>
     <User "Anna" (...)>
     <User "Bill" (...)>
 
@@ -425,7 +472,7 @@ Addresses can be accessed directly:
 
 The address has not been verified:
 
-    >>> print(address.verified_on is None)
+    >>> print(address.verified_on is not None)
     True
 
 But that can be done via the address object:
@@ -498,7 +545,7 @@ for the settings is returned which behaves much like a dictionary.
 
     >>> settings = test_one.settings
     >>> len(settings)
-    50
+    51
 
     >>> for attr in sorted(settings):
     ...     print(attr + ': ' + str(settings[attr]))
@@ -606,7 +653,9 @@ Moderators are also not automatically added as members:
 Members and owners/moderators are separate entries in in the general members
 list:
 
-    >>> test_one.subscribe('bar@example.com')
+    >>> test_one.subscribe('bar@example.com', 'Bar',
+    ...                    pre_verified=True,
+    ...                    pre_confirmed=True)
     <Member "bar@example.com" on "test-one.example.com">
 
     >>> for member in client.members:
@@ -636,13 +685,20 @@ Subscription Moderation
 -----------------------
 
 Subscription requests can be accessed through the list object's 
-`request` property.
+`request` property. So let's create a non-open list first. 
 
-    >>> requests = test_one.requests
+    >>> confirm_first = example_dot_com.create_list('confirm-first')
+    >>> settings = confirm_first.settings
+    >>> settings['subscription_policy'] = 'moderate'
+    >>> settings.save()
+
+    >>> confirm_first = client.get_list('confirm-first.example.com')
+    >>> print(confirm_first.settings['subscription_policy'])
+    moderate
 
 Initially there are no requests:
 
-    >>> requests
+    >>> test_one.requests
     []
 
 

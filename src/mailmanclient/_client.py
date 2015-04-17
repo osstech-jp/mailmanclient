@@ -199,13 +199,14 @@ class Client:
         return _Page(self._connection, 'users', _User, count, page)
 
     def create_domain(self, mail_host, base_url=None,
-                      description=None, contact_address=None):
-        # `contact_address` is deprecated but still accepted.
+                      description=None, owner=None):
         data = dict(mail_host=mail_host)
         if base_url is not None:
             data['base_url'] = base_url
         if description is not None:
             data['description'] = description
+        if owner is not None:
+            data['owner'] = owner
         response, content = self._connection.call('domains', data)
         return _Domain(self._connection, response['location'])
 
@@ -278,9 +279,13 @@ class _Domain:
         return self._info['base_url']
 
     @property
-    def contact_address(self):
-        self._get_info()
-        return self._info['contact_address']
+    def owners(self):
+        url = self._url + '/owners'
+        response, content = self._connection.call(url)
+        if 'entries' not in content:
+            return []
+        else:
+            return [item for item in content['entries']]
 
     @property
     def description(self):
@@ -312,6 +317,21 @@ class _Domain:
         response, content = self._connection.call(
             'lists', dict(fqdn_listname=fqdn_listname))
         return _List(self._connection, response['location'])
+
+    # def remove_owner(self, owner):
+    #     TODO: add this when API supports it.
+    #     pass
+
+    def remove_all_owners(self):
+        url = self._url + '/owners'
+        response, content = self._connection.call(
+            url, method='DELETE')
+        return response
+
+    def add_owner(self, owner):
+        url = self._url + '/owners'
+        response, content = self._connection.call(
+            url, {'owner': owner})
 
 
 class _List:

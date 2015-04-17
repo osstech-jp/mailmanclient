@@ -696,10 +696,75 @@ Subscription requests can be accessed through the list object's
     >>> print(confirm_first.settings['subscription_policy'])
     moderate
 
-Initially there are no requests:
+Initially there are no requests, so let's to subscribe someone to the 
+list. We'll get a token back. 
 
-    >>> test_one.requests
+    >>> confirm_first.requests
     []
+    >>> data = confirm_first.subscribe('groucho@example.com',
+    ...                                pre_verified=True,
+    ...                                pre_confirmed=True)
+    >>> print(data['token_owner'])
+    moderator
+
+Now the request shows up in the list of requests:
+
+    >>> import time; time.sleep(5)
+    >>> len(confirm_first.requests)
+    1
+
+    >>> request_1 = confirm_first.requests[0]
+    >>> print(request_1['email'])
+    groucho@example.com
+    >>> print (request_1['token'] is not None)
+    True
+    >>> print(request_1['token_owner'])
+    moderator
+    >>> print(request_1['request_date'] is not None)
+    True
+    >>> print(request_1['list_id'])
+    confirm-first.example.com
+
+Subscription requests can be accepted, deferred, rejected or
+discarded using the request token.
+    
+    >>> data = confirm_first.subscribe('harpo@example.com',
+    ...                                pre_verified=True,
+    ...                                pre_confirmed=True)
+    >>> data = confirm_first.subscribe('zeppo@example.com',
+    ...                                pre_verified=True,
+    ...                                pre_confirmed=True)
+
+    >>> len(confirm_first.requests)
+    3
+
+Let's accept Groucho:
+
+    >>> confirm_first.manage_request(request_1['token'], 'accept')
+
+    >>> len(confirm_first.requests)
+    2
+
+    >>> request_2 = confirm_first.requests[0]
+    >>> print(request_2['email'])
+    harpo@example.com
+
+    >>> request_3 = confirm_first.requests[1]
+    >>> print(request_3['email'])
+    zeppo@example.com
+
+Let's reject Harpo:
+
+    >>> confirm_first.manage_request(request_2['token'], 'reject')
+    
+    >>> len(confirm_first.requests)
+    1
+
+Let's discard Zeppo's request:
+
+    >>> confirm_first.manage_request(request_3['token'], 'discard')
+    >>> len(confirm_first.requests)
+    0
 
 
 Message Moderation

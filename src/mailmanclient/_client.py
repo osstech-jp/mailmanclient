@@ -425,7 +425,6 @@ class _List:
     @property
     def requests(self):
         """Return a list of dicts with subscription requests."""
-
         response, content = self._connection.call(
             'lists/{0}/requests'.format(self.fqdn_listname), None, 'GET')
         if 'entries' not in content:
@@ -434,16 +433,20 @@ class _List:
             entries = []
             for entry in content['entries']:
                 request = dict(email=entry['email'],
-                               address=entry['email'],  # Deprecated.
-                               delivery_mode=entry['delivery_mode'],
-                               display_name=entry['display_name'],
-                               language=entry['language'],
-                               password=entry['password'],
-                               request_id=entry['request_id'],
-                               request_date=entry['when'],
-                               type=entry['type'])
+                               token=entry['token'],
+                               token_owner=entry['token_owner'],
+                               list_id=entry['list_id'],
+                               request_date=entry['when'])
                 entries.append(request)
         return entries
+
+    def manage_request(self, token, action):
+        """
+        accept|reject|discard|defer a subscription request.
+        """
+        response, content = self._connection.call(
+            'lists/{0}/requests/{1}'.format(self.list_id, token),
+            {'action': action})
 
     @property
     def archivers(self):

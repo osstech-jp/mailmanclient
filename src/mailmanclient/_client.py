@@ -616,11 +616,11 @@ class _List:
         # In order to get the member object we need to
         # iterate over the existing member list
 
-        for member in self.members:
-            if member.email == email:
-                self._connection.call(member.self_link, method='DELETE')
-                break
-        else:
+        try:
+            path = 'lists/{0}/member/{1}'.format(self.list_id, email)
+            self._connection.call(path, method='DELETE')
+        except HTTPError:
+            # The member link does not exist, i.e. he is not a member
             raise ValueError('%s is not a member address of %s' %
                              (email, self.fqdn_listname))
 

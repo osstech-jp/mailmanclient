@@ -8,7 +8,7 @@ instantiating a client object to access the root of the REST hierarchy,
 providing it the base URL, user name and password (for Basic Auth).
 
     >>> from mailmanclient import Client
-    >>> client = Client('http://localhost:9001/3.0', 'restadmin', 'restpass')
+    >>> client = Client('http://localhost:9001/3.1', 'restadmin', 'restpass')
 
 .. note::
     Please note that port '9001' is used above, since mailman's test server
@@ -18,10 +18,11 @@ providing it the base URL, user name and password (for Basic Auth).
 We can retrieve basic information about the server.
 
     >>> dump(client.system)
+    api_version: 3.1
     http_etag: "..."
-    mailman_version: GNU Mailman 3.0... (...)
+    mailman_version: GNU Mailman 3.1... (...)
     python_version: ...
-    self_link: http://localhost:9001/3.0/system/versions
+    self_link: http://localhost:9001/3.1/system/versions
 
 To start with, there are no known mailing lists.
 
@@ -840,7 +841,7 @@ key in a dictionary.
     ...     print('{0}: {1}'.format(archiver, archivers[archiver]))
     mail-archive: True
     mhonarc: True
-    prototype: False
+    prototype: True
 
     >>> archivers['mail-archive']
     True

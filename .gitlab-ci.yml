@@ -1,0 +1,14 @@
+before_script:
+- pip install tox
+
+python2.7:
+  script:
+  - tox -e py27
+  tags:
+  - sqlite
+
+python3.4:
+  script:
+  - tox -e py34
+  tags:
+  - sqlite

@@ -27,11 +27,11 @@ Project details
 
 The project home page is:
 
-    http://launchpad.net/mailman.client
+    https://gitlab.com/mailman/mailmanclient
 
 You should report bugs at:
 
-    http://bugs.launchpad.net/mailman.client
+    https://gitlab.com/mailman/mailmanclient/issues
 
 You can download the latest version of the package either from the Cheeseshop:
 
@@ -42,14 +42,13 @@ or from the Launchpad page above.  Of course you can also just install it with
 
     % sudo pip mailman.client
 
-You can grab the latest development copy of the code using Bazaar, from the
-Launchpad home page above.  See http://bazaar-vcs.org for details on the
-Bazaar distributed revision control system.  If you have Bazaar installed, you
-can grab your own branch of the code like this::
+You can grab the latest development copy of the code using Git, from the Gitlab
+home page above. If you have Git installed, you can grab your own branch of
+the code like this::
 
-     bzr branch lp:mailman.client
+     git clone https://gitlab.com/mailman/mailmanclient.git
 
-You may contact the author via barry@python.org.
+You may contact the developers via mailman-developers@python.org
 
 
 Copyright

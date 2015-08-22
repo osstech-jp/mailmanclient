@@ -31,7 +31,7 @@ The project home page is:
 
 You should report bugs at:
 
-    https://gitlab.com/mailman/mailmanclient
+    https://gitlab.com/mailman/mailmanclient/issues
 
 You can download the latest version of the package either from the Cheeseshop:
 

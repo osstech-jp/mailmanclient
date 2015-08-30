@@ -561,12 +561,14 @@ class _List:
         :param address: The email address of the member for this list.
         :return: A member proxy object.
         """
-        # In order to get the member object we need to
-        # iterate over the existing member list
-        for member in self.members:
-            if member.email == email:
-                return member
-        else:
+        # In order to get the member object we query the REST API for
+        # the member. Incase there is no matching subscription, an
+        # HTTPError is returned instead.
+        try:
+            path = 'lists/{0}/member/{1}'.format(self.list_id, email)
+            response, content = self._connection.call(path)
+            return _Member(self._connection, content['self_link'])
+        except HTTPError:
             raise ValueError('%s is not a member address of %s' %
                              (email, self.fqdn_listname))
 
@@ -614,11 +616,11 @@ class _List:
         # In order to get the member object we need to
         # iterate over the existing member list
 
-        for member in self.members:
-            if member.email == email:
-                self._connection.call(member.self_link, method='DELETE')
-                break
-        else:
+        try:
+            path = 'lists/{0}/member/{1}'.format(self.list_id, email)
+            self._connection.call(path, method='DELETE')
+        except HTTPError:
+            # The member link does not exist, i.e. he is not a member
             raise ValueError('%s is not a member address of %s' %
                              (email, self.fqdn_listname))
 

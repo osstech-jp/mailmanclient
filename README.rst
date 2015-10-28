@@ -39,14 +39,13 @@ Project details
 ===============
 
 You may download the latest version of the package from the Python
-`Cheese Shop`_ or from Launchpad_.
+`Cheese Shop`_ or from GitLab_.
 
 You can also install it via ``pip``.
 
-    % sudo pip install mailman.client
+    % sudo pip install mailmanclient
 
-See the Launchpad project page for access to the Bazaar branch, bug report,
-etc.
+See the GitLab project page for access to the development branch, issues, etc.
 
 
 Acknowledgements
@@ -55,5 +54,5 @@ Acknowledgements
 Many thanks to Florian Fuchs for his contribution of an initial REST client.
 
 
-.. _`Cheese Shop`: http://pypi.python.org/mailman.client
-.. _Launchpad: https://launchpad.net/mailman.client
+.. _`Cheese Shop`: https://pypi.python.org/pypi/mailmanclient
+.. _GitLab: https://gitlab.com/mailman/mailmanclient

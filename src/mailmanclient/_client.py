@@ -340,6 +340,7 @@ class _List:
         self._connection = connection
         self._url = url
         self._info = data
+        self._settings = None
 
     def __repr__(self):
         return '<List "{0}">'.format(self.fqdn_listname)
@@ -420,8 +421,10 @@ class _List:
 
     @property
     def settings(self):
-        return _Settings(self._connection,
-                         'lists/{0}/config'.format(self.fqdn_listname))
+        if self._settings is None:
+            self._settings = _Settings(self._connection,
+                'lists/{0}/config'.format(self.fqdn_listname))
+        return self._settings
 
     @property
     def held(self):

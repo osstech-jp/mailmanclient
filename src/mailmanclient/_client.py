@@ -157,7 +157,7 @@ class Client:
         response, content = self._connection.call('lists')
         if 'entries' not in content:
             return []
-        return [_List(self._connection, entry['self_link'])
+        return [_List(self._connection, entry['self_link'], entry)
                 for entry in content['entries']]
 
     def get_list_page(self, count=50, page=1):
@@ -308,7 +308,7 @@ class _Domain:
             'domains/{0}/lists'.format(self.mail_host))
         if 'entries' not in content:
             return []
-        return [_List(self._connection, entry['self_link'])
+        return [_List(self._connection, entry['self_link'], entry)
                 for entry in sorted(content['entries'],
                                     key=itemgetter('fqdn_listname'))]
 
@@ -340,6 +340,7 @@ class _List:
         self._connection = connection
         self._url = url
         self._info = data
+        self._settings = None
 
     def __repr__(self):
         return '<List "{0}">'.format(self.fqdn_listname)
@@ -420,8 +421,10 @@ class _List:
 
     @property
     def settings(self):
-        return _Settings(self._connection,
-                         'lists/{0}/config'.format(self.fqdn_listname))
+        if self._settings is None:
+            self._settings = _Settings(self._connection,
+                'lists/{0}/config'.format(self.fqdn_listname))
+        return self._settings
 
     @property
     def held(self):
@@ -1098,8 +1101,14 @@ class _Page:
         response, content = self._connection.call(path)
         if 'entries' in content:
             for entry in content['entries']:
-                self._entries.append(self._model(self._connection,
-                                     entry['self_link']))
+                if self._model == _List:
+                    # _List instances accept a "data" parameter to save one
+                    # REST call
+                    instance = self._model(
+                        self._connection, entry['self_link'], entry)
+                else:
+                    instance = self._model(self._connection, entry['self_link'])
+                self._entries.append(instance)
 
     @property
     def nr(self):

@@ -805,27 +805,38 @@ It might take a few moments for the message to show up in the moderation
 queue.
 
     >>> while True:
-    ...     held = test_one.held
-    ...     if len(held) > 0:
+    ...     all_held = test_one.held
+    ...     if len(all_held) > 0:
     ...         break
     ...     time.sleep(0.1)
 
 Messages held for moderation can be listed on a per list basis.
 
-    >>> print(held[0]['subject'])
-    Something
-    >>> print(held[0]['reason'])
-    <BLANKLINE>
-    >>> print(held[0]['request_id'])
+    >>> print(all_held[0]['request_id'])
     1
 
-    >>> print(test_one.defer_message(held[0]['request_id'])['status'])
+A held message can be retrieved by ID, and have attributes:
+
+    >>> heldmsg = test_one.get_held_message(1)
+    >>> print(heldmsg.subject)
+    Something
+    >>> print(heldmsg.reason)
+    <BLANKLINE>
+    >>> print(heldmsg.sender)
+    nomember@example.com
+    >>> 'Message-ID: <moderated_01>' in heldmsg.msg
+    True
+
+A moderation action can be taken on them using the list methods or the held
+message's methods.
+
+    >>> print(test_one.defer_message(heldmsg.request_id)['status'])
     204
 
     >>> len(test_one.held)
     1
 
-    >>> print(test_one.discard_message(held[0]['request_id'])['status'])
+    >>> print(heldmsg.discard()['status'])
     204
 
     >>> len(test_one.held)

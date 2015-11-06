@@ -434,18 +434,16 @@ class _List:
             'lists/{0}/held'.format(self.fqdn_listname), None, 'GET')
         if 'entries' not in content:
             return []
-        else:
-            entries = []
-            for entry in content['entries']:
-                msg = dict(hold_date=entry['hold_date'],
-                           msg=entry['msg'],
-                           reason=entry['reason'],
-                           moderation_reasons=entry['moderation_reasons'],
-                           sender=entry['sender'],
-                           request_id=entry['request_id'],
-                           subject=entry['subject'])
-                entries.append(msg)
-        return entries
+        return [_HeldMessage(self._connection, entry['self_link'], entry)
+                for entry in content['entries']]
+
+    def get_held_page(self, count=50, page=1):
+        url = 'lists/{0}/held'.format(self.fqdn_listname)
+        return _Page(self._connection, url, _HeldMessage, count, page)
+
+    def get_held_message(self, held_id):
+        url = 'lists/{0}/held/{1}'.format(self.fqdn_listname, held_id)
+        return _HeldMessage(self._connection, url)
 
     @property
     def requests(self):
@@ -940,6 +938,66 @@ class _Address:
         self._connection.call('addresses/{0}/unverify'.format(
             self._address['email']), method='POST')
         self._info = None
+
+
+class _HeldMessage:
+
+    def __init__(self, connection, url, data=None):
+        self._connection = connection
+        self._url = url
+        self._info = data
+
+    def __repr__(self):
+        return '<HeldMessage "{0}" by {1}>'.format(
+            self.request_id, self.sender)
+
+    def __unicode__(self):
+        return unicode(self._info)
+
+    def _get_info(self):
+        if self._info is None:
+            response, content = self._connection.call(self._url)
+            self._info = content
+
+    def __getitem__(self, name):
+        # This method is only necessary if compatibility with the dict
+        # interface is required. Postorius will work with the attribute-based
+        # interface.
+        self._get_info()
+        return self._info[name]
+
+    def __getattr__(self, name):
+        if name in ('hold_date', 'msg', 'reason', 'moderation_reasons',
+                    'sender', 'request_id', 'subject'):
+            self._get_info()
+            return self._info.get(name)
+        raise AttributeError
+
+    def moderate(self, action):
+        """Moderate a held message.
+
+        :param action: Action to perform on held message.
+        :type action: String.
+        """
+        response, content = self._connection.call(
+            self._url, dict(action=action), 'POST')
+        return response
+
+    def discard(self):
+        """Shortcut for moderate."""
+        return self.moderate('discard')
+
+    def reject(self):
+        """Shortcut for moderate."""
+        return self.moderate('reject')
+
+    def defer(self):
+        """Shortcut for moderate."""
+        return self.moderate('defer')
+
+    def accept(self):
+        """Shortcut for moderate."""
+        return self.moderate('accept')
 
 
 PREFERENCE_FIELDS = (

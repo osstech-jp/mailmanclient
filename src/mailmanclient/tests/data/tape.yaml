@@ -2546,6 +2546,30 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
+    uri: http://localhost:9001/3.1/lists/test-one@example.com/held/1
+  response:
+    body: {string: '{"_parsemsg": false, "envsender": "noreply@example.com", "hold_date":
+        "2005-08-01T07:49:23", "http_etag": "\"03ed6212bd8a23904538e34e132e672d84d5224e\"",
+        "lang": "en", "listid": "test-one.example.com", "message_id": "<moderated_01>",
+        "moderation_action": "hold", "moderation_reasons": ["The message is not from
+        a list member"], "moderation_sender": "nomember@example.com", "msg": "From:
+        nomember@example.com\nTo: test-one@example.com\nSubject: Something\nMessage-ID:
+        <moderated_01>\nDate: 30 Nov 2015 14:40:51 +0100\nX-Mailman-Rule-Hits:
+        nonmember-moderation\nX-Mailman-Rule-Misses: approved; emergency; loop; member-moderation\nMessage-ID-Hash:
+        KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\nX-Message-ID-Hash: KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\n\nSome
+        text.\n\n", "original_size": 251, "reason": "", "request_id": 1, "rule_hits":
+        ["nonmember-moderation"], "rule_misses": ["approved", "emergency", "loop",
+        "member-moderation"], "self_link": "http://localhost:9001/3.1/lists/test-one.example.com/held/1",
+        "sender": "nomember@example.com", "subject": "Something", "version": 3}'}
+    headers:
+      content-length: ['1067']
+      content-type: [application/json; charset=utf-8]
+    status: {code: 200, message: OK}
+- request:
     body: !!binary |
       YWN0aW9uPWRlZmVy
     headers:

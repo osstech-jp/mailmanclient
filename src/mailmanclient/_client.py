@@ -439,6 +439,7 @@ class _List:
                 msg = dict(hold_date=entry['hold_date'],
                            msg=entry['msg'],
                            reason=entry['reason'],
+                           moderation_reasons=entry['moderation_reasons'],
                            sender=entry['sender'],
                            request_id=entry['request_id'],
                            subject=entry['subject'])

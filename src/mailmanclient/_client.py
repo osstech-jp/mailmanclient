@@ -1079,6 +1079,7 @@ class _Page:
         self._page = page
         self._model = model
         self._entries = []
+        self.total_size = 0
         self._create_page()
 
     def __getitem__(self, key):
@@ -1101,6 +1102,7 @@ class _Page:
             self._path, self._count, self._page)
         response, content = self._connection.call(path)
         if 'entries' in content:
+            self.total_size = content["total_size"]
             for entry in content['entries']:
                 if self._model == _List:
                     # _List instances accept a "data" parameter to save one
@@ -1117,16 +1119,22 @@ class _Page:
 
     @property
     def next(self):
-        self._page += 1
-        self._create_page()
-        return self
+        return _Page(self._connection, self._path, self._model,
+                     self._count, self._page + 1)
 
     @property
     def previous(self):
-        if self._count > 0:
-            self._page -= 1
-            self._create_page()
-            return self
+        if self.has_previous:
+            return _Page(self._connection, self._path, self._model,
+                         self._count, self._page - 1)
+
+    @property
+    def has_previous(self):
+        return self._page > 1
+
+    @property
+    def has_next(self):
+        return self._count * self._page < self.total_size
 
 
 class _Queue:

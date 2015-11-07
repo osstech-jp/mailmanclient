@@ -139,6 +139,8 @@ List results can be retrieved as pages:
     1
     >>> len(page)
     2
+    >>> page.total_size
+    4
     >>> for m_list in page:
     ...     print(m_list)
     <List "test-one@example.com">
@@ -268,6 +270,8 @@ Membership lists can be paginated, to recieve only a part of the result.
     >>> page = client.get_member_page(count=2, page=1)
     >>> page.nr
     1
+    >>> page.total_size
+    4
     >>> for member in page:
     ...     print(member)
     <Member "anna@example.com" on "test-one.example.com">
@@ -284,11 +288,15 @@ Membership lists can be paginated, to recieve only a part of the result.
     >>> page = test_one.get_member_page(count=1, page=1)
     >>> page.nr
     1
+    >>> page.total_size
+    2
     >>> for member in page:
     ...     print(member)
     <Member "anna@example.com" on "test-one.example.com">
     >>> page = page.next
     >>> page.nr
+    2
+    >>> page.total_size
     2
     >>> for member in page:
     ...     print(member)
@@ -403,6 +411,8 @@ The list of users can also be paginated:
     >>> page = client.get_user_page(count=4, page=1)
     >>> page.nr
     1
+    >>> page.total_size
+    5
 
     >>> for user in page:
     ...     print(user)

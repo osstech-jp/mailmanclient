@@ -729,7 +729,7 @@ interactions:
         "list_name": "test-two", "volume": 1, "member_count": 0, "mail_host": "example.com",
         "http_etag": "\"1fe01c088cf7e7df6ae8c520e18bcc65dc2a04b6\"", "self_link":
         "http://localhost:9001/3.1/lists/test-two.example.com", "list_id": "test-two.example.com",
-        "display_name": "Test-two"}], "total_size": 2, "start": 0}'}
+        "display_name": "Test-two"}], "total_size": 4, "start": 0}'}
     headers:
       content-length: ['745']
       content-type: [application/json; charset=utf-8]
@@ -791,8 +791,8 @@ interactions:
         "test-three@example.com", "list_name": "test-three", "volume": 1, "member_count":
         0, "mail_host": "example.com", "http_etag": "\"89ff891fab1d546cc90a774a6007bd4527f22d37\"",
         "self_link": "http://localhost:9001/3.1/lists/test-three.example.com", "list_id":
-        "test-three.example.com", "display_name": "Test-three"}], "total_size": 2,
-        "start": 0}'}
+        "test-three.example.com", "display_name": "Test-three"}], "total_size": 4,
+        "start": 2}'}
     headers:
       content-length: ['765']
       content-type: [application/json; charset=utf-8]
@@ -1506,7 +1506,7 @@ interactions:
         "http://localhost:9001/3.1/users/198976075374111894912729205057680594491",
         "role": "member", "delivery_mode": "regular", "self_link": "http://localhost:9001/3.1/members/50018780916269240231843847144497357951",
         "email": "bill@example.com", "member_id": 50018780916269240231843847144497357951,
-        "list_id": "test-one.example.com"}], "total_size": 2, "start": 0}'}
+        "list_id": "test-one.example.com"}], "total_size": 4, "start": 0}'}
     headers:
       content-length: ['1034']
       content-type: [application/json; charset=utf-8]
@@ -1575,7 +1575,7 @@ interactions:
         "http://localhost:9001/3.1/users/166592902223974960207515209463556429563",
         "role": "member", "delivery_mode": "regular", "self_link": "http://localhost:9001/3.1/members/45758364452112724875835990240537724949",
         "email": "cris@example.com", "member_id": 45758364452112724875835990240537724949,
-        "list_id": "test-two.example.com"}], "total_size": 2, "start": 0}'}
+        "list_id": "test-two.example.com"}], "total_size": 4, "start": 2}'}
     headers:
       content-length: ['1032']
       content-type: [application/json; charset=utf-8]
@@ -1639,7 +1639,7 @@ interactions:
         "http://localhost:9001/3.1/users/24575991643704116174547915509645071691",
         "role": "member", "delivery_mode": "regular", "self_link": "http://localhost:9001/3.1/members/300442128227839151180238692013270431521",
         "email": "anna@example.com", "member_id": 300442128227839151180238692013270431521,
-        "list_id": "test-one.example.com"}], "total_size": 1, "start": 0}'}
+        "list_id": "test-one.example.com"}], "total_size": 2, "start": 0}'}
     headers:
       content-length: ['569']
       content-type: [application/json; charset=utf-8]
@@ -1682,7 +1682,7 @@ interactions:
         "http://localhost:9001/3.1/users/198976075374111894912729205057680594491",
         "role": "member", "delivery_mode": "regular", "self_link": "http://localhost:9001/3.1/members/50018780916269240231843847144497357951",
         "email": "bill@example.com", "member_id": 50018780916269240231843847144497357951,
-        "list_id": "test-one.example.com"}], "total_size": 1, "start": 0}'}
+        "list_id": "test-one.example.com"}], "total_size": 2, "start": 0}'}
     headers:
       content-length: ['568']
       content-type: [application/json; charset=utf-8]
@@ -2242,7 +2242,7 @@ interactions:
         "Anna"}, {"http_etag": "\"ef18fb40275febb82af3b42edf5b980f17440c11\"", "user_id":
         198976075374111894912729205057680594491, "self_link": "http://localhost:9001/3.1/users/198976075374111894912729205057680594491",
         "created_on": "2015-08-12T08:06:41.766381", "is_server_owner": false, "display_name":
-        "Bill"}], "total_size": 4, "start": 0}'}
+        "Bill"}], "total_size": 5, "start": 0}'}
     headers:
       content-length: ['1302']
       content-type: [application/json; charset=utf-8]
@@ -2338,7 +2338,7 @@ interactions:
         "entries": [{"http_etag": "\"f4a6838db0bdef3715c8ad60a7af196b422400a5\"",
         "user_id": 166592902223974960207515209463556429563, "self_link": "http://localhost:9001/3.1/users/166592902223974960207515209463556429563",
         "created_on": "2015-08-12T08:06:42.457267", "is_server_owner": false, "display_name":
-        "Cris"}], "total_size": 1, "start": 0}'}
+        "Cris"}], "total_size": 5, "start": 4}'}
     headers:
       content-length: ['400']
       content-type: [application/json; charset=utf-8]
@@ -2386,7 +2386,7 @@ interactions:
         "Anna"}, {"http_etag": "\"ef18fb40275febb82af3b42edf5b980f17440c11\"", "user_id":
         198976075374111894912729205057680594491, "self_link": "http://localhost:9001/3.1/users/198976075374111894912729205057680594491",
         "created_on": "2015-08-12T08:06:41.766381", "is_server_owner": false, "display_name":
-        "Bill"}], "total_size": 4, "start": 0}'}
+        "Bill"}], "total_size": 5, "start": 0}'}
     headers:
       content-length: ['1302']
       content-type: [application/json; charset=utf-8]

@@ -461,6 +461,7 @@ Every user has a list of one or more addresses.
 Multiple addresses can be assigned to a user record:
 
     >>> cris.add_address('cris.person@example.org')
+    cris.person@example.org
     >>> print(client.get_address('cris.person@example.org'))
     cris.person@example.org
 

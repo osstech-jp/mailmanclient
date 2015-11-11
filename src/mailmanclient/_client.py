@@ -844,7 +844,12 @@ class _User:
         # Adds another email adress to the user record and returns an
         # _Address object.
         url = '{0}/addresses'.format(self._url)
-        self._connection.call(url, {'email': email})
+        response, content = self._connection.call(url, {'email': email})
+        address = {
+            'email': email,
+            'self_link': response['location'],
+        }
+        return _Address(self._connection, address)
 
     def save(self):
         data = {'display_name': self.display_name}

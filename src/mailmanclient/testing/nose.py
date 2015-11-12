@@ -39,6 +39,13 @@ FLAGS = doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE | doctest.REPORT_NDIFF
 TOPDIR = os.path.dirname(mailmanclient.__file__)
 
 
+def filter_response_headers(response):
+    for header in ('Date', 'Server'):
+        if header in response['headers']:
+            del response['headers'][header]
+    return response
+
+
 
 class NosePlugin(Plugin):
     configSection = 'mailman'
@@ -61,6 +68,10 @@ class NosePlugin(Plugin):
                      Mailman to be running.""")
         self._data_path = os.path.join(TOPDIR, 'tests', 'data', 'tape.yaml')
         self._resources = ExitStack()
+        self._recorder = vcr.VCR(
+            filter_headers=['authorization', 'user-agent', 'date'],
+            before_record_response=filter_response_headers,
+            )
 
     def startTestRun(self, event):
         # Check to see if we're running the test suite in record mode.  If so,
@@ -72,7 +83,8 @@ class NosePlugin(Plugin):
                 if error.errno != errno.ENOENT:
                     raise
         # This will automatically create the recording file.
-        self._resources.enter_context(vcr.use_cassette(self._data_path))
+        self._resources.enter_context(
+            self._recorder.use_cassette(self._data_path))
 
     def stopTestRun(self, event):
         # Stop all recording.

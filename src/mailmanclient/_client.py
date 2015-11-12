@@ -177,7 +177,7 @@ class Client:
         response, content = self._connection.call('members')
         if 'entries' not in content:
             return []
-        return [_Member(self._connection, entry['self_link'])
+        return [_Member(self._connection, entry['self_link'], entry)
                 for entry in content['entries']]
 
     def get_member(self, fqdn_listname, subscriber_address):
@@ -399,7 +399,7 @@ class _List:
         response, content = self._connection.call(url)
         if 'entries' not in content:
             return []
-        return [_Member(self._connection, entry['self_link'])
+        return [_Member(self._connection, entry['self_link'], entry)
                 for entry in sorted(content['entries'],
                                     key=itemgetter('address'))]
 
@@ -411,7 +411,7 @@ class _List:
         response, content = self._connection.call(url, data)
         if 'entries' not in content:
             return []
-        return [_Member(self._connection, entry['self_link'])
+        return [_Member(self._connection, entry['self_link'], entry)
                 for entry in sorted(content['entries'],
                                     key=itemgetter('address'))]
 
@@ -571,7 +571,7 @@ class _List:
         try:
             path = 'lists/{0}/member/{1}'.format(self.list_id, email)
             response, content = self._connection.call(path)
-            return _Member(self._connection, content['self_link'])
+            return _Member(self._connection, content['self_link'], content)
         except HTTPError:
             raise ValueError('%s is not a member address of %s' %
                              (email, self.fqdn_listname))
@@ -691,10 +691,10 @@ class _ListArchivers:
 
 class _Member:
 
-    def __init__(self, connection, url):
+    def __init__(self, connection, url, data=None):
         self._connection = connection
         self._url = url
-        self._info = None
+        self._info = data
         self._preferences = None
 
     def __repr__(self):
@@ -817,8 +817,8 @@ class _User:
                     'members/find', data={'subscriber': address})
                 try:
                     for entry in content['entries']:
-                        subscriptions.append(_Member(self._connection,
-                                                     entry['self_link']))
+                        subscriptions.append(_Member(
+                            self._connection, entry['self_link'], entry))
                 except KeyError:
                     pass
             self._subscriptions = subscriptions
@@ -1109,8 +1109,8 @@ class _Page:
         if 'entries' in content:
             self.total_size = content["total_size"]
             for entry in content['entries']:
-                if self._model == _List:
-                    # _List instances accept a "data" parameter to save one
+                if self._model in (_List, _Member):
+                    # Some classes accept a "data" parameter to save one
                     # REST call
                     instance = self._model(
                         self._connection, entry['self_link'], entry)

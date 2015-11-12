@@ -752,8 +752,7 @@ discarded using the request token.
 
 Let's accept Groucho:
 
-    >>> confirm_first.manage_request(request_1['token'], 'accept')
-
+    >>> response = confirm_first.moderate_request(request_1['token'], 'accept')
     >>> len(confirm_first.requests)
     2
 
@@ -767,14 +766,13 @@ Let's accept Groucho:
 
 Let's reject Harpo:
 
-    >>> confirm_first.manage_request(request_2['token'], 'reject')
-    
+    >>> response = confirm_first.moderate_request(request_2['token'], 'reject')
     >>> len(confirm_first.requests)
     1
 
 Let's discard Zeppo's request:
 
-    >>> confirm_first.manage_request(request_3['token'], 'discard')
+    >>> response = confirm_first.moderate_request(request_3['token'], 'discard')
     >>> len(confirm_first.requests)
     0
 

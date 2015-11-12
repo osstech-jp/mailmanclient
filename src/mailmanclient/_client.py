@@ -27,6 +27,7 @@ __all__ = [
 
 import six
 import json
+import warnings
 
 from base64 import b64encode
 from httplib2 import Http
@@ -464,14 +465,6 @@ class _List:
                 entries.append(request)
         return entries
 
-    def manage_request(self, token, action):
-        """
-        accept|reject|discard|defer a subscription request.
-        """
-        response, content = self._connection.call(
-            'lists/{0}/requests/{1}'.format(self.list_id, token),
-            {'action': action})
-
     @property
     def archivers(self):
         """
@@ -542,6 +535,13 @@ class _List:
         path = 'lists/{0}/requests/{1}'.format(self.list_id, request_id)
         response, content = self._connection.call(path, {'action': action})
         return response
+
+    def manage_request(self, token, action):
+        """Alias for moderate_request, kept for compatibility"""
+        warnings.warn('The `manage_request()` method has been replaced by '
+                      '`moderate_request()` and will be removed in the future.',
+                      DeprecationWarning, stacklevel=2)
+        return self.moderate_request(token, action)
 
     def accept_request(self, request_id):
         """Shortcut to accept a subscription request."""

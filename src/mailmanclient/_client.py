@@ -191,7 +191,7 @@ class Client:
         response, content = self._connection.call('users')
         if 'entries' not in content:
             return []
-        return [_User(self._connection, entry['self_link'])
+        return [_User(self._connection, entry['self_link'], entry)
                 for entry in sorted(content['entries'],
                                     key=itemgetter('self_link'))]
 
@@ -239,7 +239,7 @@ class Client:
     def get_user(self, address):
         response, content = self._connection.call(
             'users/{0}'.format(address))
-        return _User(self._connection, content['self_link'])
+        return _User(self._connection, content['self_link'], content)
 
     def get_address(self, address):
         response, content = self._connection.call(
@@ -752,11 +752,10 @@ class _Member:
 
 class _User:
 
-    def __init__(self, connection, url):
+    def __init__(self, connection, url, data=None):
         self._connection = connection
         self._url = url
-        self._info = None
-        self._addresses = None
+        self._info = data
         self._subscriptions = None
         self._subscription_list_ids = None
         self._preferences = None
@@ -1109,13 +1108,8 @@ class _Page:
         if 'entries' in content:
             self.total_size = content["total_size"]
             for entry in content['entries']:
-                if self._model in (_List, _Member):
-                    # Some classes accept a "data" parameter to save one
-                    # REST call
-                    instance = self._model(
-                        self._connection, entry['self_link'], entry)
-                else:
-                    instance = self._model(self._connection, entry['self_link'])
+                instance = self._model(
+                    self._connection, entry['self_link'], entry)
                 self._entries.append(instance)
 
     @property

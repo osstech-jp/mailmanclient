@@ -2777,26 +2777,6 @@ interactions:
       server: [WSGIServer/0.2 CPython/3.4.3]
     status: {code: 200, message: OK}
 - request:
-    body: null
-    headers:
-      accept-encoding: ['gzip, deflate']
-      !!python/unicode 'authorization': [!!python/unicode 'Basic cmVzdGFkbWluOnJlc3RwYXNz']
-      !!python/unicode 'user-agent': [!!python/unicode 'GNU Mailman REST client v1.0.0']
-    method: !!python/unicode 'GET'
-    uri: http://localhost:9001/3.1/users/216614712828521143934313061384322266010
-  response:
-    body: {string: !!python/unicode '{"password": "$6$rounds=90376$O1lbkv2ScCOgvcRP$PxHhydjErcmkylIlf1jt5.lfYwFZLud7N8Ip6NHc.GOvlyed59d3GQXD8HTSNucDY7/ZNnFrSjAUgtWTIPpCx1",
-        "http_etag": "\"826cda615fbed782e60ccb7ae0b2b35bb09f5512\"", "user_id": 216614712828521143934313061384322266010,
-        "self_link": "http://localhost:9001/3.1/users/216614712828521143934313061384322266010",
-        "created_on": "2015-08-12T08:06:48.884164", "is_server_owner": false, "display_name":
-        "Ler"}'}
-    headers:
-      content-length: ['429']
-      content-type: [application/json; charset=utf-8]
-      date: ['Wed, 12 Aug 2015 08:06:49 GMT']
-      server: [WSGIServer/0.2 CPython/3.4.3]
-    status: {code: 200, message: OK}
-- request:
     body: display_name=Sir+Ler
     headers:
       accept-encoding: ['gzip, deflate']
@@ -2820,26 +2800,6 @@ interactions:
       !!python/unicode 'user-agent': [!!python/unicode 'GNU Mailman REST client v1.0.0']
     method: !!python/unicode 'GET'
     uri: http://localhost:9001/3.1/users/ler@primus.org
-  response:
-    body: {string: !!python/unicode '{"password": "$6$rounds=90376$O1lbkv2ScCOgvcRP$PxHhydjErcmkylIlf1jt5.lfYwFZLud7N8Ip6NHc.GOvlyed59d3GQXD8HTSNucDY7/ZNnFrSjAUgtWTIPpCx1",
-        "http_etag": "\"9005044d365bd09d1e1cd11a41e03ca044d325c0\"", "user_id": 216614712828521143934313061384322266010,
-        "self_link": "http://localhost:9001/3.1/users/216614712828521143934313061384322266010",
-        "created_on": "2015-08-12T08:06:48.884164", "is_server_owner": false, "display_name":
-        "Sir Ler"}'}
-    headers:
-      content-length: ['433']
-      content-type: [application/json; charset=utf-8]
-      date: ['Wed, 12 Aug 2015 08:06:49 GMT']
-      server: [WSGIServer/0.2 CPython/3.4.3]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      accept-encoding: ['gzip, deflate']
-      !!python/unicode 'authorization': [!!python/unicode 'Basic cmVzdGFkbWluOnJlc3RwYXNz']
-      !!python/unicode 'user-agent': [!!python/unicode 'GNU Mailman REST client v1.0.0']
-    method: !!python/unicode 'GET'
-    uri: http://localhost:9001/3.1/users/216614712828521143934313061384322266010
   response:
     body: {string: !!python/unicode '{"password": "$6$rounds=90376$O1lbkv2ScCOgvcRP$PxHhydjErcmkylIlf1jt5.lfYwFZLud7N8Ip6NHc.GOvlyed59d3GQXD8HTSNucDY7/ZNnFrSjAUgtWTIPpCx1",
         "http_etag": "\"9005044d365bd09d1e1cd11a41e03ca044d325c0\"", "user_id": 216614712828521143934313061384322266010,

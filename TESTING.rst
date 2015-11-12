@@ -50,6 +50,7 @@ it contains the following::
 
     [devmode]
     enabled: yes
+    testing: yes
     recipient: you@yourdomain.com
 
     [mta]

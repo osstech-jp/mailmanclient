@@ -2639,6 +2639,51 @@ interactions:
     headers:
       accept-encoding: ['gzip, deflate']
     method: GET
+    uri: http://localhost:9001/3.1/lists/test-one.example.com/member/bill@example.com
+  response:
+    body: {string: '{"address": "http://localhost:9001/3.1/addresses/bill@example.com",
+        "delivery_mode": "regular", "email": "bill@example.com", "http_etag": "\"5bca828088456c2968c9fe8840166d88127dc1aa\"",
+        "list_id": "test-one.example.com", "member_id": 2, "moderation_action": "defer",
+        "role": "member", "self_link": "http://localhost:9001/3.1/members/2", "user":
+        "http://localhost:9001/3.1/users/4"}'}
+    headers:
+      content-length: ['381']
+      content-type: [application/json; charset=utf-8]
+    status: {code: 200, message: OK}
+- request:
+    body: !!binary |
+      bW9kZXJhdGlvbl9hY3Rpb249aG9sZA==
+    headers:
+      accept-encoding: ['gzip, deflate']
+      content-type: [application/x-www-form-urlencoded]
+    method: PATCH
+    uri: http://localhost:9001/3.1/members/2
+  response:
+    body: {string: ''}
+    headers:
+      Content-Length: ['0']
+    status: {code: 204, message: No Content}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
+    uri: http://localhost:9001/3.1/lists/test-one.example.com/member/bill@example.com
+  response:
+    body: {string: '{"address": "http://localhost:9001/3.1/addresses/bill@example.com",
+        "delivery_mode": "regular", "email": "bill@example.com", "http_etag": "\"567cbd50da762bdabe94ac50d5b2b6c93e2d917e\"",
+        "list_id": "test-one.example.com", "member_id": 2, "moderation_action": "hold",
+        "role": "member", "self_link": "http://localhost:9001/3.1/members/2", "user":
+        "http://localhost:9001/3.1/users/4"}'}
+    headers:
+      content-length: ['380']
+      content-type: [application/json; charset=utf-8]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
     uri: http://localhost:9001/3.1/lists/test-one.example.com/archivers
   response:
     body: {string: '{"http_etag": "\"3dbbbaad592a043938314db0e5249a1ca71d0dc6\"",

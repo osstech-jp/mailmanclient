@@ -842,6 +842,20 @@ message's methods.
     >>> len(test_one.held)
     0
 
+Member moderation
+-----------------
+
+Each member or non-member can have a specific moderation action. It is set
+using the 'moderation_action' property:
+
+    >>> bill_member = test_one.get_member('bill@example.com')
+    >>> print(bill_member.moderation_action)
+    defer
+    >>> bill_member.moderation_action = 'hold'
+    >>> bill_member.save()
+    >>> print(test_one.get_member('bill@example.com').moderation_action)
+    hold
+
 
 Archivers
 =========

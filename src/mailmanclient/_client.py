@@ -694,6 +694,7 @@ class _Member:
         self._url = url
         self._info = data
         self._preferences = None
+        self._changed = set()
 
     def __repr__(self):
         return '<Member "{0}" on "{1}">'.format(self.email, self.list_id)
@@ -729,6 +730,19 @@ class _Member:
         return self._info['role']
 
     @property
+    def moderation_action(self):
+        self._get_info()
+        return self._info['moderation_action']
+
+    @moderation_action.setter
+    def moderation_action(self, value):
+        self._get_info()
+        if self._info['moderation_action'] == value:
+            return
+        self._info['moderation_action'] = value
+        self._changed.add('moderation_action')
+
+    @property
     def user(self):
         self._get_info()
         return _User(self._connection, self._info['user'])
@@ -746,6 +760,15 @@ class _Member:
         :param self_link: The REST resource to delete
         """
         self._connection.call(self.self_link, method='DELETE')
+
+    def save(self):
+        data = {}
+        for key in self._changed:
+            data[key] = self._info[key]
+        self._changed.clear()
+        response, content = self._connection.call(
+            self._url, data, method='PATCH')
+        self._info = None
 
 
 class _User:

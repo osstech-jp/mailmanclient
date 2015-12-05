@@ -905,6 +905,11 @@ class _Address:
             self._info = content
 
     @property
+    def email(self):
+        self._get_info()
+        return self._info.get('email')
+
+    @property
     def display_name(self):
         self._get_info()
         return self._info.get('display_name')

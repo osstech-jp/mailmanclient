@@ -420,6 +420,22 @@ class _List:
         url = 'lists/{0}/roster/member'.format(self.fqdn_listname)
         return _Page(self._connection, url, _Member, count, page)
 
+    def find_members(self, address, role='member', page=None, count=50):
+        data = {
+            'subscriber': address,
+            'role': role,
+            'list_id': self.list_id,
+            }
+        url = 'members/find?{}'.format(urlencode(data, doseq=True))
+        if page is None:
+            response, content = self._connection.call(url, data)
+            if 'entries' not in content:
+                return []
+            return [_Member(self._connection, entry['self_link'], entry)
+                    for entry in content['entries']]
+        else:
+            return _Page(self._connection, url, _Member, count, page)
+
     @property
     def settings(self):
         if self._settings is None:

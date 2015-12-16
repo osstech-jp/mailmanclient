@@ -1104,6 +1104,9 @@ class _Preferences:
                 data[key] = self._preferences[key]
         response, content = self._connection.call(self._url, data, 'PATCH')
 
+    def delete(self):
+        response, content = self._connection.call(self._url, method='DELETE')
+
 
 LIST_READ_ONLY_ATTRS = (
     'bounces_address',

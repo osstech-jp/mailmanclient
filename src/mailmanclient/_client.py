@@ -44,7 +44,7 @@ class MailmanConnectionError(Exception):
     """Custom Exception to catch connection errors."""
 
 
-class _Connection:
+class Connection:
     """A connection to the REST client."""
 
     def __init__(self, baseurl, name=None, password=None):
@@ -119,6 +119,254 @@ class _Connection:
             raise MailmanConnectionError('Could not connect to Mailman API')
 
 
+class RESTBase:
+    """
+    Base class for data coming from the REST API.
+
+    Subclasses can (and sometimes must) define some attributes to handle a
+    particular entity.
+
+    :cvar _properties: the list of expected entity properties. This is required
+      for API elements that behave like an object, with REST data accessed
+      through attributes. If this value is None, the REST data is used to
+      list available properties.
+    :cvar _writable_properties: list of properties that can be written to using a
+      `PATCH` request. If this value is `None`, all properties are writable.
+    :cvar _read_only_properties: list of properties that cannot be written to
+      (defaults to `self_link` only).
+    :cvar _autosave: automatically send a `PATCH` request to the API when a value
+      is changed. Otherwise, the `save()` method must be called.
+    """
+
+    _properties = None
+    _writable_properties = None
+    _read_only_properties = ['self_link']
+    _autosave = False
+
+    def __init__(self, connection, url, data=None):
+        """
+        :param connection: An API connection object.
+        :type connection: Connection.
+        :param url: The url of the API endpoint.
+        :type url: str.
+        :param data: The initial data to use.
+        :type data: dict.
+        """
+        self._connection = connection
+        self._url = url
+        self._rest_data = data
+        self._changed_rest_data = {}
+
+    @property
+    def rest_data(self):
+        """Get data from API and cache it (only once per instance)."""
+        if self._rest_data is None:
+            response, content = self._connection.call(self._url)
+            if isinstance(content, dict) and 'http_etag' in content:
+                del content['http_etag'] # We don't care about etags.
+            self._rest_data = content
+        return self._rest_data
+
+    def _get(self, name):
+        if self._properties is not None:
+            # Some REST key/values may not be returned by Mailman if the value
+            # is None.
+            if name in self._properties:
+                return self.rest_data.get(name)
+            raise KeyError(name)
+        else:
+            return self.rest_data[name]
+
+    def _set(self, name, value):
+        if (name in self._read_only_properties or (
+            self._writable_properties is not None
+            and name not in self._writable_properties)):
+            raise ValueError('value is read-only')
+        # Don't check that the name is in _properties, the accepted values for
+        # write may be different from the returned values (eg: User.password
+        # and User.cleartext_password).
+        if name in self.rest_data and self.rest_data[name] == value:
+            return # Nothing to do
+        self._changed_rest_data[name] = value
+        if self._autosave:
+            self.save()
+
+    def _reset_cache(self):
+        self._changed_rest_data = {}
+        self._rest_data = None
+
+    def save(self):
+        response, content = self._connection.call(
+            self._url, self._changed_rest_data, method='PATCH')
+        self._reset_cache()
+
+
+class RESTObject(RESTBase):
+    """Base class for REST data that behaves like an object with attributes."""
+
+    def __repr__(self):
+        return '<{0} at {1}>'.format(self.__class__.__name__, self._url)
+
+    def __getattr__(self, name):
+        try:
+            return self._get(name)
+        except KeyError:
+            # Transform the KeyError into the more appropriate AttributeError
+            raise AttributeError(
+                "'{0}' object has no attribute '{1}'".format(
+                self.__class__.__name__, name))
+
+    def __setattr__(self, name, value):
+        # RESTObject must list REST-specific properties or we won't be able to
+        # store the _connection, _url, etc.
+        assert self._properties is not None
+        if name not in self._properties:
+            return super(RESTObject, self).__setattr__(name, value)
+        return self._set(name, value)
+
+
+class RESTDict(RESTBase):
+    """Base class for REST data that behaves like a dictionary."""
+
+    def __repr__(self):
+        return repr(self.rest_data)
+
+    def __unicode__(self):
+        return unicode(self.rest_data)
+
+    def __getitem__(self, name):
+        return self._get(name)
+
+    def __setitem__(self, name, value):
+        self._set(name, value)
+
+    def __iter__(self):
+        return self.rest_data.__iter__()
+
+    def __len__(self):
+        return len(self.rest_data)
+
+    def get(self, name, default=None):
+        return self.rest_data.get(name, default)
+
+    def keys(self):
+        return self.rest_data.keys()
+
+
+class RESTList(RESTBase):
+    """
+    Base class for REST data that behaves like a list.
+
+    The `_factory` attribute is a callable that will be applied on each
+    returned member of the list.
+    """
+
+    _factory = lambda x: x
+
+    @property
+    def rest_data(self):
+        if self._rest_data is None:
+            response, content = self._connection.call(self._url)
+            if 'entries' not in content:
+                self._rest_data = []
+            else:
+                self._rest_data = content['entries']
+        return self._rest_data
+
+    def __repr__(self):
+        return repr(self.rest_data)
+
+    def __unicode__(self):
+        return unicode(self.rest_data)
+
+    def __getitem__(self, key):
+        return self._factory(self.rest_data[key])
+
+    def __iter__(self):
+        for entry in self.rest_data:
+            yield self._factory(entry)
+
+
+class PreferencesMixin:
+    """Mixin for objects that have preferences."""
+
+    @property
+    def preferences(self):
+        if getattr(self, '_preferences', None) is None:
+            path = '{0}/preferences'.format(self.self_link)
+            self._preferences = Preferences(self._connection, path)
+        return self._preferences
+
+
+class Page:
+
+    def __init__(self, connection, path, model, count=DEFAULT_PAGE_ITEM_COUNT,
+                 page=1):
+        self._connection = connection
+        self._path = path
+        self._count = count
+        self._page = page
+        self._model = model
+        self._entries = []
+        self.total_size = 0
+        self._create_page()
+
+    def __getitem__(self, key):
+        return self._entries[key]
+
+    def __iter__(self):
+        for entry in self._entries:
+            yield entry
+
+    def __repr__(self):
+        return '<Page {0} ({1})'.format(self._page, self._model)
+
+    def __len__(self):
+        return len(self._entries)
+
+    def _create_page(self):
+        self._entries = []
+        # create url
+        path = '{0}?count={1}&page={2}'.format(
+            self._path, self._count, self._page)
+        response, content = self._connection.call(path)
+        if 'entries' in content:
+            self.total_size = content["total_size"]
+            for entry in content['entries']:
+                instance = self._model(
+                    self._connection, entry['self_link'], entry)
+                self._entries.append(instance)
+
+    @property
+    def nr(self):
+        return self._page
+
+    @property
+    def next(self):
+        return self.__class__(
+            self._connection, self._path, self._model, self._count,
+            self._page + 1)
+
+    @property
+    def previous(self):
+        if self.has_previous:
+            return self.__class__(
+                self._connection, self._path, self._model, self._count,
+                self._page - 1)
+
+    @property
+    def has_previous(self):
+        return self._page > 1
+
+    @property
+    def has_next(self):
+        return self._count * self._page < self.total_size
+
+
+#
+# --- The following classes are part of the API
+#
+
 class Client:
     """Access the Mailman REST API root."""
 
@@ -131,7 +379,7 @@ class Client:
         :param password: The Basic Auth password.  If given the `name` must
             also be given.
         """
-        self._connection = _Connection(baseurl, name, password)
+        self._connection = Connection(baseurl, name, password)
 
     def __repr__(self):
         return '<Client ({0.name}:{0.password}) {0.baseurl}>'.format(
@@ -143,14 +391,15 @@ class Client:
 
     @property
     def preferences(self):
-        return _Preferences(self._connection, 'system/preferences')
+        return Preferences(self._connection, 'system/preferences')
 
     @property
     def queues(self):
         response, content = self._connection.call('queues')
         queues = {}
         for entry in content['entries']:
-            queues[entry['name']] = _Queue(self._connection, entry)
+            queues[entry['name']] = Queue(
+                self._connection, entry['self_link'], entry)
         return queues
 
     @property
@@ -158,18 +407,18 @@ class Client:
         response, content = self._connection.call('lists')
         if 'entries' not in content:
             return []
-        return [_List(self._connection, entry['self_link'], entry)
+        return [MailingList(self._connection, entry['self_link'], entry)
                 for entry in content['entries']]
 
     def get_list_page(self, count=50, page=1):
-        return _Page(self._connection, 'lists', _List, count, page)
+        return Page(self._connection, 'lists', MailingList, count, page)
 
     @property
     def domains(self):
         response, content = self._connection.call('domains')
         if 'entries' not in content:
             return []
-        return [_Domain(self._connection, entry['self_link'])
+        return [Domain(self._connection, entry['self_link'])
                 for entry in sorted(content['entries'],
                                     key=itemgetter('url_host'))]
 
@@ -178,26 +427,26 @@ class Client:
         response, content = self._connection.call('members')
         if 'entries' not in content:
             return []
-        return [_Member(self._connection, entry['self_link'], entry)
+        return [Member(self._connection, entry['self_link'], entry)
                 for entry in content['entries']]
 
     def get_member(self, fqdn_listname, subscriber_address):
         return self.get_list(fqdn_listname).get_member(subscriber_address)
 
     def get_member_page(self, count=50, page=1):
-        return _Page(self._connection, 'members', _Member, count, page)
+        return Page(self._connection, 'members', Member, count, page)
 
     @property
     def users(self):
         response, content = self._connection.call('users')
         if 'entries' not in content:
             return []
-        return [_User(self._connection, entry['self_link'], entry)
+        return [User(self._connection, entry['self_link'], entry)
                 for entry in sorted(content['entries'],
                                     key=itemgetter('self_link'))]
 
     def get_user_page(self, count=50, page=1):
-        return _Page(self._connection, 'users', _User, count, page)
+        return Page(self._connection, 'users', User, count, page)
 
     def create_domain(self, mail_host, base_url=None,
                       description=None, owner=None):
@@ -209,7 +458,7 @@ class Client:
         if owner is not None:
             data['owner'] = owner
         response, content = self._connection.call('domains', data)
-        return _Domain(self._connection, response['location'])
+        return Domain(self._connection, response['location'])
 
     def delete_domain(self, mail_host):
         response, content = self._connection.call(
@@ -220,7 +469,7 @@ class Client:
         if mail_host is not None:
             response, content = self._connection.call(
                 'domains/{0}'.format(mail_host))
-            return _Domain(self._connection, content['self_link'])
+            return Domain(self._connection, content['self_link'])
         elif web_host is not None:
             for domain in self.domains:
                 # note: `base_url` property will be renamed to `web_host`
@@ -235,49 +484,34 @@ class Client:
             'users', dict(email=email,
                           password=password,
                           display_name=display_name))
-        return _User(self._connection, response['location'])
+        return User(self._connection, response['location'])
 
     def get_user(self, address):
         response, content = self._connection.call(
             'users/{0}'.format(address))
-        return _User(self._connection, content['self_link'], content)
+        return User(self._connection, content['self_link'], content)
 
     def get_address(self, address):
         response, content = self._connection.call(
             'addresses/{0}'.format(address))
-        return _Address(self._connection, content)
+        return Address(self._connection, content['self_link'], content)
 
     def get_list(self, fqdn_listname):
         response, content = self._connection.call(
             'lists/{0}'.format(fqdn_listname))
-        return _List(self._connection, content['self_link'], content)
+        return MailingList(self._connection, content['self_link'], content)
 
     def delete_list(self, fqdn_listname):
         response, content = self._connection.call(
             'lists/{0}'.format(fqdn_listname), None, 'DELETE')
 
 
-class _Domain:
+class Domain(RESTObject):
 
-    def __init__(self, connection, url):
-        self._connection = connection
-        self._url = url
-        self._info = None
+    _properties = ('base_url', 'description', 'mail_host', 'self_link', 'url_host')
 
     def __repr__(self):
         return '<Domain "{0}">'.format(self.mail_host)
-
-    def _get_info(self):
-        if self._info is None:
-            response, content = self._connection.call(self._url)
-            self._info = content
-
-    # note: `base_url` property will be renamed to `web_host`
-    # in Mailman3Alpha8
-    @property
-    def base_url(self):
-        self._get_info()
-        return self._info['base_url']
 
     @property
     def owners(self):
@@ -289,27 +523,12 @@ class _Domain:
             return [item for item in content['entries']]
 
     @property
-    def description(self):
-        self._get_info()
-        return self._info['description']
-
-    @property
-    def mail_host(self):
-        self._get_info()
-        return self._info['mail_host']
-
-    @property
-    def url_host(self):
-        self._get_info()
-        return self._info['url_host']
-
-    @property
     def lists(self):
         response, content = self._connection.call(
             'domains/{0}/lists'.format(self.mail_host))
         if 'entries' not in content:
             return []
-        return [_List(self._connection, entry['self_link'], entry)
+        return [MailingList(self._connection, entry['self_link'], entry)
                 for entry in sorted(content['entries'],
                                     key=itemgetter('fqdn_listname'))]
 
@@ -317,7 +536,7 @@ class _Domain:
         fqdn_listname = '{0}@{1}'.format(list_name, self.mail_host)
         response, content = self._connection.call(
             'lists', dict(fqdn_listname=fqdn_listname))
-        return _List(self._connection, response['location'])
+        return MailingList(self._connection, response['location'])
 
     # def remove_owner(self, owner):
     #     TODO: add this when API supports it.
@@ -335,21 +554,17 @@ class _Domain:
             url, {'owner': owner})
 
 
-class _List:
+class MailingList(RESTObject):
+
+    _properties = ('display_name', 'fqdn_listname', 'list_id', 'list_name',
+                   'mail_host', 'member_count', 'volume', 'self_link')
 
     def __init__(self, connection, url, data=None):
-        self._connection = connection
-        self._url = url
-        self._info = data
+        super(MailingList, self).__init__(connection, url, data)
         self._settings = None
 
     def __repr__(self):
         return '<List "{0}">'.format(self.fqdn_listname)
-
-    def _get_info(self):
-        if self._info is None:
-            response, content = self._connection.call(self._url)
-            self._info = content
 
     @property
     def owners(self):
@@ -370,37 +585,12 @@ class _List:
             return [item['email'] for item in content['entries']]
 
     @property
-    def fqdn_listname(self):
-        self._get_info()
-        return self._info['fqdn_listname']
-
-    @property
-    def mail_host(self):
-        self._get_info()
-        return self._info['mail_host']
-
-    @property
-    def list_id(self):
-        self._get_info()
-        return self._info['list_id']
-
-    @property
-    def list_name(self):
-        self._get_info()
-        return self._info['list_name']
-
-    @property
-    def display_name(self):
-        self._get_info()
-        return self._info.get('display_name')
-
-    @property
     def members(self):
         url = 'lists/{0}/roster/member'.format(self.fqdn_listname)
         response, content = self._connection.call(url)
         if 'entries' not in content:
             return []
-        return [_Member(self._connection, entry['self_link'], entry)
+        return [Member(self._connection, entry['self_link'], entry)
                 for entry in sorted(content['entries'],
                                     key=itemgetter('address'))]
 
@@ -412,13 +602,13 @@ class _List:
         response, content = self._connection.call(url, data)
         if 'entries' not in content:
             return []
-        return [_Member(self._connection, entry['self_link'], entry)
+        return [Member(self._connection, entry['self_link'], entry)
                 for entry in sorted(content['entries'],
                                     key=itemgetter('address'))]
 
     def get_member_page(self, count=50, page=1):
         url = 'lists/{0}/roster/member'.format(self.fqdn_listname)
-        return _Page(self._connection, url, _Member, count, page)
+        return Page(self._connection, url, Member, count, page)
 
     def find_members(self, address, role='member', page=None, count=50):
         data = {
@@ -431,15 +621,15 @@ class _List:
             response, content = self._connection.call(url, data)
             if 'entries' not in content:
                 return []
-            return [_Member(self._connection, entry['self_link'], entry)
+            return [Member(self._connection, entry['self_link'], entry)
                     for entry in content['entries']]
         else:
-            return _Page(self._connection, url, _Member, count, page)
+            return Page(self._connection, url, Member, count, page)
 
     @property
     def settings(self):
         if self._settings is None:
-            self._settings = _Settings(self._connection,
+            self._settings = Settings(self._connection,
                 'lists/{0}/config'.format(self.fqdn_listname))
         return self._settings
 
@@ -450,16 +640,16 @@ class _List:
             'lists/{0}/held'.format(self.fqdn_listname), None, 'GET')
         if 'entries' not in content:
             return []
-        return [_HeldMessage(self._connection, entry['self_link'], entry)
+        return [HeldMessage(self._connection, entry['self_link'], entry)
                 for entry in content['entries']]
 
     def get_held_page(self, count=50, page=1):
         url = 'lists/{0}/held'.format(self.fqdn_listname)
-        return _Page(self._connection, url, _HeldMessage, count, page)
+        return Page(self._connection, url, HeldMessage, count, page)
 
     def get_held_message(self, held_id):
         url = 'lists/{0}/held/{1}'.format(self.fqdn_listname, held_id)
-        return _HeldMessage(self._connection, url)
+        return HeldMessage(self._connection, url)
 
     @property
     def requests(self):
@@ -481,11 +671,8 @@ class _List:
 
     @property
     def archivers(self):
-        """
-        Returns a _ListArchivers instance.
-        """
         url = 'lists/{0}/archivers'.format(self.list_id)
-        return _ListArchivers(self._connection, url, self)
+        return ListArchivers(self._connection, url, self)
 
     def add_owner(self, address):
         self.add_role('owner', address)
@@ -585,7 +772,7 @@ class _List:
         try:
             path = 'lists/{0}/member/{1}'.format(self.list_id, email)
             response, content = self._connection.call(path)
-            return _Member(self._connection, content['self_link'], content)
+            return Member(self._connection, content['self_link'], content)
         except HTTPError:
             raise ValueError('%s is not a member address of %s' %
                              (email, self.fqdn_listname))
@@ -624,7 +811,7 @@ class _List:
             return content
         # I the subscription is executed immediately, a member object
         # is returned.
-        return _Member(self._connection, response['location'])
+        return Member(self._connection, response['location'])
 
     def unsubscribe(self, email):
         """Unsubscribe an email address from a mailing list.
@@ -647,128 +834,49 @@ class _List:
             'lists/{0}'.format(self.fqdn_listname), None, 'DELETE')
 
 
-class _ListArchivers:
+class ListArchivers(RESTDict):
     """
     Represents the activation status for each site-wide available archiver
-    for a given list. 
+    for a given list.
     """
 
-    def __init__(self, connection, url, list_obj):
+    _autosave = True
+
+    def __init__(self, connection, url, mlist):
         """
         :param connection: An API connection object.
-        :type connection: _Connection.
+        :type connection: Connection.
         :param url: The API url of the list's archiver endpoint.
-        :param url: str.
-        :param list_obj: The corresponding list object.
-        :type list_obj: _List.
+        :type url: str.
+        :param mlist: The corresponding list object.
+        :type mlist: MailingList.
         """
-        self._connection = connection
-        self._url = url
-        self._list_obj = list_obj
-        self._info = None
+        super(ListArchivers, self).__init__(connection, url)
+        self._mlist = mlist
 
     def __repr__(self):
-        self._get_info()
-        return '<Archivers on "{0}">'.format(self._list_obj.list_id)
-
-    def _get_info(self):
-        # Get data from API; only once per instance.
-        if self._info is None:
-            response, content = self._connection.call(self._url)
-            # Remove `http_etag` from dictionary, we only want
-            # the archiver info.
-            content.pop('http_etag')
-            self._info = content
-
-    def __iter__(self):
-        self._get_info()
-        for archiver in self._info:
-            yield self._info[archiver]
-
-    def __getitem__(self, key):
-        self._get_info()
-        # No precautions against KeyError, should behave like a dict.
-        return self._info[key]
-
-    def __setitem__(self, key, value):
-        self._get_info()
-        # No precautions against KeyError, should behave like a dict.
-        self._info[key] = value
-        # Update archiver status via the API.
-        self._connection.call(self._url, self._info, method='PUT')
-
-    def keys(self):
-        self._get_info()
-        for key in self._info:
-            yield key
+        return '<Archivers on "{0}">'.format(self._mlist.list_id)
 
 
-class _Member:
+class Member(RESTObject, PreferencesMixin):
 
-    def __init__(self, connection, url, data=None):
-        self._connection = connection
-        self._url = url
-        self._info = data
-        self._preferences = None
-        self._changed = set()
+    _properties = ('delivery_mode', 'email', 'list_id', 'moderation_action',
+                   'role', 'self_link')
+    _writable_properties = ('address', 'delivery_mode', 'moderation_action')
 
     def __repr__(self):
         return '<Member "{0}" on "{1}">'.format(self.email, self.list_id)
 
-    def _get_info(self):
-        if self._info is None:
-            response, content = self._connection.call(self._url)
-            self._info = content
-
-    @property
-    def list_id(self):
-        self._get_info()
-        return self._info['list_id']
+    def __unicode__(self):
+        return '<Member "{0}" on "{1}">'.format(self.email, self.list_id)
 
     @property
     def address(self):
-        self._get_info()
-        return self._info['email']
-
-    @property
-    def email(self):
-        self._get_info()
-        return self._info['email']
-
-    @property
-    def self_link(self):
-        self._get_info()
-        return self._info['self_link']
-
-    @property
-    def role(self):
-        self._get_info()
-        return self._info['role']
-
-    @property
-    def moderation_action(self):
-        self._get_info()
-        return self._info['moderation_action']
-
-    @moderation_action.setter
-    def moderation_action(self, value):
-        self._get_info()
-        if self._info['moderation_action'] == value:
-            return
-        self._info['moderation_action'] = value
-        self._changed.add('moderation_action')
+        return Address(self._connection, self.rest_data['address'])
 
     @property
     def user(self):
-        self._get_info()
-        return _User(self._connection, self._info['user'])
-
-    @property
-    def preferences(self):
-        if self._preferences is None:
-            path = '{0}/preferences'.format(self.self_link)
-            self._preferences = _Preferences(self._connection, path)
-        return self._preferences
+        return User(self._connection, self.rest_data['user'])
 
     def unsubscribe(self):
         """Unsubscribe the member from a mailing list.
@@ -777,72 +885,33 @@ class _Member:
         """
         self._connection.call(self.self_link, method='DELETE')
 
-    def save(self):
-        data = {}
-        for key in self._changed:
-            data[key] = self._info[key]
-        self._changed.clear()
-        response, content = self._connection.call(
-            self._url, data, method='PATCH')
-        self._info = None
 
+class User(RESTObject, PreferencesMixin):
 
-class _User:
+    _properties = ('created_on', 'display_name', 'is_server_owner', 'password', 'self_link', 'user_id')
+    _writable_properties = ('cleartext_password', 'display_name', 'is_server_owner')
 
     def __init__(self, connection, url, data=None):
-        self._connection = connection
-        self._url = url
-        self._info = data
+        super(User, self).__init__(connection, url, data)
         self._subscriptions = None
         self._subscription_list_ids = None
-        self._preferences = None
-        self._cleartext_password = None
 
     def __repr__(self):
         return '<User "{0}" ({1})>'.format(self.display_name, self.user_id)
 
-    def _get_info(self):
-        if self._info is None:
-            response, content = self._connection.call(self._url)
-            self._info = content
-
     @property
     def addresses(self):
-        return _Addresses(self._connection, self.user_id)
+        return Addresses(
+            self._connection, 'users/{0}/addresses'.format(self.user_id))
 
-    @property
-    def display_name(self):
-        self._get_info()
-        return self._info.get('display_name', None)
-
-    @display_name.setter
-    def display_name(self, value):
-        self._get_info()
-        self._info['display_name'] = value
-
-    @property
-    def password(self):
-        self._get_info()
-        return self._info.get('password', None)
-
-    @password.setter
-    def password(self, value):
-        self._cleartext_password = value
-
-    @property
-    def user_id(self):
-        self._get_info()
-        return self._info['user_id']
-
-    @property
-    def created_on(self):
-        self._get_info()
-        return self._info['created_on']
-
-    @property
-    def self_link(self):
-        self._get_info()
-        return self._info['self_link']
+    def __setattr__(self, name, value):
+        """Special case for the password"""
+        if name == 'password':
+            self._changed_rest_data['cleartext_password'] = value
+            if self._autosave:
+                self.save()
+        else:
+            super(User, self).__setattr__(name, value)
 
     @property
     def subscriptions(self):
@@ -853,7 +922,7 @@ class _User:
                     'members/find', data={'subscriber': address})
                 try:
                     for entry in content['entries']:
-                        subscriptions.append(_Member(
+                        subscriptions.append(Member(
                             self._connection, entry['self_link'], entry))
                 except KeyError:
                     pass
@@ -869,148 +938,67 @@ class _User:
             self._subscription_list_ids = list_ids
         return self._subscription_list_ids
 
-    @property
-    def preferences(self):
-        if self._preferences is None:
-            path = 'users/{0}/preferences'.format(self.user_id)
-            self._preferences = _Preferences(self._connection, path)
-        return self._preferences
-
     def add_address(self, email):
         # Adds another email adress to the user record and returns an
-        # _Address object.
+        # Address object.
         url = '{0}/addresses'.format(self._url)
         response, content = self._connection.call(url, {'email': email})
         address = {
             'email': email,
             'self_link': response['location'],
         }
-        return _Address(self._connection, address)
-
-    def save(self):
-        data = {'display_name': self.display_name}
-        if self._cleartext_password is not None:
-            data['cleartext_password'] = self._cleartext_password
-        self.cleartext_password = None
-        response, content = self._connection.call(
-            self._url, data, method='PATCH')
-        self._info = None
+        return Address(self._connection, address['self_link'], address)
 
     def delete(self):
         response, content = self._connection.call(self._url, method='DELETE')
 
 
-class _Addresses:
-
-    def __init__(self, connection, user_id):
-        self._connection = connection
-        self._user_id = user_id
-        self._addresses = None
-        self._get_addresses()
-
-    def _get_addresses(self):
-        if self._addresses is None:
-            response, content = self._connection.call(
-                'users/{0}/addresses'.format(self._user_id))
-            if 'entries' not in content:
-                self._addresses = []
-            self._addresses = content['entries']
-
-    def __getitem__(self, key):
-        return _Address(self._connection, self._addresses[key])
-
-    def __iter__(self):
-        for address in self._addresses:
-            yield _Address(self._connection, address)
-
-
-class _Address:
-
-    def __init__(self, connection, address):
-        self._connection = connection
-        self._address = address
-        self._preferences = None
-        self._url = address['self_link']
-        self._info = None
-
-    def __repr__(self):
-        return self._address['email']
-
-    def _get_info(self):
-        if self._info is None:
-            response, content = self._connection.call(self._url)
-            self._info = content
-
-    @property
-    def email(self):
-        self._get_info()
-        return self._info.get('email')
-
-    @property
-    def display_name(self):
-        self._get_info()
-        return self._info.get('display_name')
-
-    @property
-    def registered_on(self):
-        self._get_info()
-        return self._info.get('registered_on')
-
-    @property
-    def verified_on(self):
-        self._get_info()
-        return self._info.get('verified_on')
-
-    @property
-    def preferences(self):
-        if self._preferences is None:
-            path = 'addresses/{0}/preferences'.format(self._address['email'])
-            self._preferences = _Preferences(self._connection, path)
-        return self._preferences
-
-    def verify(self):
-        self._connection.call('addresses/{0}/verify'.format(
-            self._address['email']), method='POST')
-        self._info = None
-
-    def unverify(self):
-        self._connection.call('addresses/{0}/unverify'.format(
-            self._address['email']), method='POST')
-        self._info = None
-
-
-class _HeldMessage:
+class Addresses(RESTList):
 
     def __init__(self, connection, url, data=None):
-        self._connection = connection
-        self._url = url
-        self._info = data
+        super(Addresses, self).__init__(connection, url, data)
+        self._factory = lambda data: Address(
+            self._connection, data['self_link'], data)
+
+
+class Address(RESTObject, PreferencesMixin):
+
+    _properties = ('display_name', 'email', 'original_email', 'registered_on',
+                   'self_link', 'verified_on')
+
+    def __repr__(self):
+        return self.email
+
+    @property
+    def user(self):
+        if 'user' in self.rest_data:
+            return User(self._connection, self.rest_data['user'])
+        else:
+            return None
+
+    def verify(self):
+        self._connection.call(
+            'addresses/{0}/verify'.format(self.email), method='POST')
+        self._reset_cache()
+
+    def unverify(self):
+        self._connection.call(
+            'addresses/{0}/unverify'.format(self.email), method='POST')
+        self._reset_cache()
+
+
+class HeldMessage(RESTObject):
+
+    _properties = ('hold_date', 'message_id', 'moderation_reasons', 'msg',
+                   'reason', 'request_id', 'self_link', 'sender', 'subject',
+                   'type')
 
     def __repr__(self):
         return '<HeldMessage "{0}" by {1}>'.format(
             self.request_id, self.sender)
 
     def __unicode__(self):
-        return unicode(self._info)
-
-    def _get_info(self):
-        if self._info is None:
-            response, content = self._connection.call(self._url)
-            self._info = content
-
-    def __getitem__(self, name):
-        # This method is only necessary if compatibility with the dict
-        # interface is required. Postorius will work with the attribute-based
-        # interface.
-        self._get_info()
-        return self._info[name]
-
-    def __getattr__(self, name):
-        if name in ('hold_date', 'msg', 'reason', 'moderation_reasons',
-                    'sender', 'request_id', 'subject'):
-            self._get_info()
-            return self._info.get(name)
-        raise AttributeError
+        return unicode(self.rest_data)
 
     def moderate(self, action):
         """Moderate a held message.
@@ -1039,222 +1027,56 @@ class _HeldMessage:
         return self.moderate('accept')
 
 
-PREFERENCE_FIELDS = (
-    'acknowledge_posts',
-    'delivery_mode',
-    'delivery_status',
-    'hide_address',
-    'preferred_language',
-    'receive_list_copy',
-    'receive_own_postings',
-    )
+class Preferences(RESTDict):
 
-PREF_READ_ONLY_ATTRS = (
-    'http_etag',
-    'self_link',
-    )
-
-
-class _Preferences:
-
-    def __init__(self, connection, url):
-        self._connection = connection
-        self._url = url
-        self._preferences = None
-        self.delivery_mode = None
-        self._get_preferences()
-
-    def __repr__(self):
-        return repr(self._preferences)
-
-    def _get_preferences(self):
-        if self._preferences is None:
-            response, content = self._connection.call(self._url)
-            self._preferences = content
-            for key in PREFERENCE_FIELDS:
-                self._preferences[key] = content.get(key)
-
-    def __setitem__(self, key, value):
-        self._preferences[key] = value
-
-    def __getitem__(self, key):
-        return self._preferences[key]
-
-    def __iter__(self):
-        for key in self._preferences:
-            yield self._preferences[key]
-
-    def __len__(self):
-        return len(self._preferences)
-
-    def get(self, key, default=None):
-        try:
-            return self._preferences[key]
-        except KeyError:
-            return default
-
-    def keys(self):
-        return self._preferences.keys()
-
-    def save(self):
-        data = {}
-        for key in self._preferences:
-            if (key not in PREF_READ_ONLY_ATTRS
-                    and self._preferences[key] is not None):
-                data[key] = self._preferences[key]
-        response, content = self._connection.call(self._url, data, 'PATCH')
+    _properties = (
+        'acknowledge_posts', 'delivery_mode', 'delivery_status',
+        'hide_address', 'preferred_language', 'receive_list_copy',
+        'receive_own_postings',
+        )
 
     def delete(self):
         response, content = self._connection.call(self._url, method='DELETE')
 
 
-LIST_READ_ONLY_ATTRS = (
-    'bounces_address',
-    'created_at',
-    'digest_last_sent_at',
-    'fqdn_listname',
-    'http_etag',
-    'join_address',
-    'last_post_at',
-    'leave_address',
-    'list_id',
-    'list_name',
-    'mail_host',
-    'next_digest_number',
-    'no_reply_address',
-    'owner_address',
-    'post_id',
-    'posting_address',
-    'request_address',
-    'scheme',
-    'volume',
-    'web_host',
-    )
+class Settings(RESTDict):
+
+    _read_only_properties = (
+        'bounces_address',
+        'created_at',
+        'digest_last_sent_at',
+        'fqdn_listname',
+        'join_address',
+        'last_post_at',
+        'leave_address',
+        'list_id',
+        'list_name',
+        'mail_host',
+        'next_digest_number',
+        'no_reply_address',
+        'owner_address',
+        'post_id',
+        'posting_address',
+        'request_address',
+        'scheme',
+        'self_link',
+        'volume',
+        'web_host',
+        )
 
 
-class _Settings:
+class Queue(RESTObject):
 
-    def __init__(self, connection, url):
-        self._connection = connection
-        self._url = url
-        self._info = None
-        self._get_info()
-
-    def __repr__(self):
-        return repr(self._info)
-
-    def _get_info(self):
-        if self._info is None:
-            response, content = self._connection.call(self._url)
-            self._info = content
-
-    def __iter__(self):
-        for key in self._info:
-            yield key
-
-    def __getitem__(self, key):
-        return self._info[key]
-
-    def __setitem__(self, key, value):
-        self._info[key] = value
-
-    def __len__(self):
-        return len(self._info)
-
-    def get(self, key, default=None):
-        try:
-            return self._info[key]
-        except KeyError:
-            return default
-
-    def keys(self):
-        return self._info.keys()
-
-    def save(self):
-        data = {}
-        for attribute, value in self._info.items():
-            if attribute not in LIST_READ_ONLY_ATTRS:
-                data[attribute] = value
-        response, content = self._connection.call(self._url, data, 'PATCH')
-
-
-class _Page:
-
-    def __init__(self, connection, path, model, count=DEFAULT_PAGE_ITEM_COUNT,
-                 page=1):
-        self._connection = connection
-        self._path = path
-        self._count = count
-        self._page = page
-        self._model = model
-        self._entries = []
-        self.total_size = 0
-        self._create_page()
-
-    def __getitem__(self, key):
-        return self._entries[key]
-
-    def __iter__(self):
-        for entry in self._entries:
-            yield entry
-
-    def __repr__(self):
-        return '<Page {0} ({1})'.format(self._page, self._model)
-
-    def __len__(self):
-        return len(self._entries)
-
-    def _create_page(self):
-        self._entries = []
-        # create url
-        path = '{0}?count={1}&page={2}'.format(
-            self._path, self._count, self._page)
-        response, content = self._connection.call(path)
-        if 'entries' in content:
-            self.total_size = content["total_size"]
-            for entry in content['entries']:
-                instance = self._model(
-                    self._connection, entry['self_link'], entry)
-                self._entries.append(instance)
-
-    @property
-    def nr(self):
-        return self._page
-
-    @property
-    def next(self):
-        return _Page(self._connection, self._path, self._model,
-                     self._count, self._page + 1)
-
-    @property
-    def previous(self):
-        if self.has_previous:
-            return _Page(self._connection, self._path, self._model,
-                         self._count, self._page - 1)
-
-    @property
-    def has_previous(self):
-        return self._page > 1
-
-    @property
-    def has_next(self):
-        return self._count * self._page < self.total_size
-
-
-class _Queue:
-    def __init__(self, connection, entry):
-        self._connection = connection
-        self.name = entry['name']
-        self.url = entry['self_link']
-        self.directory = entry['directory']
+    _properties = ('name', 'directory', 'files')
 
     def __repr__(self):
         return '<Queue: {}>'.format(self.name)
 
     def inject(self, list_id, text):
-        self._connection.call(self.url, dict(list_id=list_id, text=text))
+        self._connection.call(self._url, dict(list_id=list_id, text=text))
 
     @property
     def files(self):
-        response, content = self._connection.call(self.url)
+        # No caching.
+        response, content = self._connection.call(self._url)
         return content['files']

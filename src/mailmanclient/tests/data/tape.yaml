@@ -41,8 +41,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      bWFpbF9ob3N0PWV4YW1wbGUuY29t
+    body: mail_host=example.com
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -131,8 +130,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      bWFpbF9ob3N0PWV4YW1wbGUubmV0
+    body: mail_host=example.net
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -160,8 +158,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      bWFpbF9ob3N0PWV4YW1wbGUub3Jn
+    body: mail_host=example.org
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -316,8 +313,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      ZnFkbl9saXN0bmFtZT10ZXN0LW9uZSU0MGV4YW1wbGUuY29t
+    body: fqdn_listname=test-one%40example.com
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -360,8 +356,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      ZnFkbl9saXN0bmFtZT10ZXN0LXR3byU0MGV4YW1wbGUuY29t
+    body: fqdn_listname=test-two%40example.com
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -419,8 +414,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      ZnFkbl9saXN0bmFtZT10ZXN0LXRocmVlJTQwZXhhbXBsZS5uZXQ=
+    body: fqdn_listname=test-three%40example.net
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -449,8 +443,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      ZnFkbl9saXN0bmFtZT10ZXN0LXRocmVlJTQwZXhhbXBsZS5jb20=
+    body: fqdn_listname=test-three%40example.com
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -689,41 +682,35 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      c3Vic2NyaWJlcj11bnZlcmlmaWVkJTQwZXhhbXBsZS5jb20mZGlzcGxheV9uYW1lPVVudmVyaWZp
-      ZWQmbGlzdF9pZD10ZXN0LW9uZS5leGFtcGxlLmNvbQ==
+    body: display_name=Unverified&list_id=test-one.example.com&subscriber=unverified%40example.com
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
     method: POST
     uri: http://localhost:9001/3.1/members
   response:
-    body: {string: '{"http_etag": "\"9a089b0af64d2696e2ef5cfd55c4b85c3f46228b\"",
-        "token": "40e741852cd887c381999535de66d2095111aedd", "token_owner": "subscriber"}'}
+    body: {string: '{"http_etag": "\"fd413325b77aa7edbe88b8ddcf9e9e581c367b95\"",
+        "token": "bb590199254e683280492926979c758ba31844ba", "token_owner": "subscriber"}'}
     headers:
       content-length: ['143']
       content-type: [application/json; charset=utf-8]
     status: {code: 202, message: Accepted}
 - request:
-    body: !!binary |
-      c3Vic2NyaWJlcj11bmNvbmZpcm1lZCU0MGV4YW1wbGUuY29tJmRpc3BsYXlfbmFtZT1VbmNvbmZp
-      cm1lZCZwcmVfdmVyaWZpZWQ9VHJ1ZSZsaXN0X2lkPXRlc3Qtb25lLmV4YW1wbGUuY29t
+    body: display_name=Unconfirmed&list_id=test-one.example.com&pre_verified=True&subscriber=unconfirmed%40example.com
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
     method: POST
     uri: http://localhost:9001/3.1/members
   response:
-    body: {string: '{"http_etag": "\"064ed824ec3a7acedef1d5a68744e00553f30874\"",
-        "token": "00903e3815441d01f375efb7006470c07106cd77", "token_owner": "subscriber"}'}
+    body: {string: '{"http_etag": "\"77b06dd97bb25b13771f567091db7f9d580a5631\"",
+        "token": "2066dec85be49be889c7e580f6c0dc9e76dd6a8b", "token_owner": "subscriber"}'}
     headers:
       content-length: ['143']
       content-type: [application/json; charset=utf-8]
     status: {code: 202, message: Accepted}
 - request:
-    body: !!binary |
-      c3Vic2NyaWJlcj1hbm5hJTQwZXhhbXBsZS5jb20mcHJlX2NvbmZpcm1lZD1UcnVlJmRpc3BsYXlf
-      bmFtZT1Bbm5hJnByZV92ZXJpZmllZD1UcnVlJmxpc3RfaWQ9dGVzdC1vbmUuZXhhbXBsZS5jb20=
+    body: display_name=Anna&list_id=test-one.example.com&pre_confirmed=True&pre_verified=True&subscriber=anna%40example.com
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -752,9 +739,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      c3Vic2NyaWJlcj1iaWxsJTQwZXhhbXBsZS5jb20mcHJlX2NvbmZpcm1lZD1UcnVlJmRpc3BsYXlf
-      bmFtZT1CaWxsJnByZV92ZXJpZmllZD1UcnVlJmxpc3RfaWQ9dGVzdC1vbmUuZXhhbXBsZS5jb20=
+    body: display_name=Bill&list_id=test-one.example.com&pre_confirmed=True&pre_verified=True&subscriber=bill%40example.com
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -783,9 +768,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      c3Vic2NyaWJlcj1hbm5hJTQwZXhhbXBsZS5jb20mcHJlX2NvbmZpcm1lZD1UcnVlJmRpc3BsYXlf
-      bmFtZT1Ob25lJnByZV92ZXJpZmllZD1UcnVlJmxpc3RfaWQ9dGVzdC10d28uZXhhbXBsZS5jb20=
+    body: display_name=None&list_id=test-two.example.com&pre_confirmed=True&pre_verified=True&subscriber=anna%40example.com
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -814,9 +797,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      c3Vic2NyaWJlcj1jcmlzJTQwZXhhbXBsZS5jb20mcHJlX2NvbmZpcm1lZD1UcnVlJmRpc3BsYXlf
-      bmFtZT1DcmlzJnByZV92ZXJpZmllZD1UcnVlJmxpc3RfaWQ9dGVzdC10d28uZXhhbXBsZS5jb20=
+    body: display_name=Cris&list_id=test-two.example.com&pre_confirmed=True&pre_verified=True&subscriber=cris%40example.com
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -1137,8 +1118,7 @@ interactions:
       content-type: [application/json]
     status: {code: 404, message: Not Found}
 - request:
-    body: !!binary |
-      cm9sZT1ub25tZW1iZXImbGlzdF9pZD10ZXN0LW9uZS5leGFtcGxlLmNvbQ==
+    body: list_id=test-one.example.com&role=nonmember
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -1273,23 +1253,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: null
-    headers:
-      accept-encoding: ['gzip, deflate']
-    method: GET
-    uri: http://localhost:9001/3.1/addresses/cris@example.com
-  response:
-    body: {string: '{"display_name": "Cris", "email": "cris@example.com", "http_etag":
-        "\"04a52c1b6c5b2037da3829b250b4252a4275dd3e\"", "original_email": "cris@example.com",
-        "registered_on": "2005-08-01T07:49:23", "self_link": "http://localhost:9001/3.1/addresses/cris@example.com",
-        "user": "http://localhost:9001/3.1/users/5", "verified_on": "2005-08-01T07:49:23"}'}
-    headers:
-      content-length: ['344']
-      content-type: [application/json; charset=utf-8]
-    status: {code: 200, message: OK}
-- request:
-    body: !!binary |
-      ZW1haWw9Y3Jpcy5wZXJzb24lNDBleGFtcGxlLm9yZw==
+    body: email=cris.person%40example.org
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -1335,21 +1299,6 @@ interactions:
         2}'}
     headers:
       content-length: ['754']
-      content-type: [application/json; charset=utf-8]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      accept-encoding: ['gzip, deflate']
-    method: GET
-    uri: http://localhost:9001/3.1/addresses/cris@example.com
-  response:
-    body: {string: '{"display_name": "Cris", "email": "cris@example.com", "http_etag":
-        "\"04a52c1b6c5b2037da3829b250b4252a4275dd3e\"", "original_email": "cris@example.com",
-        "registered_on": "2005-08-01T07:49:23", "self_link": "http://localhost:9001/3.1/addresses/cris@example.com",
-        "user": "http://localhost:9001/3.1/users/5", "verified_on": "2005-08-01T07:49:23"}'}
-    headers:
-      content-length: ['344']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
@@ -1420,8 +1369,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      cGFzc3dvcmQ9c29tZXBhc3MmZW1haWw9bGVyJTQwcHJpbXVzLm9yZyZkaXNwbGF5X25hbWU9TGVy
+    body: display_name=Ler&email=ler%40primus.org&password=somepass
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -1441,8 +1389,8 @@ interactions:
     uri: http://localhost:9001/3.1/users/6
   response:
     body: {string: '{"created_on": "2005-08-01T07:49:23", "display_name": "Ler", "http_etag":
-        "\"bb81f2cbe68f8f743b19b7355432f209b255fd16\"", "is_server_owner": false,
-        "password": "$6$rounds=702001$wz1qMd3oX7lYRppb$2uILtz.JJnglg5zl3zmBMKILts4HURy/0Whi7xP7mRx3FhUAiWJqnxUU4A9.CdiTQ5gXByB8nPUpDSplsdFbF/",
+        "\"c5d766e7492068faa5d10acd397937e5c67630d3\"", "is_server_owner": false,
+        "password": "$6$rounds=625501$3yZe3tJFObco0fDO$Wbi5tNPw6.cak.lKXJLpZZKIhDTTk.9O5uslXc3Ss4m32LR9IDOgGFKZDzsT6/F6YY/glLdPZGsFYZQnMuawg/",
         "self_link": "http://localhost:9001/3.1/users/6", "user_id": 6}'}
     headers:
       content-length: ['347']
@@ -1456,16 +1404,15 @@ interactions:
     uri: http://localhost:9001/3.1/users/ler@primus.org
   response:
     body: {string: '{"created_on": "2005-08-01T07:49:23", "display_name": "Ler", "http_etag":
-        "\"bb81f2cbe68f8f743b19b7355432f209b255fd16\"", "is_server_owner": false,
-        "password": "$6$rounds=702001$wz1qMd3oX7lYRppb$2uILtz.JJnglg5zl3zmBMKILts4HURy/0Whi7xP7mRx3FhUAiWJqnxUU4A9.CdiTQ5gXByB8nPUpDSplsdFbF/",
+        "\"c5d766e7492068faa5d10acd397937e5c67630d3\"", "is_server_owner": false,
+        "password": "$6$rounds=625501$3yZe3tJFObco0fDO$Wbi5tNPw6.cak.lKXJLpZZKIhDTTk.9O5uslXc3Ss4m32LR9IDOgGFKZDzsT6/F6YY/glLdPZGsFYZQnMuawg/",
         "self_link": "http://localhost:9001/3.1/users/6", "user_id": 6}'}
     headers:
       content-length: ['347']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      ZGlzcGxheV9uYW1lPVNpcitMZXI=
+    body: display_name=Sir+Ler
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -1484,16 +1431,15 @@ interactions:
     uri: http://localhost:9001/3.1/users/ler@primus.org
   response:
     body: {string: '{"created_on": "2005-08-01T07:49:23", "display_name": "Sir Ler",
-        "http_etag": "\"64f7eafbb4858d647cc4cec20d94255607eb5041\"", "is_server_owner":
-        false, "password": "$6$rounds=702001$wz1qMd3oX7lYRppb$2uILtz.JJnglg5zl3zmBMKILts4HURy/0Whi7xP7mRx3FhUAiWJqnxUU4A9.CdiTQ5gXByB8nPUpDSplsdFbF/",
+        "http_etag": "\"c07dc8e6d3de73a344d890d515a7c30c8f09f02a\"", "is_server_owner":
+        false, "password": "$6$rounds=625501$3yZe3tJFObco0fDO$Wbi5tNPw6.cak.lKXJLpZZKIhDTTk.9O5uslXc3Ss4m32LR9IDOgGFKZDzsT6/F6YY/glLdPZGsFYZQnMuawg/",
         "self_link": "http://localhost:9001/3.1/users/6", "user_id": 6}'}
     headers:
       content-length: ['351']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      Y2xlYXJ0ZXh0X3Bhc3N3b3JkPWVhc3kmZGlzcGxheV9uYW1lPVNpcitMZXI=
+    body: cleartext_password=easy
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -1512,8 +1458,8 @@ interactions:
     uri: http://localhost:9001/3.1/users/6
   response:
     body: {string: '{"created_on": "2005-08-01T07:49:23", "display_name": "Sir Ler",
-        "http_etag": "\"bb01d1f7f3ee69f66f87f9aade87d4c3695b188d\"", "is_server_owner":
-        false, "password": "$6$rounds=692408$BOphnXx3WP3jl0TV$JmQb.tM0ds7.go7KKCp2IdttGQN/4LdE/BxUa.1ekk85wKmAm2Xuf3dK0DVsHp5Rycw1VC8TIu6BcPNMGE4Jv0",
+        "http_etag": "\"65d6fc845bfa6d97c00701197b0787f6da669e89\"", "is_server_owner":
+        false, "password": "$6$rounds=635429$.vTXH4XJD1OoW1Gt$SpTWOiuhA5GlT8ZOnztS5bm6Ye1jeelAwOzBuCH7m1BHbV5i8/WlRDBTlUIwqgAWB62fEQEkdyi3rDN1nCWBn.",
         "self_link": "http://localhost:9001/3.1/users/6", "user_id": 6}'}
     headers:
       content-length: ['351']
@@ -1551,8 +1497,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      c3Vic2NyaWJlcj1iaWxsJTQwZXhhbXBsZS5jb20=
+    body: subscriber=bill%40example.com
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -1601,22 +1546,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      c2VuZF93ZWxjb21lX21lc3NhZ2U9VHJ1ZSZpbmNsdWRlX3JmYzIzNjlfaGVhZGVycz1UcnVlJmF1
-      dG9yZXNwb25zZV9yZXF1ZXN0X3RleHQ9JmF1dG9yZXNwb25zZV9wb3N0aW5nc190ZXh0PSZkZXNj
-      cmlwdGlvbj1BK3ZlcnkrbWVhbmluZ2Z1bCtkZXNjcmlwdGlvbi4mcmVwbHlfdG9fYWRkcmVzcz0m
-      YWxsb3dfbGlzdF9wb3N0cz1UcnVlJnBvc3RpbmdfcGlwZWxpbmU9ZGVmYXVsdC1wb3N0aW5nLXBp
-      cGVsaW5lJmFub255bW91c19saXN0PUZhbHNlJmF1dG9yZXNwb25zZV9ncmFjZV9wZXJpb2Q9OTBk
-      JmRlZmF1bHRfbWVtYmVyX2FjdGlvbj1kZWZlciZmaXJzdF9zdHJpcF9yZXBseV90bz1GYWxzZSZk
-      aWdlc3Rfc2l6ZV90aHJlc2hvbGQ9MzAuMCZhdXRvcmVzcG9uc2Vfb3duZXJfdGV4dD0mcmVwbHlf
-      Z29lc190b19saXN0PW5vX211bmdpbmcmYXJjaGl2ZV9wb2xpY3k9cHVibGljJmF1dG9yZXNwb25k
-      X293bmVyPW5vbmUmYXV0b3Jlc3BvbmRfcmVxdWVzdHM9bm9uZSZjb2xsYXBzZV9hbHRlcm5hdGl2
-      ZXM9VHJ1ZSZhZG1pbmlzdHJpdmlhPVRydWUmZGVmYXVsdF9ub25tZW1iZXJfYWN0aW9uPWhvbGQm
-      YWR2ZXJ0aXNlZD1UcnVlJndlbGNvbWVfbWVzc2FnZV91cmk9bWFpbG1hbiUzQSUyRiUyRiUyRndl
-      bGNvbWUudHh0JmRpc3BsYXlfbmFtZT1UZXN0K051bWVybytVbm8mZmlsdGVyX2NvbnRlbnQ9RmFs
-      c2Umc3Vic2NyaXB0aW9uX3BvbGljeT1jb25maXJtJmFkbWluX25vdGlmeV9tY2hhbmdlcz1GYWxz
-      ZSZzdWJqZWN0X3ByZWZpeD0lNUJUZXN0LW9uZSU1RCsmY29udmVydF9odG1sX3RvX3BsYWludGV4
-      dD1GYWxzZSZhdXRvcmVzcG9uZF9wb3N0aW5ncz1ub25lJmFkbWluX2ltbWVkX25vdGlmeT1UcnVl
+    body: description=A+very+meaningful+description.&display_name=Test+Numero+Uno
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -1627,6 +1557,37 @@ interactions:
     headers:
       Content-Length: ['0']
     status: {code: 204, message: No Content}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
+    uri: http://localhost:9001/3.1/lists/test-one@example.com/config
+  response:
+    body: {string: '{"acceptable_aliases": [], "admin_immed_notify": true, "admin_notify_mchanges":
+        false, "administrivia": true, "advertised": true, "allow_list_posts": true,
+        "anonymous_list": false, "archive_policy": "public", "autorespond_owner":
+        "none", "autorespond_postings": "none", "autorespond_requests": "none", "autoresponse_grace_period":
+        "90d", "autoresponse_owner_text": "", "autoresponse_postings_text": "", "autoresponse_request_text":
+        "", "bounces_address": "test-one-bounces@example.com", "collapse_alternatives":
+        true, "convert_html_to_plaintext": false, "created_at": "2005-08-01T07:49:23",
+        "default_member_action": "defer", "default_nonmember_action": "hold", "description":
+        "A very meaningful description.", "digest_last_sent_at": null, "digest_size_threshold":
+        30.0, "display_name": "Test Numero Uno", "filter_content": false, "first_strip_reply_to":
+        false, "fqdn_listname": "test-one@example.com", "http_etag": "\"55fd698fbacfd1224a08593839888d1aa5e051e7\"",
+        "include_rfc2369_headers": true, "join_address": "test-one-join@example.com",
+        "last_post_at": null, "leave_address": "test-one-leave@example.com", "list_name":
+        "test-one", "mail_host": "example.com", "next_digest_number": 1, "no_reply_address":
+        "noreply@example.com", "owner_address": "test-one-owner@example.com", "post_id":
+        1, "posting_address": "test-one@example.com", "posting_pipeline": "default-posting-pipeline",
+        "reply_goes_to_list": "no_munging", "reply_to_address": "", "request_address":
+        "test-one-request@example.com", "scheme": "http", "send_welcome_message":
+        true, "subject_prefix": "[Test-one] ", "subscription_policy": "confirm", "volume":
+        1, "web_host": "example.com", "welcome_message_uri": "mailman:///welcome.txt"}'}
+    headers:
+      content-length: ['1697']
+      content-type: [application/json; charset=utf-8]
+    status: {code: 200, message: OK}
 - request:
     body: null
     headers:
@@ -1672,8 +1633,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      ZGVsaXZlcnlfc3RhdHVzPWJ5X3VzZXI=
+    body: delivery_status=by_user
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -1740,9 +1700,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      c3Vic2NyaWJlcj1mb28lNDBleGFtcGxlLmNvbSZyb2xlPW93bmVyJmxpc3RfaWQ9dGVzdC1vbmUu
-      ZXhhbXBsZS5jb20=
+    body: list_id=test-one.example.com&role=owner&subscriber=foo%40example.com
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -1789,9 +1747,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      c3Vic2NyaWJlcj1iYXIlNDBleGFtcGxlLmNvbSZyb2xlPW1vZGVyYXRvciZsaXN0X2lkPXRlc3Qt
-      b25lLmV4YW1wbGUuY29t
+    body: list_id=test-one.example.com&role=moderator&subscriber=bar%40example.com
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -1838,9 +1794,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      c3Vic2NyaWJlcj1iYXIlNDBleGFtcGxlLmNvbSZwcmVfY29uZmlybWVkPVRydWUmZGlzcGxheV9u
-      YW1lPUJhciZwcmVfdmVyaWZpZWQ9VHJ1ZSZsaXN0X2lkPXRlc3Qtb25lLmV4YW1wbGUuY29t
+    body: display_name=Bar&list_id=test-one.example.com&pre_confirmed=True&pre_verified=True&subscriber=bar%40example.com
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -1926,8 +1880,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      ZnFkbl9saXN0bmFtZT1jb25maXJtLWZpcnN0JTQwZXhhbXBsZS5jb20=
+    body: fqdn_listname=confirm-first%40example.com
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -1988,22 +1941,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      c2VuZF93ZWxjb21lX21lc3NhZ2U9VHJ1ZSZpbmNsdWRlX3JmYzIzNjlfaGVhZGVycz1UcnVlJmF1
-      dG9yZXNwb25zZV9yZXF1ZXN0X3RleHQ9JmF1dG9yZXNwb25zZV9wb3N0aW5nc190ZXh0PSZkZXNj
-      cmlwdGlvbj0mcmVwbHlfdG9fYWRkcmVzcz0mYWxsb3dfbGlzdF9wb3N0cz1UcnVlJnBvc3Rpbmdf
-      cGlwZWxpbmU9ZGVmYXVsdC1wb3N0aW5nLXBpcGVsaW5lJmFub255bW91c19saXN0PUZhbHNlJmF1
-      dG9yZXNwb25zZV9ncmFjZV9wZXJpb2Q9OTBkJmRlZmF1bHRfbWVtYmVyX2FjdGlvbj1kZWZlciZm
-      aXJzdF9zdHJpcF9yZXBseV90bz1GYWxzZSZkaWdlc3Rfc2l6ZV90aHJlc2hvbGQ9MzAuMCZhdXRv
-      cmVzcG9uc2Vfb3duZXJfdGV4dD0mcmVwbHlfZ29lc190b19saXN0PW5vX211bmdpbmcmYXJjaGl2
-      ZV9wb2xpY3k9cHVibGljJmF1dG9yZXNwb25kX293bmVyPW5vbmUmYXV0b3Jlc3BvbmRfcmVxdWVz
-      dHM9bm9uZSZjb2xsYXBzZV9hbHRlcm5hdGl2ZXM9VHJ1ZSZhZG1pbmlzdHJpdmlhPVRydWUmZGVm
-      YXVsdF9ub25tZW1iZXJfYWN0aW9uPWhvbGQmYWR2ZXJ0aXNlZD1UcnVlJndlbGNvbWVfbWVzc2Fn
-      ZV91cmk9bWFpbG1hbiUzQSUyRiUyRiUyRndlbGNvbWUudHh0JmRpc3BsYXlfbmFtZT1Db25maXJt
-      LWZpcnN0JmZpbHRlcl9jb250ZW50PUZhbHNlJnN1YnNjcmlwdGlvbl9wb2xpY3k9bW9kZXJhdGUm
-      YWRtaW5fbm90aWZ5X21jaGFuZ2VzPUZhbHNlJnN1YmplY3RfcHJlZml4PSU1QkNvbmZpcm0tZmly
-      c3QlNUQrJmNvbnZlcnRfaHRtbF90b19wbGFpbnRleHQ9RmFsc2UmYXV0b3Jlc3BvbmRfcG9zdGlu
-      Z3M9bm9uZSZhZG1pbl9pbW1lZF9ub3RpZnk9VHJ1ZQ==
+    body: subscription_policy=moderate
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -2076,18 +2014,15 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      c3Vic2NyaWJlcj1ncm91Y2hvJTQwZXhhbXBsZS5jb20mcHJlX2NvbmZpcm1lZD1UcnVlJmRpc3Bs
-      YXlfbmFtZT1Ob25lJnByZV92ZXJpZmllZD1UcnVlJmxpc3RfaWQ9Y29uZmlybS1maXJzdC5leGFt
-      cGxlLmNvbQ==
+    body: display_name=None&list_id=confirm-first.example.com&pre_confirmed=True&pre_verified=True&subscriber=groucho%40example.com
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
     method: POST
     uri: http://localhost:9001/3.1/members
   response:
-    body: {string: '{"http_etag": "\"634923c364f058a9362aab3d946511625a49451a\"",
-        "token": "a568d3af9b71e93b607a78d29f0c435d6a465dbc", "token_owner": "moderator"}'}
+    body: {string: '{"http_etag": "\"3f4f711965ca67767acd6309750d84730c0ae004\"",
+        "token": "2f8b69cfa630f283032a49dad080147c8aae164e", "token_owner": "moderator"}'}
     headers:
       content-length: ['142']
       content-type: [application/json; charset=utf-8]
@@ -2100,12 +2035,12 @@ interactions:
     uri: http://localhost:9001/3.1/lists/confirm-first@example.com/requests
   response:
     body: {string: '{"entries": [{"display_name": "None", "email": "groucho@example.com",
-        "http_etag": "\"97064d6c9fea9a0c09a66358604cec60f145b0c8\"", "list_id": "confirm-first.example.com",
-        "token": "a568d3af9b71e93b607a78d29f0c435d6a465dbc", "token_owner": "moderator",
-        "when": "2005-08-01T07:49:23"}], "http_etag": "\"f241488ab97d927d47b481ab0cfb0b25f04e9199\"",
+        "http_etag": "\"6c5cfec71962c56988c393eb3077557b74f30c99\"", "list_id": "confirm-first.example.com",
+        "token": "2f8b69cfa630f283032a49dad080147c8aae164e", "token_owner": "moderator",
+        "type": "subscription", "when": "2005-08-01T07:49:23"}], "http_etag": "\"0203fc3bd305cf8556ab4381883007501da8788e\"",
         "start": 0, "total_size": 1}'}
     headers:
-      content-length: ['374']
+      content-length: ['398']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
@@ -2116,44 +2051,38 @@ interactions:
     uri: http://localhost:9001/3.1/lists/confirm-first@example.com/requests
   response:
     body: {string: '{"entries": [{"display_name": "None", "email": "groucho@example.com",
-        "http_etag": "\"97064d6c9fea9a0c09a66358604cec60f145b0c8\"", "list_id": "confirm-first.example.com",
-        "token": "a568d3af9b71e93b607a78d29f0c435d6a465dbc", "token_owner": "moderator",
-        "when": "2005-08-01T07:49:23"}], "http_etag": "\"f241488ab97d927d47b481ab0cfb0b25f04e9199\"",
+        "http_etag": "\"6c5cfec71962c56988c393eb3077557b74f30c99\"", "list_id": "confirm-first.example.com",
+        "token": "2f8b69cfa630f283032a49dad080147c8aae164e", "token_owner": "moderator",
+        "type": "subscription", "when": "2005-08-01T07:49:23"}], "http_etag": "\"0203fc3bd305cf8556ab4381883007501da8788e\"",
         "start": 0, "total_size": 1}'}
     headers:
-      content-length: ['374']
+      content-length: ['398']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      c3Vic2NyaWJlcj1oYXJwbyU0MGV4YW1wbGUuY29tJnByZV9jb25maXJtZWQ9VHJ1ZSZkaXNwbGF5
-      X25hbWU9Tm9uZSZwcmVfdmVyaWZpZWQ9VHJ1ZSZsaXN0X2lkPWNvbmZpcm0tZmlyc3QuZXhhbXBs
-      ZS5jb20=
+    body: display_name=None&list_id=confirm-first.example.com&pre_confirmed=True&pre_verified=True&subscriber=harpo%40example.com
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
     method: POST
     uri: http://localhost:9001/3.1/members
   response:
-    body: {string: '{"http_etag": "\"7ac5240c7fce5b9f26b11759d9381e8e7995f85d\"",
-        "token": "2b369e31856577175f7e6d5e7f2e0bba5af76de9", "token_owner": "moderator"}'}
+    body: {string: '{"http_etag": "\"8325698b13f61cb865af8680f88296bba87d2204\"",
+        "token": "24863ce71e0a2a16a4b9a4ceb6d3f020e0c59a83", "token_owner": "moderator"}'}
     headers:
       content-length: ['142']
       content-type: [application/json; charset=utf-8]
     status: {code: 202, message: Accepted}
 - request:
-    body: !!binary |
-      c3Vic2NyaWJlcj16ZXBwbyU0MGV4YW1wbGUuY29tJnByZV9jb25maXJtZWQ9VHJ1ZSZkaXNwbGF5
-      X25hbWU9Tm9uZSZwcmVfdmVyaWZpZWQ9VHJ1ZSZsaXN0X2lkPWNvbmZpcm0tZmlyc3QuZXhhbXBs
-      ZS5jb20=
+    body: display_name=None&list_id=confirm-first.example.com&pre_confirmed=True&pre_verified=True&subscriber=zeppo%40example.com
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
     method: POST
     uri: http://localhost:9001/3.1/members
   response:
-    body: {string: '{"http_etag": "\"fafd3eb8012f8844b7f184fb3b76772a85ba0687\"",
-        "token": "cb514f612e941cd97c89e3ed4bb67e0fdbcdbc8e", "token_owner": "moderator"}'}
+    body: {string: '{"http_etag": "\"5f2b78fae9980665c9f28738f440541adf2b9bc2\"",
+        "token": "059762981c64777241a6f367aced0daa083fd248", "token_owner": "moderator"}'}
     headers:
       content-length: ['142']
       content-type: [application/json; charset=utf-8]
@@ -2166,28 +2095,28 @@ interactions:
     uri: http://localhost:9001/3.1/lists/confirm-first@example.com/requests
   response:
     body: {string: '{"entries": [{"display_name": "None", "email": "groucho@example.com",
-        "http_etag": "\"97064d6c9fea9a0c09a66358604cec60f145b0c8\"", "list_id": "confirm-first.example.com",
-        "token": "a568d3af9b71e93b607a78d29f0c435d6a465dbc", "token_owner": "moderator",
-        "when": "2005-08-01T07:49:23"}, {"display_name": "None", "email": "harpo@example.com",
-        "http_etag": "\"b20f627d37951107c95b02bf47a8c9d6c562057a\"", "list_id": "confirm-first.example.com",
-        "token": "2b369e31856577175f7e6d5e7f2e0bba5af76de9", "token_owner": "moderator",
-        "when": "2005-08-01T07:49:23"}, {"display_name": "None", "email": "zeppo@example.com",
-        "http_etag": "\"ed3006dcac088c53e4f93d3bcae9f53d8c5dd71e\"", "list_id": "confirm-first.example.com",
-        "token": "cb514f612e941cd97c89e3ed4bb67e0fdbcdbc8e", "token_owner": "moderator",
-        "when": "2005-08-01T07:49:23"}], "http_etag": "\"2ea0060f493f7973bcf04b27fa0608b7bbc38930\"",
-        "start": 0, "total_size": 3}'}
+        "http_etag": "\"6c5cfec71962c56988c393eb3077557b74f30c99\"", "list_id": "confirm-first.example.com",
+        "token": "2f8b69cfa630f283032a49dad080147c8aae164e", "token_owner": "moderator",
+        "type": "subscription", "when": "2005-08-01T07:49:23"}, {"display_name": "None",
+        "email": "harpo@example.com", "http_etag": "\"a99825c5224139494d268f122428c70e9ce955a5\"",
+        "list_id": "confirm-first.example.com", "token": "24863ce71e0a2a16a4b9a4ceb6d3f020e0c59a83",
+        "token_owner": "moderator", "type": "subscription", "when": "2005-08-01T07:49:23"},
+        {"display_name": "None", "email": "zeppo@example.com", "http_etag": "\"7a5a78afca4c5c593e5c9defbbd0f2d4f5e04786\"",
+        "list_id": "confirm-first.example.com", "token": "059762981c64777241a6f367aced0daa083fd248",
+        "token_owner": "moderator", "type": "subscription", "when": "2005-08-01T07:49:23"}],
+        "http_etag": "\"fa8d569a7b09ee0cf458acca98bb41658f48a58e\"", "start": 0, "total_size":
+        3}'}
     headers:
-      content-length: ['912']
+      content-length: ['984']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      YWN0aW9uPWFjY2VwdA==
+    body: action=accept
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
     method: POST
-    uri: http://localhost:9001/3.1/lists/confirm-first.example.com/requests/a568d3af9b71e93b607a78d29f0c435d6a465dbc
+    uri: http://localhost:9001/3.1/lists/confirm-first.example.com/requests/2f8b69cfa630f283032a49dad080147c8aae164e
   response:
     body: {string: ''}
     headers:
@@ -2201,15 +2130,16 @@ interactions:
     uri: http://localhost:9001/3.1/lists/confirm-first@example.com/requests
   response:
     body: {string: '{"entries": [{"display_name": "None", "email": "harpo@example.com",
-        "http_etag": "\"b20f627d37951107c95b02bf47a8c9d6c562057a\"", "list_id": "confirm-first.example.com",
-        "token": "2b369e31856577175f7e6d5e7f2e0bba5af76de9", "token_owner": "moderator",
-        "when": "2005-08-01T07:49:23"}, {"display_name": "None", "email": "zeppo@example.com",
-        "http_etag": "\"ed3006dcac088c53e4f93d3bcae9f53d8c5dd71e\"", "list_id": "confirm-first.example.com",
-        "token": "cb514f612e941cd97c89e3ed4bb67e0fdbcdbc8e", "token_owner": "moderator",
-        "when": "2005-08-01T07:49:23"}], "http_etag": "\"74a8624d4efaf88c21a1bb0538f90570036bd868\"",
-        "start": 0, "total_size": 2}'}
+        "http_etag": "\"a99825c5224139494d268f122428c70e9ce955a5\"", "list_id": "confirm-first.example.com",
+        "token": "24863ce71e0a2a16a4b9a4ceb6d3f020e0c59a83", "token_owner": "moderator",
+        "type": "subscription", "when": "2005-08-01T07:49:23"}, {"display_name": "None",
+        "email": "zeppo@example.com", "http_etag": "\"7a5a78afca4c5c593e5c9defbbd0f2d4f5e04786\"",
+        "list_id": "confirm-first.example.com", "token": "059762981c64777241a6f367aced0daa083fd248",
+        "token_owner": "moderator", "type": "subscription", "when": "2005-08-01T07:49:23"}],
+        "http_etag": "\"40960e82b681c4bc818a1602223fb5d64c637b9e\"", "start": 0, "total_size":
+        2}'}
     headers:
-      content-length: ['641']
+      content-length: ['689']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
@@ -2220,15 +2150,16 @@ interactions:
     uri: http://localhost:9001/3.1/lists/confirm-first@example.com/requests
   response:
     body: {string: '{"entries": [{"display_name": "None", "email": "harpo@example.com",
-        "http_etag": "\"b20f627d37951107c95b02bf47a8c9d6c562057a\"", "list_id": "confirm-first.example.com",
-        "token": "2b369e31856577175f7e6d5e7f2e0bba5af76de9", "token_owner": "moderator",
-        "when": "2005-08-01T07:49:23"}, {"display_name": "None", "email": "zeppo@example.com",
-        "http_etag": "\"ed3006dcac088c53e4f93d3bcae9f53d8c5dd71e\"", "list_id": "confirm-first.example.com",
-        "token": "cb514f612e941cd97c89e3ed4bb67e0fdbcdbc8e", "token_owner": "moderator",
-        "when": "2005-08-01T07:49:23"}], "http_etag": "\"74a8624d4efaf88c21a1bb0538f90570036bd868\"",
-        "start": 0, "total_size": 2}'}
+        "http_etag": "\"a99825c5224139494d268f122428c70e9ce955a5\"", "list_id": "confirm-first.example.com",
+        "token": "24863ce71e0a2a16a4b9a4ceb6d3f020e0c59a83", "token_owner": "moderator",
+        "type": "subscription", "when": "2005-08-01T07:49:23"}, {"display_name": "None",
+        "email": "zeppo@example.com", "http_etag": "\"7a5a78afca4c5c593e5c9defbbd0f2d4f5e04786\"",
+        "list_id": "confirm-first.example.com", "token": "059762981c64777241a6f367aced0daa083fd248",
+        "token_owner": "moderator", "type": "subscription", "when": "2005-08-01T07:49:23"}],
+        "http_etag": "\"40960e82b681c4bc818a1602223fb5d64c637b9e\"", "start": 0, "total_size":
+        2}'}
     headers:
-      content-length: ['641']
+      content-length: ['689']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
@@ -2239,25 +2170,25 @@ interactions:
     uri: http://localhost:9001/3.1/lists/confirm-first@example.com/requests
   response:
     body: {string: '{"entries": [{"display_name": "None", "email": "harpo@example.com",
-        "http_etag": "\"b20f627d37951107c95b02bf47a8c9d6c562057a\"", "list_id": "confirm-first.example.com",
-        "token": "2b369e31856577175f7e6d5e7f2e0bba5af76de9", "token_owner": "moderator",
-        "when": "2005-08-01T07:49:23"}, {"display_name": "None", "email": "zeppo@example.com",
-        "http_etag": "\"ed3006dcac088c53e4f93d3bcae9f53d8c5dd71e\"", "list_id": "confirm-first.example.com",
-        "token": "cb514f612e941cd97c89e3ed4bb67e0fdbcdbc8e", "token_owner": "moderator",
-        "when": "2005-08-01T07:49:23"}], "http_etag": "\"74a8624d4efaf88c21a1bb0538f90570036bd868\"",
-        "start": 0, "total_size": 2}'}
+        "http_etag": "\"a99825c5224139494d268f122428c70e9ce955a5\"", "list_id": "confirm-first.example.com",
+        "token": "24863ce71e0a2a16a4b9a4ceb6d3f020e0c59a83", "token_owner": "moderator",
+        "type": "subscription", "when": "2005-08-01T07:49:23"}, {"display_name": "None",
+        "email": "zeppo@example.com", "http_etag": "\"7a5a78afca4c5c593e5c9defbbd0f2d4f5e04786\"",
+        "list_id": "confirm-first.example.com", "token": "059762981c64777241a6f367aced0daa083fd248",
+        "token_owner": "moderator", "type": "subscription", "when": "2005-08-01T07:49:23"}],
+        "http_etag": "\"40960e82b681c4bc818a1602223fb5d64c637b9e\"", "start": 0, "total_size":
+        2}'}
     headers:
-      content-length: ['641']
+      content-length: ['689']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      YWN0aW9uPXJlamVjdA==
+    body: action=reject
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
     method: POST
-    uri: http://localhost:9001/3.1/lists/confirm-first.example.com/requests/2b369e31856577175f7e6d5e7f2e0bba5af76de9
+    uri: http://localhost:9001/3.1/lists/confirm-first.example.com/requests/24863ce71e0a2a16a4b9a4ceb6d3f020e0c59a83
   response:
     body: {string: ''}
     headers:
@@ -2271,22 +2202,21 @@ interactions:
     uri: http://localhost:9001/3.1/lists/confirm-first@example.com/requests
   response:
     body: {string: '{"entries": [{"display_name": "None", "email": "zeppo@example.com",
-        "http_etag": "\"ed3006dcac088c53e4f93d3bcae9f53d8c5dd71e\"", "list_id": "confirm-first.example.com",
-        "token": "cb514f612e941cd97c89e3ed4bb67e0fdbcdbc8e", "token_owner": "moderator",
-        "when": "2005-08-01T07:49:23"}], "http_etag": "\"51fdb60c963f696006d8923a27512acab9c77a03\"",
+        "http_etag": "\"7a5a78afca4c5c593e5c9defbbd0f2d4f5e04786\"", "list_id": "confirm-first.example.com",
+        "token": "059762981c64777241a6f367aced0daa083fd248", "token_owner": "moderator",
+        "type": "subscription", "when": "2005-08-01T07:49:23"}], "http_etag": "\"f9dbfabe557e445770c65cd8608c59b83b97a999\"",
         "start": 0, "total_size": 1}'}
     headers:
-      content-length: ['372']
+      content-length: ['396']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      YWN0aW9uPWRpc2NhcmQ=
+    body: action=discard
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
     method: POST
-    uri: http://localhost:9001/3.1/lists/confirm-first.example.com/requests/cb514f612e941cd97c89e3ed4bb67e0fdbcdbc8e
+    uri: http://localhost:9001/3.1/lists/confirm-first.example.com/requests/059762981c64777241a6f367aced0daa083fd248
   response:
     body: {string: ''}
     headers:
@@ -2339,20 +2269,20 @@ interactions:
         "/home/abompard/fedora/hk/mailman.client/var/queue/pipeline", "files": [],
         "http_etag": "\"4d1a11b0750704c6a3b9e56bf50617c639d137dd\"", "name": "pipeline",
         "self_link": "http://localhost:9001/3.1/queues/pipeline"}, {"count": 11, "directory":
-        "/home/abompard/fedora/hk/mailman.client/var/queue/retry", "files": ["1448890835.1459749+b1ed642c2df35156b26d77cb2fbb205b9859e5b1",
-        "1448890835.2262647+34f59ebe99a3224d1b099350e092b861afbf5943", "1448890835.378629+72a7f485785419b34f00570fd098843f77c3cfa2",
-        "1448890835.4474921+05431ce99a6b61bd7f94c4f02b54a3352371ee06", "1448890836.5169508+05e9387712a5173ec0524dd8b76d6f41a76540bc",
-        "1448890836.6609955+0d71d57a3c5e0f32bdbe17dca7d2d34b07d6cc77", "1448890844.7433558+35a846ced653af4c7d01a06f7d8065757d5b41ba",
-        "1448890845.829297+a351d1a5253b3b65d665e0006d478b0c0b7f00bf", "1448890850.9176214+09651e5df56699697bb16f4babc4ed0585b88504",
-        "1448890851.0003753+7325c74696a111dd056b3438f17cd2dc7b083893", "1448890851.1787243+c501562d279b599d7a5c70eb3604aab1f6893151"],
-        "http_etag": "\"190e81b3726f4bd053b0a655775a5c6e429d15e8\"", "name": "retry",
+        "/home/abompard/fedora/hk/mailman.client/var/queue/retry", "files": ["1450711465.5173476+17254a0586600627fa20b2b993deef70db4bd2b4",
+        "1450711465.7227225+f35ad50ad43569ee7a836f902f8bfb657814a76b", "1450711465.7966478+e272cf5ce4dec279ab7eeb635d83772003b74278",
+        "1450711465.8609238+95747cefd4286e247e8787d88c68273393781ba8", "1450711466.9233108+5402e57c72c8d8393296f417e627f35abb68e144",
+        "1450711467.0089886+7ee7e97827c158f041df220ab6767a3547e53d67", "1450711475.1478457+41ff524e804927d115950f470ba81dc7091fff92",
+        "1450711477.226043+5e4c68d7b83c6e5be13183d4744adfab4f28b57a", "1450711482.301949+33b90cf9616e389a8742dccb6694e1075ddbbc93",
+        "1450711482.4551265+c0ca003af661547b041af2de97d17a14c97ce6fb", "1450711482.5244262+a6a3e38945f4ecc9ee18c53daa463bd3ff644e2b"],
+        "http_etag": "\"58a525962c3fdc521f0f73e7d36ef52dc0dbe232\"", "name": "retry",
         "self_link": "http://localhost:9001/3.1/queues/retry"}, {"count": 0, "directory":
         "/home/abompard/fedora/hk/mailman.client/var/queue/shunt", "files": [], "http_etag":
         "\"0a8dbc969edb6035f735f7ec46f51e7b805b9f0e\"", "name": "shunt", "self_link":
         "http://localhost:9001/3.1/queues/shunt"}, {"count": 1, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/virgin",
-        "files": ["1448890850.9792962+193013be59d5a44b603b87866461203c6f42628d"],
-        "http_etag": "\"ccf06ce679f84f509627d3782829a0347680d0e0\"", "name": "virgin",
-        "self_link": "http://localhost:9001/3.1/queues/virgin"}], "http_etag": "\"85eedfaee303161b076eb29f550b882e8fe6514d\"",
+        "files": ["1450711482.2948709+cccfffc5eff6834eca9576f0bbea2fe7944013bb"],
+        "http_etag": "\"954cbd6b6087ca58f5efd2a38c75d90643983099\"", "name": "virgin",
+        "self_link": "http://localhost:9001/3.1/queues/virgin"}], "http_etag": "\"347ca0a531a983adf14b94195d164d72d8811a46\"",
         "self_link": "http://localhost:9001/3.1/queues", "start": 0, "total_size":
         12}'}
     headers:
@@ -2360,11 +2290,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      dGV4dD1Gcm9tJTNBK25vbWVtYmVyJTQwZXhhbXBsZS5jb20lMEFUbyUzQSt0ZXN0LW9uZSU0MGV4
-      YW1wbGUuY29tJTBBU3ViamVjdCUzQStTb21ldGhpbmclMEFNZXNzYWdlLUlEJTNBKyUzQ21vZGVy
-      YXRlZF8wMSUzRSUwQSUwQVNvbWUrdGV4dC4lMEElMEEmbGlzdF9pZD10ZXN0LW9uZS5leGFtcGxl
-      LmNvbQ==
+    body: list_id=test-one.example.com&text=From%3A+nomember%40example.com%0ATo%3A+test-one%40example.com%0ASubject%3A+Something%0AMessage-ID%3A+%3Cmoderated_01%3E%0A%0ASome+text.%0A%0A
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -2374,7 +2300,7 @@ interactions:
     body: {string: ''}
     headers:
       content-length: ['0']
-      location: ['http://localhost:9001/3.1/queues/in/1448890851.5422106+9cca9195dfcf0c5fe3f52665d10ccc1e5fdd8fc8']
+      location: ['http://localhost:9001/3.1/queues/in/1450711482.8296828+40e3543b8a5586d9737dcdf1a155ae5490cf622a']
     status: {code: 201, message: Created}
 - request:
     body: null
@@ -2384,8 +2310,8 @@ interactions:
     uri: http://localhost:9001/3.1/queues/in
   response:
     body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/in",
-        "files": ["1448890851.5422106+9cca9195dfcf0c5fe3f52665d10ccc1e5fdd8fc8"],
-        "http_etag": "\"aa63418bc649f2a0ed87adab9717084836cfbed4\"", "name": "in",
+        "files": ["1450711482.8296828+40e3543b8a5586d9737dcdf1a155ae5490cf622a"],
+        "http_etag": "\"7326ea1504d978af820ce6e5ec0e4fef69decfdb\"", "name": "in",
         "self_link": "http://localhost:9001/3.1/queues/in"}'}
     headers:
       content-length: ['282']
@@ -2399,8 +2325,8 @@ interactions:
     uri: http://localhost:9001/3.1/queues/in
   response:
     body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/in",
-        "files": ["1448890851.5422106+9cca9195dfcf0c5fe3f52665d10ccc1e5fdd8fc8"],
-        "http_etag": "\"aa63418bc649f2a0ed87adab9717084836cfbed4\"", "name": "in",
+        "files": ["1450711482.8296828+40e3543b8a5586d9737dcdf1a155ae5490cf622a"],
+        "http_etag": "\"7326ea1504d978af820ce6e5ec0e4fef69decfdb\"", "name": "in",
         "self_link": "http://localhost:9001/3.1/queues/in"}'}
     headers:
       content-length: ['282']
@@ -2414,8 +2340,8 @@ interactions:
     uri: http://localhost:9001/3.1/queues/in
   response:
     body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/in",
-        "files": ["1448890851.5422106+9cca9195dfcf0c5fe3f52665d10ccc1e5fdd8fc8"],
-        "http_etag": "\"aa63418bc649f2a0ed87adab9717084836cfbed4\"", "name": "in",
+        "files": ["1450711482.8296828+40e3543b8a5586d9737dcdf1a155ae5490cf622a"],
+        "http_etag": "\"7326ea1504d978af820ce6e5ec0e4fef69decfdb\"", "name": "in",
         "self_link": "http://localhost:9001/3.1/queues/in"}'}
     headers:
       content-length: ['282']
@@ -2429,8 +2355,8 @@ interactions:
     uri: http://localhost:9001/3.1/queues/in
   response:
     body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/in",
-        "files": ["1448890851.5422106+9cca9195dfcf0c5fe3f52665d10ccc1e5fdd8fc8"],
-        "http_etag": "\"aa63418bc649f2a0ed87adab9717084836cfbed4\"", "name": "in",
+        "files": ["1450711482.8296828+40e3543b8a5586d9737dcdf1a155ae5490cf622a"],
+        "http_etag": "\"7326ea1504d978af820ce6e5ec0e4fef69decfdb\"", "name": "in",
         "self_link": "http://localhost:9001/3.1/queues/in"}'}
     headers:
       content-length: ['282']
@@ -2444,8 +2370,8 @@ interactions:
     uri: http://localhost:9001/3.1/queues/in
   response:
     body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/in",
-        "files": ["1448890851.5422106+9cca9195dfcf0c5fe3f52665d10ccc1e5fdd8fc8"],
-        "http_etag": "\"aa63418bc649f2a0ed87adab9717084836cfbed4\"", "name": "in",
+        "files": ["1450711482.8296828+40e3543b8a5586d9737dcdf1a155ae5490cf622a"],
+        "http_etag": "\"7326ea1504d978af820ce6e5ec0e4fef69decfdb\"", "name": "in",
         "self_link": "http://localhost:9001/3.1/queues/in"}'}
     headers:
       content-length: ['282']
@@ -2459,8 +2385,8 @@ interactions:
     uri: http://localhost:9001/3.1/queues/in
   response:
     body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/in",
-        "files": ["1448890851.5422106+9cca9195dfcf0c5fe3f52665d10ccc1e5fdd8fc8"],
-        "http_etag": "\"aa63418bc649f2a0ed87adab9717084836cfbed4\"", "name": "in",
+        "files": ["1450711482.8296828+40e3543b8a5586d9737dcdf1a155ae5490cf622a"],
+        "http_etag": "\"7326ea1504d978af820ce6e5ec0e4fef69decfdb\"", "name": "in",
         "self_link": "http://localhost:9001/3.1/queues/in"}'}
     headers:
       content-length: ['282']
@@ -2513,33 +2439,20 @@ interactions:
     method: GET
     uri: http://localhost:9001/3.1/lists/test-one@example.com/held
   response:
-    body: {string: '{"http_etag": "\"32223434a0f3af4cdc4673d1fbc5bac1f6d98fd3\"",
-        "start": 0, "total_size": 0}'}
-    headers:
-      content-length: ['90']
-      content-type: [application/json; charset=utf-8]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      accept-encoding: ['gzip, deflate']
-    method: GET
-    uri: http://localhost:9001/3.1/lists/test-one@example.com/held
-  response:
     body: {string: '{"entries": [{"_parsemsg": false, "envsender": "noreply@example.com",
-        "hold_date": "2005-08-01T07:49:23", "http_etag": "\"03ed6212bd8a23904538e34e132e672d84d5224e\"",
+        "hold_date": "2005-08-01T07:49:23", "http_etag": "\"a6fae2919e3d2ebb7b0cb601a7213d78e198511b\"",
         "lang": "en", "listid": "test-one.example.com", "message_id": "<moderated_01>",
         "moderation_action": "hold", "moderation_reasons": ["The message is not from
         a list member"], "moderation_sender": "nomember@example.com", "msg": "From:
         nomember@example.com\nTo: test-one@example.com\nSubject: Something\nMessage-ID:
-        <moderated_01>\nDate: Mon, 30 Nov 2015 14:40:51 +0100\nX-Mailman-Rule-Hits:
+        <moderated_01>\nDate: Mon, 21 Dec 2015 16:24:42 +0100\nX-Mailman-Rule-Hits:
         nonmember-moderation\nX-Mailman-Rule-Misses: approved; emergency; loop; member-moderation\nMessage-ID-Hash:
         KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\nX-Message-ID-Hash: KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\n\nSome
         text.\n\n", "original_size": 251, "reason": "", "request_id": 1, "rule_hits":
         ["nonmember-moderation"], "rule_misses": ["approved", "emergency", "loop",
         "member-moderation"], "self_link": "http://localhost:9001/3.1/lists/test-one.example.com/held/1",
         "sender": "nomember@example.com", "subject": "Something", "version": 3}],
-        "http_etag": "\"ee207a6d3ed5cff65875dd2311cf2b5633f02a6f\"", "start": 0, "total_size":
+        "http_etag": "\"52d6e24c14fbb6f5583d3a0b17184869fed28399\"", "start": 0, "total_size":
         1}'}
     headers:
       content-length: ['1172']
@@ -2553,12 +2466,12 @@ interactions:
     uri: http://localhost:9001/3.1/lists/test-one@example.com/held/1
   response:
     body: {string: '{"_parsemsg": false, "envsender": "noreply@example.com", "hold_date":
-        "2005-08-01T07:49:23", "http_etag": "\"03ed6212bd8a23904538e34e132e672d84d5224e\"",
+        "2005-08-01T07:49:23", "http_etag": "\"a6fae2919e3d2ebb7b0cb601a7213d78e198511b\"",
         "lang": "en", "listid": "test-one.example.com", "message_id": "<moderated_01>",
         "moderation_action": "hold", "moderation_reasons": ["The message is not from
         a list member"], "moderation_sender": "nomember@example.com", "msg": "From:
         nomember@example.com\nTo: test-one@example.com\nSubject: Something\nMessage-ID:
-        <moderated_01>\nDate: 30 Nov 2015 14:40:51 +0100\nX-Mailman-Rule-Hits:
+        <moderated_01>\nDate: Mon, 21 Dec 2015 16:24:42 +0100\nX-Mailman-Rule-Hits:
         nonmember-moderation\nX-Mailman-Rule-Misses: approved; emergency; loop; member-moderation\nMessage-ID-Hash:
         KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\nX-Message-ID-Hash: KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\n\nSome
         text.\n\n", "original_size": 251, "reason": "", "request_id": 1, "rule_hits":
@@ -2570,8 +2483,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      YWN0aW9uPWRlZmVy
+    body: action=defer
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -2590,27 +2502,26 @@ interactions:
     uri: http://localhost:9001/3.1/lists/test-one@example.com/held
   response:
     body: {string: '{"entries": [{"_parsemsg": false, "envsender": "noreply@example.com",
-        "hold_date": "2005-08-01T07:49:23", "http_etag": "\"03ed6212bd8a23904538e34e132e672d84d5224e\"",
+        "hold_date": "2005-08-01T07:49:23", "http_etag": "\"a6fae2919e3d2ebb7b0cb601a7213d78e198511b\"",
         "lang": "en", "listid": "test-one.example.com", "message_id": "<moderated_01>",
         "moderation_action": "hold", "moderation_reasons": ["The message is not from
         a list member"], "moderation_sender": "nomember@example.com", "msg": "From:
         nomember@example.com\nTo: test-one@example.com\nSubject: Something\nMessage-ID:
-        <moderated_01>\nDate: Mon, 30 Nov 2015 14:40:51 +0100\nX-Mailman-Rule-Hits:
+        <moderated_01>\nDate: Mon, 21 Dec 2015 16:24:42 +0100\nX-Mailman-Rule-Hits:
         nonmember-moderation\nX-Mailman-Rule-Misses: approved; emergency; loop; member-moderation\nMessage-ID-Hash:
         KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\nX-Message-ID-Hash: KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\n\nSome
         text.\n\n", "original_size": 251, "reason": "", "request_id": 1, "rule_hits":
         ["nonmember-moderation"], "rule_misses": ["approved", "emergency", "loop",
         "member-moderation"], "self_link": "http://localhost:9001/3.1/lists/test-one.example.com/held/1",
         "sender": "nomember@example.com", "subject": "Something", "version": 3}],
-        "http_etag": "\"ee207a6d3ed5cff65875dd2311cf2b5633f02a6f\"", "start": 0, "total_size":
+        "http_etag": "\"52d6e24c14fbb6f5583d3a0b17184869fed28399\"", "start": 0, "total_size":
         1}'}
     headers:
       content-length: ['1172']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      YWN0aW9uPWRpc2NhcmQ=
+    body: action=discard
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -2651,8 +2562,7 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: !!binary |
-      bW9kZXJhdGlvbl9hY3Rpb249aG9sZA==
+    body: moderation_action=hold
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
@@ -2693,25 +2603,11 @@ interactions:
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
-    body: null
-    headers:
-      accept-encoding: ['gzip, deflate']
-    method: GET
-    uri: http://localhost:9001/3.1/lists/test-one.example.com/archivers
-  response:
-    body: {string: '{"http_etag": "\"3dbbbaad592a043938314db0e5249a1ca71d0dc6\"",
-        "mail-archive": true, "mhonarc": true, "prototype": true}'}
-    headers:
-      content-length: ['119']
-      content-type: [application/json; charset=utf-8]
-    status: {code: 200, message: OK}
-- request:
-    body: !!binary |
-      bWFpbC1hcmNoaXZlPUZhbHNlJnByb3RvdHlwZT1UcnVlJm1ob25hcmM9VHJ1ZQ==
+    body: mail-archive=False
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
-    method: PUT
+    method: PATCH
     uri: http://localhost:9001/3.1/lists/test-one.example.com/archivers
   response:
     body: {string: ''}
@@ -2719,12 +2615,24 @@ interactions:
       Content-Length: ['0']
     status: {code: 204, message: No Content}
 - request:
-    body: !!binary |
-      bWFpbC1hcmNoaXZlPUZhbHNlJnByb3RvdHlwZT1UcnVlJm1ob25hcmM9RmFsc2U=
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
+    uri: http://localhost:9001/3.1/lists/test-one.example.com/archivers
+  response:
+    body: {string: '{"http_etag": "\"9f3e82fa9d7dc70277565c9703a90ad3fbeb9a03\"",
+        "mail-archive": false, "mhonarc": true, "prototype": true}'}
+    headers:
+      content-length: ['120']
+      content-type: [application/json; charset=utf-8]
+    status: {code: 200, message: OK}
+- request:
+    body: mhonarc=False
     headers:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
-    method: PUT
+    method: PATCH
     uri: http://localhost:9001/3.1/lists/test-one.example.com/archivers
   response:
     body: {string: ''}

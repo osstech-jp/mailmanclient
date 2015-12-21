@@ -45,6 +45,29 @@ def filter_response_headers(response):
             del response['headers'][header]
     return response
 
+def reorder_request_params(request):
+    from six import binary_type
+    from six.moves.urllib.parse import urlparse, urlunparse, parse_qsl, urlencode
+    def reorder_params(params):
+        return urlencode(
+            sorted(parse_qsl(params), key=lambda kv: kv[0])
+            )
+    # sort the URL query-string by key names.
+    uri_parts = urlparse(request.uri)
+    if uri_parts.query:
+        request.uri = urlunparse((
+            uri_parts.scheme, uri_parts.netloc, uri_parts.path,
+            uri_parts.params, reorder_params(uri_parts.query),
+            uri_parts.fragment,
+            ))
+    # convert the request body to text and sort the parameters.
+    if isinstance(request.body, binary_type):
+        try:
+            request._body = reorder_params(request._body.decode('utf-8'))
+        except UnicodeDecodeError:
+            pass
+    return request
+
 
 
 class NosePlugin(Plugin):
@@ -70,6 +93,7 @@ class NosePlugin(Plugin):
         self._resources = ExitStack()
         self._recorder = vcr.VCR(
             filter_headers=['authorization', 'user-agent', 'date'],
+            before_record=reorder_request_params,
             before_record_response=filter_response_headers,
             )
 

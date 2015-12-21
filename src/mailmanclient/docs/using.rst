@@ -557,7 +557,7 @@ for the settings is returned which behaves much like a dictionary.
 
     >>> settings = test_one.settings
     >>> len(settings)
-    51
+    50
 
     >>> for attr in sorted(settings):
     ...     print(attr + ': ' + str(settings[attr]))
@@ -812,7 +812,7 @@ queue.
 
 Messages held for moderation can be listed on a per list basis.
 
-    >>> print(all_held[0]['request_id'])
+    >>> print(all_held[0].request_id)
     1
 
 A held message can be retrieved by ID, and have attributes:

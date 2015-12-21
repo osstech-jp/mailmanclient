@@ -24,7 +24,6 @@ __all__ = [
 
 import os
 import re
-import vcr
 import errno
 import doctest
 import mailmanclient
@@ -32,18 +31,12 @@ import mailmanclient
 from contextlib2 import ExitStack
 from mailmanclient.testing.documentation import setup, teardown
 from nose2.events import Plugin
+from .vcr_helpers import get_vcr
 
 
 DOT = '.'
 FLAGS = doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE | doctest.REPORT_NDIFF
 TOPDIR = os.path.dirname(mailmanclient.__file__)
-
-
-def filter_response_headers(response):
-    for header in ('Date', 'Server'):
-        if header in response['headers']:
-            del response['headers'][header]
-    return response
 
 
 
@@ -68,10 +61,7 @@ class NosePlugin(Plugin):
                      Mailman to be running.""")
         self._data_path = os.path.join(TOPDIR, 'tests', 'data', 'tape.yaml')
         self._resources = ExitStack()
-        self._recorder = vcr.VCR(
-            filter_headers=['authorization', 'user-agent', 'date'],
-            before_record_response=filter_response_headers,
-            )
+        self._recorder = get_vcr()
 
     def startTestRun(self, event):
         # Check to see if we're running the test suite in record mode.  If so,

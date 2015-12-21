@@ -24,7 +24,7 @@ __all__ = [
 
 import vcr
 
-from six import binary_type
+from six import binary_type, text_type
 from six.moves.urllib.parse import urlparse, urlunparse, parse_qsl, urlencode
 
 
@@ -37,9 +37,12 @@ def filter_response_headers(response):
 
 def reorder_request_params(request):
     def reorder_params(params):
-        return urlencode(
-            sorted(parse_qsl(params), key=lambda kv: kv[0])
-            )
+        parsed = parse_qsl(params)
+        if parsed:
+            return urlencode(sorted(parsed, key=lambda kv: kv[0]))
+        else:
+            # Parsing failed, it may be a simple string.
+            return params
     # sort the URL query-string by key names.
     uri_parts = urlparse(request.uri)
     if uri_parts.query:
@@ -51,9 +54,11 @@ def reorder_request_params(request):
     # convert the request body to text and sort the parameters.
     if isinstance(request.body, binary_type):
         try:
-            request._body = reorder_params(request._body.decode('utf-8'))
+            request._body = request._body.decode('utf-8')
         except UnicodeDecodeError:
             pass
+    if isinstance(request.body, text_type):
+        request._body = reorder_params(request._body)
     return request
 
 

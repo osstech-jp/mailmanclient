@@ -2655,6 +2655,199 @@ interactions:
     headers:
       accept-encoding: ['gzip, deflate']
     method: GET
+    uri: http://localhost:9001/3.1/bans
+  response:
+    body: {string: '{"http_etag": "\"32223434a0f3af4cdc4673d1fbc5bac1f6d98fd3\"",
+        "start": 0, "total_size": 0}'}
+    headers:
+      content-length: ['90']
+      content-type: [application/json; charset=utf-8]
+    status: {code: 200, message: OK}
+- request:
+    body: email=anna%40example.com
+    headers:
+      accept-encoding: ['gzip, deflate']
+      content-type: [application/x-www-form-urlencoded]
+    method: POST
+    uri: http://localhost:9001/3.1/bans
+  response:
+    body: {string: ''}
+    headers:
+      content-length: ['0']
+      location: ['http://localhost:9001/3.1/bans/anna@example.com']
+    status: {code: 201, message: Created}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
+    uri: http://localhost:9001/3.1/bans/anna@example.com
+  response:
+    body: {string: '{"email": "anna@example.com", "http_etag": "\"ef7f731960ec29cd372783b3ec958c606acd7e68\"",
+        "list_id": null, "self_link": "http://localhost:9001/3.1/bans/anna@example.com"}'}
+    headers:
+      content-length: ['171']
+      content-type: [application/json; charset=utf-8]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
+    uri: http://localhost:9001/3.1/bans/anna@example.com
+  response:
+    body: {string: '{"email": "anna@example.com", "http_etag": "\"ef7f731960ec29cd372783b3ec958c606acd7e68\"",
+        "list_id": null, "self_link": "http://localhost:9001/3.1/bans/anna@example.com"}'}
+    headers:
+      content-length: ['171']
+      content-type: [application/json; charset=utf-8]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
+    uri: http://localhost:9001/3.1/bans
+  response:
+    body: {string: '{"entries": [{"email": "anna@example.com", "http_etag": "\"ef7f731960ec29cd372783b3ec958c606acd7e68\"",
+        "list_id": null, "self_link": "http://localhost:9001/3.1/bans/anna@example.com"}],
+        "http_etag": "\"7a3a471cdc2ceba51fccc5bdead77937c78032ce\"", "start": 0, "total_size":
+        1}'}
+    headers:
+      content-length: ['276']
+      content-type: [application/json; charset=utf-8]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: DELETE
+    uri: http://localhost:9001/3.1/bans/anna@example.com
+  response:
+    body: {string: ''}
+    headers:
+      Content-Length: ['0']
+    status: {code: 204, message: No Content}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
+    uri: http://localhost:9001/3.1/bans/anna@example.com
+  response:
+    body: {string: Email anna@example.com is not banned}
+    headers:
+      content-length: ['36']
+      content-type: [application/json; charset=utf-8]
+    status: {code: 404, message: Not Found}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
+    uri: http://localhost:9001/3.1/bans
+  response:
+    body: {string: '{"http_etag": "\"32223434a0f3af4cdc4673d1fbc5bac1f6d98fd3\"",
+        "start": 0, "total_size": 0}'}
+    headers:
+      content-length: ['90']
+      content-type: [application/json; charset=utf-8]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
+    uri: http://localhost:9001/3.1/lists/test-one.example.com/bans
+  response:
+    body: {string: '{"http_etag": "\"32223434a0f3af4cdc4673d1fbc5bac1f6d98fd3\"",
+        "start": 0, "total_size": 0}'}
+    headers:
+      content-length: ['90']
+      content-type: [application/json; charset=utf-8]
+    status: {code: 200, message: OK}
+- request:
+    body: email=anna%40example.com
+    headers:
+      accept-encoding: ['gzip, deflate']
+      content-type: [application/x-www-form-urlencoded]
+    method: POST
+    uri: http://localhost:9001/3.1/lists/test-one.example.com/bans
+  response:
+    body: {string: ''}
+    headers:
+      content-length: ['0']
+      location: ['http://localhost:9001/3.1/lists/test-one.example.com/bans/anna@example.com']
+    status: {code: 201, message: Created}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
+    uri: http://localhost:9001/3.1/lists/test-one.example.com/bans/anna@example.com
+  response:
+    body: {string: '{"email": "anna@example.com", "http_etag": "\"4e180be973c2587d964cc0a7d6ebca5f5768124b\"",
+        "list_id": "test-one.example.com", "self_link": "http://localhost:9001/3.1/lists/test-one.example.com/bans/anna@example.com"}'}
+    headers:
+      content-length: ['216']
+      content-type: [application/json; charset=utf-8]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
+    uri: http://localhost:9001/3.1/lists/test-one.example.com/bans
+  response:
+    body: {string: '{"entries": [{"email": "anna@example.com", "http_etag": "\"4e180be973c2587d964cc0a7d6ebca5f5768124b\"",
+        "list_id": "test-one.example.com", "self_link": "http://localhost:9001/3.1/lists/test-one.example.com/bans/anna@example.com"}],
+        "http_etag": "\"e9d79da2679defb7c4d3f299c05e331301f4277c\"", "start": 0, "total_size":
+        1}'}
+    headers:
+      content-length: ['321']
+      content-type: [application/json; charset=utf-8]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: DELETE
+    uri: http://localhost:9001/3.1/lists/test-one.example.com/bans/anna@example.com
+  response:
+    body: {string: ''}
+    headers:
+      Content-Length: ['0']
+    status: {code: 204, message: No Content}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
+    uri: http://localhost:9001/3.1/lists/test-one.example.com/bans/anna@example.com
+  response:
+    body: {string: Email anna@example.com is not banned}
+    headers:
+      content-length: ['36']
+      content-type: [application/json; charset=utf-8]
+    status: {code: 404, message: Not Found}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
+    uri: http://localhost:9001/3.1/lists/test-one.example.com/bans
+  response:
+    body: {string: '{"http_etag": "\"32223434a0f3af4cdc4673d1fbc5bac1f6d98fd3\"",
+        "start": 0, "total_size": 0}'}
+    headers:
+      content-length: ['90']
+      content-type: [application/json; charset=utf-8]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
     uri: http://localhost:9001/3.1/lists/test-one.example.com/archivers
   response:
     body: {string: '{"http_etag": "\"3dbbbaad592a043938314db0e5249a1ca71d0dc6\"",

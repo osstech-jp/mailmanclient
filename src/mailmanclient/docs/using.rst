@@ -856,6 +856,52 @@ using the 'moderation_action' property:
     >>> print(test_one.get_member('bill@example.com').moderation_action)
     hold
 
+Banning addresses
+-----------------
+
+A ban list is a list of email addresses that are not allowed to subscribe to a
+mailing-list. There are two types of ban lists: each mailing-list has its ban
+list, and there is a site-wide list. Addresses on the site-wide list are
+prevented from subscribing to every mailing-list on the server.
+
+To view the site-wide ban list, use the `bans` property::
+
+    >>> list(client.bans)
+    []
+
+You can use the `add` method on the ban list to ban an email address::
+
+    >>> banned_anna = client.bans.add('anna@example.com')
+    >>> print(banned_anna)
+    anna@example.com
+    >>> 'anna@example.com' in client.bans
+    True
+    >>> list(client.bans)
+    [anna@example.com]
+
+You can use the `delete()` method on a banned address to unban it::
+
+    >>> banned_anna.delete()
+    >>> 'anna@example.com' in client.bans
+    False
+    >>> list(client.bans)
+    []
+
+The mailing-list-specific ban lists work in the same way::
+
+    >>> list(test_one.bans)
+    []
+    >>> banned_anna = test_one.bans.add('anna@example.com')
+    >>> 'anna@example.com' in test_one.bans
+    True
+    >>> list(test_one.bans)
+    [anna@example.com]
+    >>> banned_anna.delete()
+    >>> 'anna@example.com' in test_one.bans
+    False
+    >>> list(test_one.bans)
+    []
+
 
 Archivers
 =========

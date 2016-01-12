@@ -527,6 +527,10 @@ class Client:
         response, content = self._connection.call(
             'lists/{0}'.format(fqdn_listname), None, 'DELETE')
 
+    @property
+    def bans(self):
+        return Bans(self._connection, 'bans', None)
+
 
 class Domain(RESTObject):
 
@@ -862,6 +866,11 @@ class MailingList(RESTObject):
         response, content = self._connection.call(
             'lists/{0}'.format(self.fqdn_listname), None, 'DELETE')
 
+    @property
+    def bans(self):
+        url = 'lists/{0}/bans'.format(self.list_id)
+        return Bans(self._connection, url, self)
+
 
 class ListArchivers(RESTDict):
     """
@@ -885,6 +894,82 @@ class ListArchivers(RESTDict):
 
     def __repr__(self):
         return '<Archivers on "{0}">'.format(self._mlist.list_id)
+
+
+class Bans(RESTList):
+    """
+    The list of banned addresses from a mailing-list or from the whole site.
+    """
+
+    def __init__(self, connection, url, mlist):
+        """
+        :param mlist: The corresponding list object, or None if it is a global
+            ban list.
+        :type mlist: MailingList or None.
+        """
+        super(Bans, self).__init__(connection, url)
+        self._mlist = mlist
+        self._factory = lambda data: BannedAddress(
+            self._connection, data['self_link'], data)
+
+    def __repr__(self):
+        if self._mlist is None:
+            return '<Global bans>'
+        else:
+            return '<Bans on "{0}">'.format(self._mlist.list_id)
+
+    def __contains__(self, item):
+        # Accept email addresses and BannedAddress objects
+        if isinstance(item, BannedAddress):
+            item = item.email
+        if self._rest_data is not None:
+            return item in [data['email'] for data in self._rest_data]
+        else:
+            # Avoid getting the whole list just to check membership
+            try:
+                response, content = self._connection.call(
+                    '{}/{}'.format(self._url, item))
+            except HTTPError as e:
+                if e.code == 404:
+                    return False
+                else:
+                    raise
+            else:
+                return True
+
+    def __delitem__(self, key):
+        self[key].delete()
+        self._reset_cache()
+
+    def add(self, email):
+        response, content = self._connection.call(self._url, dict(email=email))
+        self._reset_cache()
+        return BannedAddress(self._connection, response['location'])
+
+    def remove(self, email):
+        for ban in self:
+            if ban.email == email:
+                ban.delete()
+                return
+        raise ValueError('The address {} is not banned'.format(email))
+
+
+class BannedAddress(RESTObject):
+
+    _properties = ('email', 'list_id', 'self_link')
+    _writable_properties = []
+
+    def __repr__(self):
+        return self.email
+
+    @property
+    def mailinglist(self):
+        return MailingList(
+            self._connection, 'lists/{0}'.format(self.list_id))
+
+    def delete(self):
+        self._connection.call(self._url, method='DELETE')
+        self._reset_cache()
 
 
 class Member(RESTObject, PreferencesMixin):

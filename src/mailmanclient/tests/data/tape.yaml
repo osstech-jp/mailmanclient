@@ -665,9 +665,10 @@ interactions:
         "", "bounces_address": "test-two-bounces@example.com", "collapse_alternatives":
         true, "convert_html_to_plaintext": false, "created_at": "2005-08-01T07:49:23",
         "default_member_action": "defer", "default_nonmember_action": "hold", "description":
-        "", "digest_last_sent_at": null, "digest_size_threshold": 30.0, "display_name":
+        "", "digest_last_sent_at": null, "digest_send_periodic": true, "digest_size_threshold":
+        30.0, "digest_volume_frequency": "monthly", "digests_enabled": true, "display_name":
         "Test-two", "filter_content": false, "first_strip_reply_to": false, "fqdn_listname":
-        "test-two@example.com", "http_etag": "\"ade589b110337efe378f4983c3d18897340da342\"",
+        "test-two@example.com", "http_etag": "\"fee7913076a50f8632ed1de6a62e6ac8db9149fe\"",
         "include_rfc2369_headers": true, "join_address": "test-two-join@example.com",
         "last_post_at": null, "leave_address": "test-two-leave@example.com", "list_name":
         "test-two", "mail_host": "example.com", "next_digest_number": 1, "no_reply_address":
@@ -678,7 +679,7 @@ interactions:
         true, "subject_prefix": "[Test-two] ", "subscription_policy": "confirm", "volume":
         1, "web_host": "example.com", "welcome_message_uri": "mailman:///welcome.txt"}'}
     headers:
-      content-length: ['1660']
+      content-length: ['1753']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
@@ -689,8 +690,8 @@ interactions:
     method: POST
     uri: http://localhost:9001/3.1/members
   response:
-    body: {string: '{"http_etag": "\"fd413325b77aa7edbe88b8ddcf9e9e581c367b95\"",
-        "token": "bb590199254e683280492926979c758ba31844ba", "token_owner": "subscriber"}'}
+    body: {string: '{"http_etag": "\"2f1dfffd552b1a6a0514ad416d4e426d8c927d44\"",
+        "token": "0000000000000000000000000000000000000001", "token_owner": "subscriber"}'}
     headers:
       content-length: ['143']
       content-type: [application/json; charset=utf-8]
@@ -703,8 +704,8 @@ interactions:
     method: POST
     uri: http://localhost:9001/3.1/members
   response:
-    body: {string: '{"http_etag": "\"77b06dd97bb25b13771f567091db7f9d580a5631\"",
-        "token": "2066dec85be49be889c7e580f6c0dc9e76dd6a8b", "token_owner": "subscriber"}'}
+    body: {string: '{"http_etag": "\"388372128b900f1c6aa068f043d82c172a04a478\"",
+        "token": "0000000000000000000000000000000000000002", "token_owner": "subscriber"}'}
     headers:
       content-length: ['143']
       content-type: [application/json; charset=utf-8]
@@ -1389,8 +1390,8 @@ interactions:
     uri: http://localhost:9001/3.1/users/6
   response:
     body: {string: '{"created_on": "2005-08-01T07:49:23", "display_name": "Ler", "http_etag":
-        "\"c5d766e7492068faa5d10acd397937e5c67630d3\"", "is_server_owner": false,
-        "password": "$6$rounds=625501$3yZe3tJFObco0fDO$Wbi5tNPw6.cak.lKXJLpZZKIhDTTk.9O5uslXc3Ss4m32LR9IDOgGFKZDzsT6/F6YY/glLdPZGsFYZQnMuawg/",
+        "\"448939fc63114f87e478f014f6ef2c3fa10b8a27\"", "is_server_owner": false,
+        "password": "$6$rounds=638170$y/.NTybj1XVB.y0e$5bb/eQJ7YbwaAUvVtUY1dpYnV0md.UIsKE9vU0EJJ/v1c406/vqHBRFSVOpxeypCZ4885p7LxFKoqi34AHTrS.",
         "self_link": "http://localhost:9001/3.1/users/6", "user_id": 6}'}
     headers:
       content-length: ['347']
@@ -1404,8 +1405,8 @@ interactions:
     uri: http://localhost:9001/3.1/users/ler@primus.org
   response:
     body: {string: '{"created_on": "2005-08-01T07:49:23", "display_name": "Ler", "http_etag":
-        "\"c5d766e7492068faa5d10acd397937e5c67630d3\"", "is_server_owner": false,
-        "password": "$6$rounds=625501$3yZe3tJFObco0fDO$Wbi5tNPw6.cak.lKXJLpZZKIhDTTk.9O5uslXc3Ss4m32LR9IDOgGFKZDzsT6/F6YY/glLdPZGsFYZQnMuawg/",
+        "\"448939fc63114f87e478f014f6ef2c3fa10b8a27\"", "is_server_owner": false,
+        "password": "$6$rounds=638170$y/.NTybj1XVB.y0e$5bb/eQJ7YbwaAUvVtUY1dpYnV0md.UIsKE9vU0EJJ/v1c406/vqHBRFSVOpxeypCZ4885p7LxFKoqi34AHTrS.",
         "self_link": "http://localhost:9001/3.1/users/6", "user_id": 6}'}
     headers:
       content-length: ['347']
@@ -1431,8 +1432,8 @@ interactions:
     uri: http://localhost:9001/3.1/users/ler@primus.org
   response:
     body: {string: '{"created_on": "2005-08-01T07:49:23", "display_name": "Sir Ler",
-        "http_etag": "\"c07dc8e6d3de73a344d890d515a7c30c8f09f02a\"", "is_server_owner":
-        false, "password": "$6$rounds=625501$3yZe3tJFObco0fDO$Wbi5tNPw6.cak.lKXJLpZZKIhDTTk.9O5uslXc3Ss4m32LR9IDOgGFKZDzsT6/F6YY/glLdPZGsFYZQnMuawg/",
+        "http_etag": "\"1543ed59c8527b266627dfe27d54293c29f37074\"", "is_server_owner":
+        false, "password": "$6$rounds=638170$y/.NTybj1XVB.y0e$5bb/eQJ7YbwaAUvVtUY1dpYnV0md.UIsKE9vU0EJJ/v1c406/vqHBRFSVOpxeypCZ4885p7LxFKoqi34AHTrS.",
         "self_link": "http://localhost:9001/3.1/users/6", "user_id": 6}'}
     headers:
       content-length: ['351']
@@ -1458,8 +1459,8 @@ interactions:
     uri: http://localhost:9001/3.1/users/6
   response:
     body: {string: '{"created_on": "2005-08-01T07:49:23", "display_name": "Sir Ler",
-        "http_etag": "\"65d6fc845bfa6d97c00701197b0787f6da669e89\"", "is_server_owner":
-        false, "password": "$6$rounds=635429$.vTXH4XJD1OoW1Gt$SpTWOiuhA5GlT8ZOnztS5bm6Ye1jeelAwOzBuCH7m1BHbV5i8/WlRDBTlUIwqgAWB62fEQEkdyi3rDN1nCWBn.",
+        "http_etag": "\"df6d372cec5e911eb4126cf16491f021605a54f7\"", "is_server_owner":
+        false, "password": "$6$rounds=659897$qsq2U7DL.E3cKO29$BZ1RZzkSwXedZ3u4KnRMSW7UPC5pPZlCZPniDjTKEtQ0qbfV609HyysfiARPpRJ1gX7ACwdClw1gzElWV7fFA/",
         "self_link": "http://localhost:9001/3.1/users/6", "user_id": 6}'}
     headers:
       content-length: ['351']
@@ -1529,9 +1530,10 @@ interactions:
         "", "bounces_address": "test-one-bounces@example.com", "collapse_alternatives":
         true, "convert_html_to_plaintext": false, "created_at": "2005-08-01T07:49:23",
         "default_member_action": "defer", "default_nonmember_action": "hold", "description":
-        "", "digest_last_sent_at": null, "digest_size_threshold": 30.0, "display_name":
+        "", "digest_last_sent_at": null, "digest_send_periodic": true, "digest_size_threshold":
+        30.0, "digest_volume_frequency": "monthly", "digests_enabled": true, "display_name":
         "Test-one", "filter_content": false, "first_strip_reply_to": false, "fqdn_listname":
-        "test-one@example.com", "http_etag": "\"67f087cffdd4e3802730c5d74048861ce1b38625\"",
+        "test-one@example.com", "http_etag": "\"f0484bbbb5f04cd96587b69bde4aba3d8dd7f764\"",
         "include_rfc2369_headers": true, "join_address": "test-one-join@example.com",
         "last_post_at": null, "leave_address": "test-one-leave@example.com", "list_name":
         "test-one", "mail_host": "example.com", "next_digest_number": 1, "no_reply_address":
@@ -1542,7 +1544,7 @@ interactions:
         true, "subject_prefix": "[Test-one] ", "subscription_policy": "confirm", "volume":
         1, "web_host": "example.com", "welcome_message_uri": "mailman:///welcome.txt"}'}
     headers:
-      content-length: ['1660']
+      content-length: ['1753']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
@@ -1572,20 +1574,22 @@ interactions:
         "", "bounces_address": "test-one-bounces@example.com", "collapse_alternatives":
         true, "convert_html_to_plaintext": false, "created_at": "2005-08-01T07:49:23",
         "default_member_action": "defer", "default_nonmember_action": "hold", "description":
-        "A very meaningful description.", "digest_last_sent_at": null, "digest_size_threshold":
-        30.0, "display_name": "Test Numero Uno", "filter_content": false, "first_strip_reply_to":
-        false, "fqdn_listname": "test-one@example.com", "http_etag": "\"55fd698fbacfd1224a08593839888d1aa5e051e7\"",
-        "include_rfc2369_headers": true, "join_address": "test-one-join@example.com",
-        "last_post_at": null, "leave_address": "test-one-leave@example.com", "list_name":
-        "test-one", "mail_host": "example.com", "next_digest_number": 1, "no_reply_address":
-        "noreply@example.com", "owner_address": "test-one-owner@example.com", "post_id":
-        1, "posting_address": "test-one@example.com", "posting_pipeline": "default-posting-pipeline",
-        "reply_goes_to_list": "no_munging", "reply_to_address": "", "request_address":
-        "test-one-request@example.com", "scheme": "http", "send_welcome_message":
-        true, "subject_prefix": "[Test-one] ", "subscription_policy": "confirm", "volume":
-        1, "web_host": "example.com", "welcome_message_uri": "mailman:///welcome.txt"}'}
+        "A very meaningful description.", "digest_last_sent_at": null, "digest_send_periodic":
+        true, "digest_size_threshold": 30.0, "digest_volume_frequency": "monthly",
+        "digests_enabled": true, "display_name": "Test Numero Uno", "filter_content":
+        false, "first_strip_reply_to": false, "fqdn_listname": "test-one@example.com",
+        "http_etag": "\"9efd7140578fba4dc71830a916bf1043396e56c5\"", "include_rfc2369_headers":
+        true, "join_address": "test-one-join@example.com", "last_post_at": null, "leave_address":
+        "test-one-leave@example.com", "list_name": "test-one", "mail_host": "example.com",
+        "next_digest_number": 1, "no_reply_address": "noreply@example.com", "owner_address":
+        "test-one-owner@example.com", "post_id": 1, "posting_address": "test-one@example.com",
+        "posting_pipeline": "default-posting-pipeline", "reply_goes_to_list": "no_munging",
+        "reply_to_address": "", "request_address": "test-one-request@example.com",
+        "scheme": "http", "send_welcome_message": true, "subject_prefix": "[Test-one]
+        ", "subscription_policy": "confirm", "volume": 1, "web_host": "example.com",
+        "welcome_message_uri": "mailman:///welcome.txt"}'}
     headers:
-      content-length: ['1697']
+      content-length: ['1790']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
@@ -1923,9 +1927,10 @@ interactions:
         "", "bounces_address": "confirm-first-bounces@example.com", "collapse_alternatives":
         true, "convert_html_to_plaintext": false, "created_at": "2005-08-01T07:49:23",
         "default_member_action": "defer", "default_nonmember_action": "hold", "description":
-        "", "digest_last_sent_at": null, "digest_size_threshold": 30.0, "display_name":
+        "", "digest_last_sent_at": null, "digest_send_periodic": true, "digest_size_threshold":
+        30.0, "digest_volume_frequency": "monthly", "digests_enabled": true, "display_name":
         "Confirm-first", "filter_content": false, "first_strip_reply_to": false, "fqdn_listname":
-        "confirm-first@example.com", "http_etag": "\"1822e0a87d87e949fb00740cc6e35534d37c0bb4\"",
+        "confirm-first@example.com", "http_etag": "\"29842ca705b19fd924e3376209253fca13be2b23\"",
         "include_rfc2369_headers": true, "join_address": "confirm-first-join@example.com",
         "last_post_at": null, "leave_address": "confirm-first-leave@example.com",
         "list_name": "confirm-first", "mail_host": "example.com", "next_digest_number":
@@ -1937,7 +1942,7 @@ interactions:
         "confirm", "volume": 1, "web_host": "example.com", "welcome_message_uri":
         "mailman:///welcome.txt"}'}
     headers:
-      content-length: ['1710']
+      content-length: ['1803']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
@@ -1983,9 +1988,10 @@ interactions:
         "", "bounces_address": "confirm-first-bounces@example.com", "collapse_alternatives":
         true, "convert_html_to_plaintext": false, "created_at": "2005-08-01T07:49:23",
         "default_member_action": "defer", "default_nonmember_action": "hold", "description":
-        "", "digest_last_sent_at": null, "digest_size_threshold": 30.0, "display_name":
+        "", "digest_last_sent_at": null, "digest_send_periodic": true, "digest_size_threshold":
+        30.0, "digest_volume_frequency": "monthly", "digests_enabled": true, "display_name":
         "Confirm-first", "filter_content": false, "first_strip_reply_to": false, "fqdn_listname":
-        "confirm-first@example.com", "http_etag": "\"6260196bda5a05fe26862453fdcb8e3a5c84cc05\"",
+        "confirm-first@example.com", "http_etag": "\"442a21a9c9c96fdf3a8cffeadbbc67c9b9bf6578\"",
         "include_rfc2369_headers": true, "join_address": "confirm-first-join@example.com",
         "last_post_at": null, "leave_address": "confirm-first-leave@example.com",
         "list_name": "confirm-first", "mail_host": "example.com", "next_digest_number":
@@ -1997,7 +2003,7 @@ interactions:
         "moderate", "volume": 1, "web_host": "example.com", "welcome_message_uri":
         "mailman:///welcome.txt"}'}
     headers:
-      content-length: ['1711']
+      content-length: ['1804']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
@@ -2021,8 +2027,8 @@ interactions:
     method: POST
     uri: http://localhost:9001/3.1/members
   response:
-    body: {string: '{"http_etag": "\"3f4f711965ca67767acd6309750d84730c0ae004\"",
-        "token": "2f8b69cfa630f283032a49dad080147c8aae164e", "token_owner": "moderator"}'}
+    body: {string: '{"http_etag": "\"c63c029e701c8257e2a249d1c41d50660434b11f\"",
+        "token": "0000000000000000000000000000000000000003", "token_owner": "moderator"}'}
     headers:
       content-length: ['142']
       content-type: [application/json; charset=utf-8]
@@ -2035,9 +2041,9 @@ interactions:
     uri: http://localhost:9001/3.1/lists/confirm-first@example.com/requests
   response:
     body: {string: '{"entries": [{"display_name": "None", "email": "groucho@example.com",
-        "http_etag": "\"6c5cfec71962c56988c393eb3077557b74f30c99\"", "list_id": "confirm-first.example.com",
-        "token": "2f8b69cfa630f283032a49dad080147c8aae164e", "token_owner": "moderator",
-        "type": "subscription", "when": "2005-08-01T07:49:23"}], "http_etag": "\"0203fc3bd305cf8556ab4381883007501da8788e\"",
+        "http_etag": "\"7a4ecb4695c41c51f274686fc35ea073fdcb773c\"", "list_id": "confirm-first.example.com",
+        "token": "0000000000000000000000000000000000000003", "token_owner": "moderator",
+        "type": "subscription", "when": "2005-08-01T07:49:23"}], "http_etag": "\"03cb4f75d93f9f17b06f9ec2786b0276acfa171a\"",
         "start": 0, "total_size": 1}'}
     headers:
       content-length: ['398']
@@ -2051,9 +2057,9 @@ interactions:
     uri: http://localhost:9001/3.1/lists/confirm-first@example.com/requests
   response:
     body: {string: '{"entries": [{"display_name": "None", "email": "groucho@example.com",
-        "http_etag": "\"6c5cfec71962c56988c393eb3077557b74f30c99\"", "list_id": "confirm-first.example.com",
-        "token": "2f8b69cfa630f283032a49dad080147c8aae164e", "token_owner": "moderator",
-        "type": "subscription", "when": "2005-08-01T07:49:23"}], "http_etag": "\"0203fc3bd305cf8556ab4381883007501da8788e\"",
+        "http_etag": "\"7a4ecb4695c41c51f274686fc35ea073fdcb773c\"", "list_id": "confirm-first.example.com",
+        "token": "0000000000000000000000000000000000000003", "token_owner": "moderator",
+        "type": "subscription", "when": "2005-08-01T07:49:23"}], "http_etag": "\"03cb4f75d93f9f17b06f9ec2786b0276acfa171a\"",
         "start": 0, "total_size": 1}'}
     headers:
       content-length: ['398']
@@ -2067,8 +2073,8 @@ interactions:
     method: POST
     uri: http://localhost:9001/3.1/members
   response:
-    body: {string: '{"http_etag": "\"8325698b13f61cb865af8680f88296bba87d2204\"",
-        "token": "24863ce71e0a2a16a4b9a4ceb6d3f020e0c59a83", "token_owner": "moderator"}'}
+    body: {string: '{"http_etag": "\"5480a4c844f282957ebb374ced8ce88fa58b6585\"",
+        "token": "0000000000000000000000000000000000000004", "token_owner": "moderator"}'}
     headers:
       content-length: ['142']
       content-type: [application/json; charset=utf-8]
@@ -2081,8 +2087,8 @@ interactions:
     method: POST
     uri: http://localhost:9001/3.1/members
   response:
-    body: {string: '{"http_etag": "\"5f2b78fae9980665c9f28738f440541adf2b9bc2\"",
-        "token": "059762981c64777241a6f367aced0daa083fd248", "token_owner": "moderator"}'}
+    body: {string: '{"http_etag": "\"71f50d73755d536ed73d06c5c8d5fb50c2a08ec6\"",
+        "token": "0000000000000000000000000000000000000005", "token_owner": "moderator"}'}
     headers:
       content-length: ['142']
       content-type: [application/json; charset=utf-8]
@@ -2095,16 +2101,16 @@ interactions:
     uri: http://localhost:9001/3.1/lists/confirm-first@example.com/requests
   response:
     body: {string: '{"entries": [{"display_name": "None", "email": "groucho@example.com",
-        "http_etag": "\"6c5cfec71962c56988c393eb3077557b74f30c99\"", "list_id": "confirm-first.example.com",
-        "token": "2f8b69cfa630f283032a49dad080147c8aae164e", "token_owner": "moderator",
+        "http_etag": "\"7a4ecb4695c41c51f274686fc35ea073fdcb773c\"", "list_id": "confirm-first.example.com",
+        "token": "0000000000000000000000000000000000000003", "token_owner": "moderator",
         "type": "subscription", "when": "2005-08-01T07:49:23"}, {"display_name": "None",
-        "email": "harpo@example.com", "http_etag": "\"a99825c5224139494d268f122428c70e9ce955a5\"",
-        "list_id": "confirm-first.example.com", "token": "24863ce71e0a2a16a4b9a4ceb6d3f020e0c59a83",
+        "email": "harpo@example.com", "http_etag": "\"1723d9e86008b582b666c6bf2953388ce6d75e41\"",
+        "list_id": "confirm-first.example.com", "token": "0000000000000000000000000000000000000004",
         "token_owner": "moderator", "type": "subscription", "when": "2005-08-01T07:49:23"},
-        {"display_name": "None", "email": "zeppo@example.com", "http_etag": "\"7a5a78afca4c5c593e5c9defbbd0f2d4f5e04786\"",
-        "list_id": "confirm-first.example.com", "token": "059762981c64777241a6f367aced0daa083fd248",
+        {"display_name": "None", "email": "zeppo@example.com", "http_etag": "\"f32addfcec41c35c80a24b1372c50cf0870a6872\"",
+        "list_id": "confirm-first.example.com", "token": "0000000000000000000000000000000000000005",
         "token_owner": "moderator", "type": "subscription", "when": "2005-08-01T07:49:23"}],
-        "http_etag": "\"fa8d569a7b09ee0cf458acca98bb41658f48a58e\"", "start": 0, "total_size":
+        "http_etag": "\"c23da5161f8e4a033cdef1b34479c55355151245\"", "start": 0, "total_size":
         3}'}
     headers:
       content-length: ['984']
@@ -2116,7 +2122,7 @@ interactions:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
     method: POST
-    uri: http://localhost:9001/3.1/lists/confirm-first.example.com/requests/2f8b69cfa630f283032a49dad080147c8aae164e
+    uri: http://localhost:9001/3.1/lists/confirm-first.example.com/requests/0000000000000000000000000000000000000003
   response:
     body: {string: ''}
     headers:
@@ -2130,13 +2136,13 @@ interactions:
     uri: http://localhost:9001/3.1/lists/confirm-first@example.com/requests
   response:
     body: {string: '{"entries": [{"display_name": "None", "email": "harpo@example.com",
-        "http_etag": "\"a99825c5224139494d268f122428c70e9ce955a5\"", "list_id": "confirm-first.example.com",
-        "token": "24863ce71e0a2a16a4b9a4ceb6d3f020e0c59a83", "token_owner": "moderator",
+        "http_etag": "\"1723d9e86008b582b666c6bf2953388ce6d75e41\"", "list_id": "confirm-first.example.com",
+        "token": "0000000000000000000000000000000000000004", "token_owner": "moderator",
         "type": "subscription", "when": "2005-08-01T07:49:23"}, {"display_name": "None",
-        "email": "zeppo@example.com", "http_etag": "\"7a5a78afca4c5c593e5c9defbbd0f2d4f5e04786\"",
-        "list_id": "confirm-first.example.com", "token": "059762981c64777241a6f367aced0daa083fd248",
+        "email": "zeppo@example.com", "http_etag": "\"f32addfcec41c35c80a24b1372c50cf0870a6872\"",
+        "list_id": "confirm-first.example.com", "token": "0000000000000000000000000000000000000005",
         "token_owner": "moderator", "type": "subscription", "when": "2005-08-01T07:49:23"}],
-        "http_etag": "\"40960e82b681c4bc818a1602223fb5d64c637b9e\"", "start": 0, "total_size":
+        "http_etag": "\"eeda499529744772bcf81b2a8ee0a58714a76f1f\"", "start": 0, "total_size":
         2}'}
     headers:
       content-length: ['689']
@@ -2150,13 +2156,13 @@ interactions:
     uri: http://localhost:9001/3.1/lists/confirm-first@example.com/requests
   response:
     body: {string: '{"entries": [{"display_name": "None", "email": "harpo@example.com",
-        "http_etag": "\"a99825c5224139494d268f122428c70e9ce955a5\"", "list_id": "confirm-first.example.com",
-        "token": "24863ce71e0a2a16a4b9a4ceb6d3f020e0c59a83", "token_owner": "moderator",
+        "http_etag": "\"1723d9e86008b582b666c6bf2953388ce6d75e41\"", "list_id": "confirm-first.example.com",
+        "token": "0000000000000000000000000000000000000004", "token_owner": "moderator",
         "type": "subscription", "when": "2005-08-01T07:49:23"}, {"display_name": "None",
-        "email": "zeppo@example.com", "http_etag": "\"7a5a78afca4c5c593e5c9defbbd0f2d4f5e04786\"",
-        "list_id": "confirm-first.example.com", "token": "059762981c64777241a6f367aced0daa083fd248",
+        "email": "zeppo@example.com", "http_etag": "\"f32addfcec41c35c80a24b1372c50cf0870a6872\"",
+        "list_id": "confirm-first.example.com", "token": "0000000000000000000000000000000000000005",
         "token_owner": "moderator", "type": "subscription", "when": "2005-08-01T07:49:23"}],
-        "http_etag": "\"40960e82b681c4bc818a1602223fb5d64c637b9e\"", "start": 0, "total_size":
+        "http_etag": "\"eeda499529744772bcf81b2a8ee0a58714a76f1f\"", "start": 0, "total_size":
         2}'}
     headers:
       content-length: ['689']
@@ -2170,13 +2176,13 @@ interactions:
     uri: http://localhost:9001/3.1/lists/confirm-first@example.com/requests
   response:
     body: {string: '{"entries": [{"display_name": "None", "email": "harpo@example.com",
-        "http_etag": "\"a99825c5224139494d268f122428c70e9ce955a5\"", "list_id": "confirm-first.example.com",
-        "token": "24863ce71e0a2a16a4b9a4ceb6d3f020e0c59a83", "token_owner": "moderator",
+        "http_etag": "\"1723d9e86008b582b666c6bf2953388ce6d75e41\"", "list_id": "confirm-first.example.com",
+        "token": "0000000000000000000000000000000000000004", "token_owner": "moderator",
         "type": "subscription", "when": "2005-08-01T07:49:23"}, {"display_name": "None",
-        "email": "zeppo@example.com", "http_etag": "\"7a5a78afca4c5c593e5c9defbbd0f2d4f5e04786\"",
-        "list_id": "confirm-first.example.com", "token": "059762981c64777241a6f367aced0daa083fd248",
+        "email": "zeppo@example.com", "http_etag": "\"f32addfcec41c35c80a24b1372c50cf0870a6872\"",
+        "list_id": "confirm-first.example.com", "token": "0000000000000000000000000000000000000005",
         "token_owner": "moderator", "type": "subscription", "when": "2005-08-01T07:49:23"}],
-        "http_etag": "\"40960e82b681c4bc818a1602223fb5d64c637b9e\"", "start": 0, "total_size":
+        "http_etag": "\"eeda499529744772bcf81b2a8ee0a58714a76f1f\"", "start": 0, "total_size":
         2}'}
     headers:
       content-length: ['689']
@@ -2188,7 +2194,7 @@ interactions:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
     method: POST
-    uri: http://localhost:9001/3.1/lists/confirm-first.example.com/requests/24863ce71e0a2a16a4b9a4ceb6d3f020e0c59a83
+    uri: http://localhost:9001/3.1/lists/confirm-first.example.com/requests/0000000000000000000000000000000000000004
   response:
     body: {string: ''}
     headers:
@@ -2202,9 +2208,9 @@ interactions:
     uri: http://localhost:9001/3.1/lists/confirm-first@example.com/requests
   response:
     body: {string: '{"entries": [{"display_name": "None", "email": "zeppo@example.com",
-        "http_etag": "\"7a5a78afca4c5c593e5c9defbbd0f2d4f5e04786\"", "list_id": "confirm-first.example.com",
-        "token": "059762981c64777241a6f367aced0daa083fd248", "token_owner": "moderator",
-        "type": "subscription", "when": "2005-08-01T07:49:23"}], "http_etag": "\"f9dbfabe557e445770c65cd8608c59b83b97a999\"",
+        "http_etag": "\"f32addfcec41c35c80a24b1372c50cf0870a6872\"", "list_id": "confirm-first.example.com",
+        "token": "0000000000000000000000000000000000000005", "token_owner": "moderator",
+        "type": "subscription", "when": "2005-08-01T07:49:23"}], "http_etag": "\"38dd136194df833402da1d1802801024422c85da\"",
         "start": 0, "total_size": 1}'}
     headers:
       content-length: ['396']
@@ -2216,7 +2222,7 @@ interactions:
       accept-encoding: ['gzip, deflate']
       content-type: [application/x-www-form-urlencoded]
     method: POST
-    uri: http://localhost:9001/3.1/lists/confirm-first.example.com/requests/059762981c64777241a6f367aced0daa083fd248
+    uri: http://localhost:9001/3.1/lists/confirm-first.example.com/requests/0000000000000000000000000000000000000005
   response:
     body: {string: ''}
     headers:
@@ -2263,30 +2269,30 @@ interactions:
         0, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/nntp",
         "files": [], "http_etag": "\"f12daf7caeb0a760757dcb27459f496f03fb5bcc\"",
         "name": "nntp", "self_link": "http://localhost:9001/3.1/queues/nntp"}, {"count":
-        0, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/out", "files":
-        [], "http_etag": "\"d013672a5322858b7ac71f848f468a6288ebd24d\"", "name": "out",
-        "self_link": "http://localhost:9001/3.1/queues/out"}, {"count": 0, "directory":
-        "/home/abompard/fedora/hk/mailman.client/var/queue/pipeline", "files": [],
-        "http_etag": "\"4d1a11b0750704c6a3b9e56bf50617c639d137dd\"", "name": "pipeline",
-        "self_link": "http://localhost:9001/3.1/queues/pipeline"}, {"count": 11, "directory":
-        "/home/abompard/fedora/hk/mailman.client/var/queue/retry", "files": ["1450711465.5173476+17254a0586600627fa20b2b993deef70db4bd2b4",
-        "1450711465.7227225+f35ad50ad43569ee7a836f902f8bfb657814a76b", "1450711465.7966478+e272cf5ce4dec279ab7eeb635d83772003b74278",
-        "1450711465.8609238+95747cefd4286e247e8787d88c68273393781ba8", "1450711466.9233108+5402e57c72c8d8393296f417e627f35abb68e144",
-        "1450711467.0089886+7ee7e97827c158f041df220ab6767a3547e53d67", "1450711475.1478457+41ff524e804927d115950f470ba81dc7091fff92",
-        "1450711477.226043+5e4c68d7b83c6e5be13183d4744adfab4f28b57a", "1450711482.301949+33b90cf9616e389a8742dccb6694e1075ddbbc93",
-        "1450711482.4551265+c0ca003af661547b041af2de97d17a14c97ce6fb", "1450711482.5244262+a6a3e38945f4ecc9ee18c53daa463bd3ff644e2b"],
-        "http_etag": "\"58a525962c3fdc521f0f73e7d36ef52dc0dbe232\"", "name": "retry",
+        3, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/out", "files":
+        ["1451135200.831574+e4c7fd0ce1cabbaba580db15c1f81d2121ada8f3", "1451135200.908285+e79a52b293419b3348baac023a1ea6e03fa34cd2",
+        "1451135200.969537+792ea012e1d99fd4b4e279c300c8534244abafa0"], "http_etag":
+        "\"890d274bbb4b42667a994c9be1dafa1fc9734e21\"", "name": "out", "self_link":
+        "http://localhost:9001/3.1/queues/out"}, {"count": 0, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/pipeline",
+        "files": [], "http_etag": "\"4d1a11b0750704c6a3b9e56bf50617c639d137dd\"",
+        "name": "pipeline", "self_link": "http://localhost:9001/3.1/queues/pipeline"},
+        {"count": 8, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/retry",
+        "files": ["1451135181.7358902+8e1c1e990b9d64d78194e8a9522b02a81d8739c6", "1451135182.891293+c6efb9149d87b09a330f89fc965d77bae9ba6041",
+        "1451135182.9814155+38ba8a382bb4efe632ed6f4b63453c1dfd532876", "1451135183.1632705+0393fb71511d21b72ee0d967661151da3d385211",
+        "1451135183.2512605+44efb874971484917d2fe4cf234523994bef7891", "1451135184.3207753+52951787317e39a4cb7da8f9709baadbc9afbe28",
+        "1451135192.4868636+a8502394ef6813b1a80f2dfc1b49194f0a01399e", "1451135195.5649965+c9b40224ddba47e128e4f82e6291c0368eace8f5"],
+        "http_etag": "\"3f7ac4b2f3d172c6c023b41518e9f338d49a4654\"", "name": "retry",
         "self_link": "http://localhost:9001/3.1/queues/retry"}, {"count": 0, "directory":
         "/home/abompard/fedora/hk/mailman.client/var/queue/shunt", "files": [], "http_etag":
         "\"0a8dbc969edb6035f735f7ec46f51e7b805b9f0e\"", "name": "shunt", "self_link":
         "http://localhost:9001/3.1/queues/shunt"}, {"count": 1, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/virgin",
-        "files": ["1450711482.2948709+cccfffc5eff6834eca9576f0bbea2fe7944013bb"],
-        "http_etag": "\"954cbd6b6087ca58f5efd2a38c75d90643983099\"", "name": "virgin",
-        "self_link": "http://localhost:9001/3.1/queues/virgin"}], "http_etag": "\"347ca0a531a983adf14b94195d164d72d8811a46\"",
+        "files": ["1451135201.0426242+dc36dff8eb55df5fcbd7bb8159d226366703140c"],
+        "http_etag": "\"4ea32eb4fadd9a604806dad87e674584ea78d4ce\"", "name": "virgin",
+        "self_link": "http://localhost:9001/3.1/queues/virgin"}], "http_etag": "\"8b7b1c2024b7883e9cbfb963bee870ba960be928\"",
         "self_link": "http://localhost:9001/3.1/queues", "start": 0, "total_size":
         12}'}
     headers:
-      content-length: ['3697']
+      content-length: ['3692']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
@@ -2300,7 +2306,7 @@ interactions:
     body: {string: ''}
     headers:
       content-length: ['0']
-      location: ['http://localhost:9001/3.1/queues/in/1450711482.8296828+40e3543b8a5586d9737dcdf1a155ae5490cf622a']
+      location: ['http://localhost:9001/3.1/queues/in/1451135201.671444+9bebc2829f01ea89abd5a1528da060fef1ea7ab4']
     status: {code: 201, message: Created}
 - request:
     body: null
@@ -2310,11 +2316,11 @@ interactions:
     uri: http://localhost:9001/3.1/queues/in
   response:
     body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/in",
-        "files": ["1450711482.8296828+40e3543b8a5586d9737dcdf1a155ae5490cf622a"],
-        "http_etag": "\"7326ea1504d978af820ce6e5ec0e4fef69decfdb\"", "name": "in",
-        "self_link": "http://localhost:9001/3.1/queues/in"}'}
+        "files": ["1451135201.671444+9bebc2829f01ea89abd5a1528da060fef1ea7ab4"], "http_etag":
+        "\"2c4b709be8385dae2110e31c9804ab7a43be25a1\"", "name": "in", "self_link":
+        "http://localhost:9001/3.1/queues/in"}'}
     headers:
-      content-length: ['282']
+      content-length: ['281']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
@@ -2325,11 +2331,11 @@ interactions:
     uri: http://localhost:9001/3.1/queues/in
   response:
     body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/in",
-        "files": ["1450711482.8296828+40e3543b8a5586d9737dcdf1a155ae5490cf622a"],
-        "http_etag": "\"7326ea1504d978af820ce6e5ec0e4fef69decfdb\"", "name": "in",
-        "self_link": "http://localhost:9001/3.1/queues/in"}'}
+        "files": ["1451135201.671444+9bebc2829f01ea89abd5a1528da060fef1ea7ab4"], "http_etag":
+        "\"2c4b709be8385dae2110e31c9804ab7a43be25a1\"", "name": "in", "self_link":
+        "http://localhost:9001/3.1/queues/in"}'}
     headers:
-      content-length: ['282']
+      content-length: ['281']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
@@ -2340,11 +2346,11 @@ interactions:
     uri: http://localhost:9001/3.1/queues/in
   response:
     body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/in",
-        "files": ["1450711482.8296828+40e3543b8a5586d9737dcdf1a155ae5490cf622a"],
-        "http_etag": "\"7326ea1504d978af820ce6e5ec0e4fef69decfdb\"", "name": "in",
-        "self_link": "http://localhost:9001/3.1/queues/in"}'}
+        "files": ["1451135201.671444+9bebc2829f01ea89abd5a1528da060fef1ea7ab4"], "http_etag":
+        "\"2c4b709be8385dae2110e31c9804ab7a43be25a1\"", "name": "in", "self_link":
+        "http://localhost:9001/3.1/queues/in"}'}
     headers:
-      content-length: ['282']
+      content-length: ['281']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
@@ -2355,41 +2361,11 @@ interactions:
     uri: http://localhost:9001/3.1/queues/in
   response:
     body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/in",
-        "files": ["1450711482.8296828+40e3543b8a5586d9737dcdf1a155ae5490cf622a"],
-        "http_etag": "\"7326ea1504d978af820ce6e5ec0e4fef69decfdb\"", "name": "in",
-        "self_link": "http://localhost:9001/3.1/queues/in"}'}
+        "files": ["1451135201.671444+9bebc2829f01ea89abd5a1528da060fef1ea7ab4"], "http_etag":
+        "\"2c4b709be8385dae2110e31c9804ab7a43be25a1\"", "name": "in", "self_link":
+        "http://localhost:9001/3.1/queues/in"}'}
     headers:
-      content-length: ['282']
-      content-type: [application/json; charset=utf-8]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      accept-encoding: ['gzip, deflate']
-    method: GET
-    uri: http://localhost:9001/3.1/queues/in
-  response:
-    body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/in",
-        "files": ["1450711482.8296828+40e3543b8a5586d9737dcdf1a155ae5490cf622a"],
-        "http_etag": "\"7326ea1504d978af820ce6e5ec0e4fef69decfdb\"", "name": "in",
-        "self_link": "http://localhost:9001/3.1/queues/in"}'}
-    headers:
-      content-length: ['282']
-      content-type: [application/json; charset=utf-8]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      accept-encoding: ['gzip, deflate']
-    method: GET
-    uri: http://localhost:9001/3.1/queues/in
-  response:
-    body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailman.client/var/queue/in",
-        "files": ["1450711482.8296828+40e3543b8a5586d9737dcdf1a155ae5490cf622a"],
-        "http_etag": "\"7326ea1504d978af820ce6e5ec0e4fef69decfdb\"", "name": "in",
-        "self_link": "http://localhost:9001/3.1/queues/in"}'}
-    headers:
-      content-length: ['282']
+      content-length: ['281']
       content-type: [application/json; charset=utf-8]
     status: {code: 200, message: OK}
 - request:
@@ -2439,20 +2415,33 @@ interactions:
     method: GET
     uri: http://localhost:9001/3.1/lists/test-one@example.com/held
   response:
+    body: {string: '{"http_etag": "\"32223434a0f3af4cdc4673d1fbc5bac1f6d98fd3\"",
+        "start": 0, "total_size": 0}'}
+    headers:
+      content-length: ['90']
+      content-type: [application/json; charset=utf-8]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
+    uri: http://localhost:9001/3.1/lists/test-one@example.com/held
+  response:
     body: {string: '{"entries": [{"_parsemsg": false, "envsender": "noreply@example.com",
-        "hold_date": "2005-08-01T07:49:23", "http_etag": "\"a6fae2919e3d2ebb7b0cb601a7213d78e198511b\"",
+        "hold_date": "2005-08-01T07:49:23", "http_etag": "\"873eee6a5b89e4afa02c0ff46116dad9643f792f\"",
         "lang": "en", "listid": "test-one.example.com", "message_id": "<moderated_01>",
         "moderation_action": "hold", "moderation_reasons": ["The message is not from
         a list member"], "moderation_sender": "nomember@example.com", "msg": "From:
         nomember@example.com\nTo: test-one@example.com\nSubject: Something\nMessage-ID:
-        <moderated_01>\nDate: Mon, 21 Dec 2015 16:24:42 +0100\nX-Mailman-Rule-Hits:
+        <moderated_01>\nDate: Sat, 26 Dec 2015 14:06:41 +0100\nX-Mailman-Rule-Hits:
         nonmember-moderation\nX-Mailman-Rule-Misses: approved; emergency; loop; member-moderation\nMessage-ID-Hash:
         KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\nX-Message-ID-Hash: KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\n\nSome
         text.\n\n", "original_size": 251, "reason": "", "request_id": 1, "rule_hits":
         ["nonmember-moderation"], "rule_misses": ["approved", "emergency", "loop",
         "member-moderation"], "self_link": "http://localhost:9001/3.1/lists/test-one.example.com/held/1",
         "sender": "nomember@example.com", "subject": "Something", "version": 3}],
-        "http_etag": "\"52d6e24c14fbb6f5583d3a0b17184869fed28399\"", "start": 0, "total_size":
+        "http_etag": "\"39a6446cf12259643fe14d18f723923ea48de0c3\"", "start": 0, "total_size":
         1}'}
     headers:
       content-length: ['1172']
@@ -2466,12 +2455,12 @@ interactions:
     uri: http://localhost:9001/3.1/lists/test-one@example.com/held/1
   response:
     body: {string: '{"_parsemsg": false, "envsender": "noreply@example.com", "hold_date":
-        "2005-08-01T07:49:23", "http_etag": "\"a6fae2919e3d2ebb7b0cb601a7213d78e198511b\"",
+        "2005-08-01T07:49:23", "http_etag": "\"873eee6a5b89e4afa02c0ff46116dad9643f792f\"",
         "lang": "en", "listid": "test-one.example.com", "message_id": "<moderated_01>",
         "moderation_action": "hold", "moderation_reasons": ["The message is not from
         a list member"], "moderation_sender": "nomember@example.com", "msg": "From:
         nomember@example.com\nTo: test-one@example.com\nSubject: Something\nMessage-ID:
-        <moderated_01>\nDate: Mon, 21 Dec 2015 16:24:42 +0100\nX-Mailman-Rule-Hits:
+        <moderated_01>\nDate: Sat, 26 Dec 2015 14:06:41 +0100\nX-Mailman-Rule-Hits:
         nonmember-moderation\nX-Mailman-Rule-Misses: approved; emergency; loop; member-moderation\nMessage-ID-Hash:
         KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\nX-Message-ID-Hash: KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\n\nSome
         text.\n\n", "original_size": 251, "reason": "", "request_id": 1, "rule_hits":
@@ -2502,19 +2491,19 @@ interactions:
     uri: http://localhost:9001/3.1/lists/test-one@example.com/held
   response:
     body: {string: '{"entries": [{"_parsemsg": false, "envsender": "noreply@example.com",
-        "hold_date": "2005-08-01T07:49:23", "http_etag": "\"a6fae2919e3d2ebb7b0cb601a7213d78e198511b\"",
+        "hold_date": "2005-08-01T07:49:23", "http_etag": "\"873eee6a5b89e4afa02c0ff46116dad9643f792f\"",
         "lang": "en", "listid": "test-one.example.com", "message_id": "<moderated_01>",
         "moderation_action": "hold", "moderation_reasons": ["The message is not from
         a list member"], "moderation_sender": "nomember@example.com", "msg": "From:
         nomember@example.com\nTo: test-one@example.com\nSubject: Something\nMessage-ID:
-        <moderated_01>\nDate: Mon, 21 Dec 2015 16:24:42 +0100\nX-Mailman-Rule-Hits:
+        <moderated_01>\nDate: Sat, 26 Dec 2015 14:06:41 +0100\nX-Mailman-Rule-Hits:
         nonmember-moderation\nX-Mailman-Rule-Misses: approved; emergency; loop; member-moderation\nMessage-ID-Hash:
         KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\nX-Message-ID-Hash: KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\n\nSome
         text.\n\n", "original_size": 251, "reason": "", "request_id": 1, "rule_hits":
         ["nonmember-moderation"], "rule_misses": ["approved", "emergency", "loop",
         "member-moderation"], "self_link": "http://localhost:9001/3.1/lists/test-one.example.com/held/1",
         "sender": "nomember@example.com", "subject": "Something", "version": 3}],
-        "http_etag": "\"52d6e24c14fbb6f5583d3a0b17184869fed28399\"", "start": 0, "total_size":
+        "http_etag": "\"39a6446cf12259643fe14d18f723923ea48de0c3\"", "start": 0, "total_size":
         1}'}
     headers:
       content-length: ['1172']

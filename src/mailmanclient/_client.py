@@ -30,6 +30,7 @@ import json
 import warnings
 
 from base64 import b64encode
+from collections import Sequence, MutableMapping
 from httplib2 import Http
 from mailmanclient import __version__
 from operator import itemgetter
@@ -167,27 +168,27 @@ class RESTBase:
             self._rest_data = content
         return self._rest_data
 
-    def _get(self, name):
+    def _get(self, key):
         if self._properties is not None:
             # Some REST key/values may not be returned by Mailman if the value
             # is None.
-            if name in self._properties:
-                return self.rest_data.get(name)
-            raise KeyError(name)
+            if key in self._properties:
+                return self.rest_data.get(key)
+            raise KeyError(key)
         else:
-            return self.rest_data[name]
+            return self.rest_data[key]
 
-    def _set(self, name, value):
-        if (name in self._read_only_properties or (
+    def _set(self, key, value):
+        if (key in self._read_only_properties or (
             self._writable_properties is not None
-            and name not in self._writable_properties)):
+            and key not in self._writable_properties)):
             raise ValueError('value is read-only')
-        # Don't check that the name is in _properties, the accepted values for
+        # Don't check that the key is in _properties, the accepted values for
         # write may be different from the returned values (eg: User.password
         # and User.cleartext_password).
-        if name in self.rest_data and self.rest_data[name] == value:
+        if key in self.rest_data and self.rest_data[key] == value:
             return # Nothing to do
-        self._changed_rest_data[name] = value
+        self._changed_rest_data[key] = value
         if self._autosave:
             self.save()
 
@@ -225,7 +226,7 @@ class RESTObject(RESTBase):
         return self._set(name, value)
 
 
-class RESTDict(RESTBase):
+class RESTDict(RESTBase, MutableMapping):
     """Base class for REST data that behaves like a dictionary."""
 
     def __repr__(self):
@@ -234,11 +235,14 @@ class RESTDict(RESTBase):
     def __unicode__(self):
         return unicode(self.rest_data)
 
-    def __getitem__(self, name):
-        return self._get(name)
+    def __getitem__(self, key):
+        return self._get(key)
 
-    def __setitem__(self, name, value):
-        self._set(name, value)
+    def __setitem__(self, key, value):
+        self._set(key, value)
+
+    def __delitem__(self, key):
+        raise NotImplementedError("REST dictionnary keys can't be deleted.")
 
     def __iter__(self):
         return self.rest_data.__iter__()
@@ -246,14 +250,14 @@ class RESTDict(RESTBase):
     def __len__(self):
         return len(self.rest_data)
 
-    def get(self, name, default=None):
-        return self.rest_data.get(name, default)
+    def get(self, key, default=None):
+        return self.rest_data.get(key, default)
 
     def keys(self):
         return self.rest_data.keys()
 
 
-class RESTList(RESTBase):
+class RESTList(RESTBase, Sequence):
     """
     Base class for REST data that behaves like a list.
 
@@ -281,6 +285,9 @@ class RESTList(RESTBase):
 
     def __getitem__(self, key):
         return self._factory(self.rest_data[key])
+
+    def __len__(self):
+        return len(self.rest_data)
 
     def __iter__(self):
         for entry in self.rest_data:

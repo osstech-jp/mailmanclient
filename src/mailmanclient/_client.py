@@ -35,7 +35,8 @@ from httplib2 import Http
 from mailmanclient import __version__
 from operator import itemgetter
 from six.moves.urllib_error import HTTPError
-from six.moves.urllib_parse import urlencode, urljoin
+from six.moves.urllib_parse import (
+    urlencode, urljoin, urlsplit, urlunsplit, parse_qs)
 
 
 DEFAULT_PAGE_ITEM_COUNT = 50
@@ -331,12 +332,17 @@ class Page:
     def __len__(self):
         return len(self._entries)
 
+    def _build_url(self):
+        url = list(urlsplit(self._path))
+        qs = parse_qs(url[3])
+        qs["count"] = self._count
+        qs["page"] = self._page
+        url[3] = urlencode(qs, doseq=True)
+        return urlunsplit(url)
+
     def _create_page(self):
         self._entries = []
-        # create url
-        path = '{0}?count={1}&page={2}'.format(
-            self._path, self._count, self._page)
-        response, content = self._connection.call(path)
+        response, content = self._connection.call(self._build_url())
         if 'entries' in content:
             self.total_size = content["total_size"]
             for entry in content['entries']:

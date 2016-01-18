@@ -257,6 +257,15 @@ class RESTDict(RESTBase, MutableMapping):
     def keys(self):
         return self.rest_data.keys()
 
+    def update(self, other):
+        # Optimize the update to call save() only once
+        _old_autosave = self._autosave
+        self._autosave = False
+        super(RESTDict, self).update(other)
+        self._autosave = _old_autosave
+        if self._autosave:
+            self.save()
+
 
 class RESTList(RESTBase, Sequence):
     """

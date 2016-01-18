@@ -696,6 +696,13 @@ class MailingList(RESTObject):
         url = 'lists/{0}/archivers'.format(self.list_id)
         return ListArchivers(self._connection, url, self)
 
+    @archivers.setter
+    def archivers(self, new_value):
+        url = 'lists/{0}/archivers'.format(self.list_id)
+        archivers = ListArchivers(self._connection, url, self)
+        archivers.update(new_value)
+        archivers.save()
+
     def add_owner(self, address):
         self.add_role('owner', address)
 

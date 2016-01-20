@@ -159,6 +159,9 @@ class RESTBase:
         self._rest_data = data
         self._changed_rest_data = {}
 
+    def __repr__(self):
+        return '<{0} at {1}>'.format(self.__class__.__name__, self._url)
+
     @property
     def rest_data(self):
         """Get data from API and cache it (only once per instance)."""
@@ -205,9 +208,6 @@ class RESTBase:
 
 class RESTObject(RESTBase):
     """Base class for REST data that behaves like an object with attributes."""
-
-    def __repr__(self):
-        return '<{0} at {1}>'.format(self.__class__.__name__, self._url)
 
     def __getattr__(self, name):
         try:

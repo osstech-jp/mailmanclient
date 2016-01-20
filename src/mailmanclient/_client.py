@@ -579,6 +579,9 @@ class Domain(RESTObject):
         response, content = self._connection.call(
             url, {'owner': owner})
 
+    def delete(self):
+        self._connection.call(self._url, None, 'DELETE')
+
 
 class MailingList(RESTObject):
 

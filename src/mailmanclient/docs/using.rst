@@ -74,7 +74,8 @@ After creating a few more domains, we can print the list of all domains.
 
     >>> client.create_domain('example.net')
     <Domain "example.net">
-    >>> client.create_domain('example.org')
+    >>> example_org = client.create_domain('example.org')
+    >>> print(example_org)
     <Domain "example.org">
     >>> for mail_host in client.domains:
     ...     print(mail_host)
@@ -84,7 +85,7 @@ After creating a few more domains, we can print the list of all domains.
 
 Also, domain can be deleted.
 
-    >>> client.delete_domain('example.org')
+    >>> example_org.delete()
     >>> for mail_host in client.domains:
     ...     print(mail_host)
     <Domain "example.com">

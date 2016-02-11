@@ -24,6 +24,7 @@ __all__ = [
 
 import vcr
 
+from functools import update_wrapper
 from six import binary_type, text_type
 from six.moves.urllib.parse import urlparse, urlunparse, parse_qsl, urlencode
 
@@ -69,3 +70,33 @@ def get_vcr(**kwargs):
         before_record_response=filter_response_headers,
         **kwargs
         )
+
+
+
+class vcr_testcase:
+    """
+    Decorator for TestCases that use VCR.
+    It automatically sets up a different cassette for each test function.
+    """
+
+    def __init__(self, vcr_instance):
+        self.vcr = vcr_instance
+
+    def __call__(self, testcase):
+        return self.decorate_class(testcase)
+
+    def decorate_class(self, testcase):
+        """Create a subclass that will add setUp instructions."""
+        vcr_instance = self.vcr
+        class VCRTestCase(testcase):
+            vcr = vcr_instance
+            def setUp(self):
+                cm = self.vcr.use_cassette('.'.join([
+                    #testcase.__module__.rpartition('.')[2],
+                    testcase.__name__, self._testMethodName, 'yaml']))
+                self.cassette = cm.__enter__()
+                self.addCleanup(cm.__exit__, None, None, None)
+                super(VCRTestCase, self).setUp()
+
+        return update_wrapper(VCRTestCase, testcase,
+            assigned=('__module__', '__name__'), updated=[])

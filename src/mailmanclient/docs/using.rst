@@ -943,3 +943,53 @@ have now been set.
     False
     >>> archivers['mhonarc']
     False
+
+
+Header matches
+==============
+
+Header matches are filtering rules that apply to messages sent to a mailing
+list. They match a header to a pattern using a regular expression, and matching
+patterns can trigger specific moderation actions. They are accessible via the
+mailing list's ``header_matches`` attribute, which behaves like a list.
+
+    >>> header_matches = test_one.header_matches
+    >>> print(header_matches)
+    <HeaderMatches for "test-one.example.com">
+    >>> len(header_matches)
+    0
+
+Header matches can be added using the ``add()`` method. The arguments are:
+
+- the header to consider (``str``). Il will be lower-cased.
+- the regular expression to use for filtering (``str``)
+- the action to take when the header matches the pattern. This can be
+  ``'accept'``, ``'discard'``, ``'reject'``, or ``'hold'``.
+
+    >>> header_matches.add('Subject', '^test: ', 'discard')
+    <HeaderMatch on "subject">
+    >>> print(header_matches)
+    <HeaderMatches for "test-one.example.com">
+    >>> len(header_matches)
+    1
+    >>> print(list(header_matches))
+    [<HeaderMatch on "subject">]
+
+You can delete a header match by deleting it from the ``header_matches``
+collection.
+
+    >>> del header_matches[0]
+    >>> len(header_matches)
+    0
+
+You can also delete a header match using its ``delete()`` method, but be aware
+that the collection will not automatically be updated. Get a new collection
+from the list's ``header_matches`` attribute to see the change.
+
+    >>> header_matches.add('Subject', '^test: ', 'discard')
+    <HeaderMatch on "subject">
+    >>> header_matches[0].delete()
+    >>> len(header_matches) # not automatically updated
+    1
+    >>> len(test_one.header_matches)
+    0

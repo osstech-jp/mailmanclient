@@ -2,24 +2,22 @@
 mailman.client - Python bindings for the Mailman 3 REST API
 ===========================================================
 
-This package is called ``mailman.client``.
+This package is called ``mailmanclient``.
 
 
 Requirements
 ============
 
-``mailman.client`` requires Python 2.6 or newer, and is compatible with Python
-3 when used with ``2to3``.
+``mailmanclient`` requires Python 2.6 or newer, and is compatible with Python 3 
 
 
 Documentation
 =============
 
 A `simple guide`_ to using the library is available within this package, in
-the form of doctests.   The manual is also available online in the Cheeseshop
-at:
+the form of doctests.   The manual is also available online at:
 
-    http://package.python.org/mailman.client
+    http://mailmanclient.readthedocs.org/en/latest/
 
 
 Project details
@@ -35,12 +33,12 @@ You should report bugs at:
 
 You can download the latest version of the package either from the Cheeseshop:
 
-    http://pypi.python.org/pypi/mailman.client
+    http://pypi.python.org/pypi/mailmanclient
 
-or from the Launchpad page above.  Of course you can also just install it with
+or from the GitLab page above.  Of course you can also just install it with
 ``pip`` from the command line::
 
-    % sudo pip mailman.client
+    % sudo pip mailmanclient
 
 You can grab the latest development copy of the code using Git, from the Gitlab
 home page above. If you have Git installed, you can grab your own branch of

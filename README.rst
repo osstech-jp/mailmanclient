@@ -1,13 +1,13 @@
 Python bindings for the Mailman 3 REST API.
 
 ..
-    This file is part of mailman.client.
+    This file is part of mailmanclient.
 
-    mailman.client is free software: you can redistribute it and/or modify it
+    mailmanclient is free software: you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, version 3 of the License.
 
-    mailman.client is distributed in the hope that it will be useful, but
+    mailmanclient is distributed in the hope that it will be useful, but
     WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
     or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
     License for more details.
@@ -20,7 +20,7 @@ Python bindings for the Mailman 3 REST API.
 mailman.client
 ==============
 
-The ``mailman.client`` library provides official Python bindings for the GNU
+The ``mailmanclient`` library provides official Python bindings for the GNU
 Mailman 3 REST API.
 
 Note that the test suite current requires that a Mailman 3 server be running.
@@ -32,7 +32,7 @@ is not necessary in order to run these tests.
 Requirements
 ============
 
-``mailman.client`` requires Python 2.6 or newer.
+``mailmanclient`` requires Python 2.6 or newer.
 
 
 Project details

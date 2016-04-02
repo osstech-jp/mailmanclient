@@ -416,6 +416,14 @@ class Client:
         return Preferences(self._connection, 'system/preferences')
 
     @property
+    def configuration(self):
+        response, content = self._connection.call('system/configuration')
+        return {section:ConfigSection(
+                self._connection, 'system/configuration/{}'.format(section),
+                section)
+                for section in content['sections']}
+
+    @property
     def queues(self):
         response, content = self._connection.call('queues')
         queues = {}
@@ -1216,6 +1224,16 @@ class Preferences(RESTDict):
 
     def delete(self):
         response, content = self._connection.call(self._url, method='DELETE')
+
+
+class ConfigSection(RESTDict):
+    _writable_properties = ()
+    def __init__(self, connection, url, name):
+        super(ConfigSection, self).__init__(connection, url)
+        self.name = name
+
+    def __repr__(self):
+        return '<ConfigSection: {}>'.format(self.name)
 
 
 class Settings(RESTDict):

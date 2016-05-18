@@ -471,6 +471,31 @@ Multiple addresses can be assigned to a user record:
     cris.person@example.org
     cris@example.com
 
+Trying to add an existing address will raise an error:
+
+    >>> client.create_user(email='dana@example.org',
+    ...                    password='somepass',
+    ...                    display_name='Dana')
+    <User "Dana" (...)>
+    >>> cris.add_address('dana@example.org')  # doctest: +IGNORE_EXCEPTION_DETAIL
+    Traceback (most recent call last):
+    ...
+    HTTPError: HTTP Error 400: Address already exists
+
+This can be overridden by using the ``absorb_existing`` flag:
+
+    >>> cris.add_address('dana@example.org', absorb_existing=True)
+    dana@example.org
+
+The user Chris will then be merged with Dana, acquiring all its subscriptions
+and preferences. In case of conflict, Chris' original preferences will prevail.
+
+    >>> for address in cris.addresses:
+    ...     print(address)
+    cris.person@example.org
+    cris@example.com
+    dana@example.org
+
 
 Addresses
 =========

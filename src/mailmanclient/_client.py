@@ -1117,11 +1117,23 @@ class User(RESTObject, PreferencesMixin):
             self._subscription_list_ids = list_ids
         return self._subscription_list_ids
 
-    def add_address(self, email):
-        # Adds another email adress to the user record and returns an
-        # Address object.
+    def add_address(self, email, absorb_existing=False):
+        """
+        Adds another email adress to the user record and returns an
+        _Address object.
+
+        :param email: The address to add
+        :type  email: str.
+        :param absorb_existing: set this to True if you want to add the address
+            even if it already exists. It will import the existing user into
+            the current one, not overwriting any previously set value.
+        :type  absorb_existing: bool.
+        """
         url = '{0}/addresses'.format(self._url)
-        response, content = self._connection.call(url, {'email': email})
+        data = {'email': email}
+        if absorb_existing:
+            data['absorb_existing'] = 1
+        response, content = self._connection.call(url, data)
         address = {
             'email': email,
             'self_link': response['location'],

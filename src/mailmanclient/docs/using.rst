@@ -1,5 +1,5 @@
 ===================
-Mailman REST client
+Mailman REST Client
 ===================
 
 This is the official Python bindings for the GNU Mailman REST API.  In order

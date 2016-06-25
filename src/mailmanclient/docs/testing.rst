@@ -1,5 +1,5 @@
 ======================
-Running the test suite
+Running the Test Suite
 ======================
 
 The test suite is run with the `tox`_ tool, which allows it to be run against

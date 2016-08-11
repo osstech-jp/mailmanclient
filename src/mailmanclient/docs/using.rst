@@ -592,7 +592,7 @@ for the settings is returned which behaves much like a dictionary.
 
     >>> settings = test_one.settings
     >>> len(settings)
-    54
+    55
 
     >>> for attr in sorted(settings):
     ...     print(attr + ': ' + str(settings[attr]))

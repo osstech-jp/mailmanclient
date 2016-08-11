@@ -226,6 +226,10 @@ class RESTObject(RESTBase):
             return super(RESTObject, self).__setattr__(name, value)
         return self._set(name, value)
 
+    def delete(self):
+        self._connection.call(self._url, method='DELETE')
+        self._reset_cache()
+
 
 class RESTDict(RESTBase, MutableMapping):
     """Base class for REST data that behaves like a dictionary."""
@@ -296,12 +300,20 @@ class RESTList(RESTBase, Sequence):
     def __getitem__(self, key):
         return self._factory(self.rest_data[key])
 
+    def __delitem__(self, key):
+        self[key].delete()
+        self._reset_cache()
+
     def __len__(self):
         return len(self.rest_data)
 
     def __iter__(self):
         for entry in self.rest_data:
             yield self._factory(entry)
+
+    def clear(self):
+        self._connection.call(self._url, method='DELETE')
+        self._reset_cache()
 
 
 class PreferencesMixin:
@@ -578,9 +590,6 @@ class Domain(RESTObject):
         url = self._url + '/owners'
         response, content = self._connection.call(
             url, {'owner': owner})
-
-    def delete(self):
-        self._connection.call(self._url, None, 'DELETE')
 
 
 class MailingList(RESTObject):
@@ -865,10 +874,6 @@ class MailingList(RESTObject):
             raise ValueError('%s is not a member address of %s' %
                              (email, self.fqdn_listname))
 
-    def delete(self):
-        response, content = self._connection.call(
-            'lists/{0}'.format(self.fqdn_listname), None, 'DELETE')
-
     @property
     def bans(self):
         url = 'lists/{0}/bans'.format(self.list_id)
@@ -945,21 +950,24 @@ class Bans(RESTList):
             else:
                 return True
 
-    def __delitem__(self, key):
-        self[key].delete()
-        self._reset_cache()
-
     def add(self, email):
         response, content = self._connection.call(self._url, dict(email=email))
         self._reset_cache()
         return BannedAddress(self._connection, response['location'])
 
-    def remove(self, email):
+    def find_by_email(self, email):
         for ban in self:
             if ban.email == email:
-                ban.delete()
-                return
-        raise ValueError('The address {} is not banned'.format(email))
+                return ban
+        return None
+
+    def remove(self, email):
+        ban = self.find_by_email(email)
+        if ban is not None:
+            ban.delete()
+            self._reset_cache()
+        else:
+            raise ValueError('The address {} is not banned'.format(email))
 
 
 class BannedAddress(RESTObject):
@@ -974,10 +982,6 @@ class BannedAddress(RESTObject):
     def mailinglist(self):
         return MailingList(
             self._connection, 'lists/{0}'.format(self.list_id))
-
-    def delete(self):
-        self._connection.call(self._url, method='DELETE')
-        self._reset_cache()
 
 
 class HeaderMatches(RESTList):
@@ -998,10 +1002,6 @@ class HeaderMatches(RESTList):
     def __repr__(self):
         return '<HeaderMatches for "{0}">'.format(self._mlist.list_id)
 
-    def __delitem__(self, key):
-        self[key].delete()
-        self._reset_cache()
-
     def add(self, header, pattern, action=None):
         """
         :param header: The header to consider.
@@ -1019,10 +1019,6 @@ class HeaderMatches(RESTList):
         self._reset_cache()
         return HeaderMatch(self._connection, response['location'])
 
-    def clear(self):
-        self._connection.call(self._url, method='DELETE')
-        self._reset_cache()
-
 
 class HeaderMatch(RESTObject):
 
@@ -1031,10 +1027,6 @@ class HeaderMatch(RESTObject):
 
     def __repr__(self):
         return '<HeaderMatch on "{0}">'.format(self.header)
-
-    def delete(self):
-        self._connection.call(self._url, method='DELETE')
-        self._reset_cache()
 
 
 class Member(RESTObject, PreferencesMixin):
@@ -1059,9 +1051,8 @@ class Member(RESTObject, PreferencesMixin):
 
     def unsubscribe(self):
         """Unsubscribe the member from a mailing list.
-
-        :param self_link: The REST resource to delete
         """
+        # TODO: call .delete() instead?
         self._connection.call(self.self_link, method='DELETE')
 
 
@@ -1140,9 +1131,6 @@ class User(RESTObject, PreferencesMixin):
         }
         return Address(self._connection, address['self_link'], address)
 
-    def delete(self):
-        response, content = self._connection.call(self._url, method='DELETE')
-
 
 class Addresses(RESTList):
 
@@ -1150,6 +1138,20 @@ class Addresses(RESTList):
         super(Addresses, self).__init__(connection, url, data)
         self._factory = lambda data: Address(
             self._connection, data['self_link'], data)
+
+    def find_by_email(self, email):
+        for address in self:
+            if address.email == email:
+                return address
+        return None
+
+    def remove(self, email):
+        address = self.find_by_email(email)
+        if address is not None:
+            address.delete()
+            self._reset_cache()
+        else:
+            raise ValueError('The address {} does not exist'.format(email))
 
 
 class Address(RESTObject, PreferencesMixin):
@@ -1166,6 +1168,10 @@ class Address(RESTObject, PreferencesMixin):
             return User(self._connection, self.rest_data['user'])
         else:
             return None
+
+    @property
+    def verified(self):
+        return self.verified_on is not None
 
     def verify(self):
         self._connection.call(

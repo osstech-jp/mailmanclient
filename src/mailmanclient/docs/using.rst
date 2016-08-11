@@ -502,28 +502,37 @@ Addresses
 
 Addresses can be accessed directly:
 
-    >>> address = client.get_address('cris@example.com')
+    >>> address = client.get_address('dana@example.org')
     >>> print(address)
-    cris@example.com
+    dana@example.org
     >>> print(address.display_name)
-    Cris
+    Dana
 
 The address has not been verified:
 
-    >>> print(address.verified_on is not None)
-    True
+    >>> print(address.verified)
+    False
 
 But that can be done via the address object:
 
     >>> address.verify()
-    >>> address.verified_on is None
-    False
+    >>> print(address.verified)
+    True
 
 It can also be unverified:
 
     >>> address.unverify()
-    >>> address.verified_on is None
-    True
+    >>> print(address.verified)
+    False
+
+Addresses can be deleted by calling their ``delete()`` method or by removing
+them from their user's ``addresses`` list:
+
+    >>> cris.addresses.remove('dana@example.org')
+    >>> for address in cris.addresses:
+    ...     print(address)
+    cris.person@example.org
+    cris@example.com
 
 
 Users can be added using ``create_user``. The display_name is optional:

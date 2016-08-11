@@ -578,13 +578,13 @@ for the settings is returned which behaves much like a dictionary.
 
     >>> settings = test_one.settings
     >>> len(settings)
-    55
+    51
 
     >>> for attr in sorted(settings):
     ...     print(attr + ': ' + str(settings[attr]))
     acceptable_aliases: []
     ...
-    welcome_message_uri: mailman:///welcome.txt
+    volume: 1
 
     >>> print(settings['display_name'])
     Test-1

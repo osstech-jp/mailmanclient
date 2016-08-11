@@ -552,6 +552,22 @@ class Domain(RESTObject):
         return '<Domain "{0}">'.format(self.mail_host)
 
     @property
+    def web_host(self):
+        warnings.warn(
+            'The `Domain.web_host` attribute is deprecated. It is not used '
+            'any more and will be removed in the future.',
+            DeprecationWarning, stacklevel=2)
+        return 'http://{}'.format(self.mail_host)
+
+    @property
+    def base_url(self):
+        warnings.warn(
+            'The `Domain.base_url` attribute is deprecated. It is not used '
+            'any more and will be removed in the future.',
+            DeprecationWarning, stacklevel=2)
+        return 'http://{}'.format(self.mail_host)
+
+    @property
     def owners(self):
         url = self._url + '/owners'
         response, content = self._connection.call(url)

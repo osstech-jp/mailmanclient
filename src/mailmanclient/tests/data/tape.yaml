@@ -61,12 +61,10 @@ interactions:
     method: GET
     uri: http://localhost:9001/3.1/domains/example.com
   response:
-    body: {string: '{"base_url": "http://example.com", "description": null, "http_etag":
-        "\"c2793b468de9dc600f574b379d36c5ceb970f6ec\"", "mail_host": "example.com",
-        "self_link": "http://localhost:9001/3.1/domains/example.com", "url_host":
-        "example.com"}'}
+    body: {string: '{"description": null, "http_etag": "\"d6e3312427f77f8bae17740af4d812349a811a55\"",
+        "mail_host": "example.com", "self_link": "http://localhost:9001/3.1/domains/example.com"}'}
     headers:
-      content-length: ['233']
+      content-length: ['172']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -76,12 +74,10 @@ interactions:
     method: GET
     uri: http://localhost:9001/3.1/domains/example.com
   response:
-    body: {string: '{"base_url": "http://example.com", "description": null, "http_etag":
-        "\"c2793b468de9dc600f574b379d36c5ceb970f6ec\"", "mail_host": "example.com",
-        "self_link": "http://localhost:9001/3.1/domains/example.com", "url_host":
-        "example.com"}'}
+    body: {string: '{"description": null, "http_etag": "\"d6e3312427f77f8bae17740af4d812349a811a55\"",
+        "mail_host": "example.com", "self_link": "http://localhost:9001/3.1/domains/example.com"}'}
     headers:
-      content-length: ['233']
+      content-length: ['172']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -91,43 +87,10 @@ interactions:
     method: GET
     uri: http://localhost:9001/3.1/domains/example.com
   response:
-    body: {string: '{"base_url": "http://example.com", "description": null, "http_etag":
-        "\"c2793b468de9dc600f574b379d36c5ceb970f6ec\"", "mail_host": "example.com",
-        "self_link": "http://localhost:9001/3.1/domains/example.com", "url_host":
-        "example.com"}'}
+    body: {string: '{"description": null, "http_etag": "\"d6e3312427f77f8bae17740af4d812349a811a55\"",
+        "mail_host": "example.com", "self_link": "http://localhost:9001/3.1/domains/example.com"}'}
     headers:
-      content-length: ['233']
-      content-type: [application/json; charset=UTF-8]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      accept-encoding: ['gzip, deflate']
-    method: GET
-    uri: http://localhost:9001/3.1/domains
-  response:
-    body: {string: '{"entries": [{"base_url": "http://example.com", "description":
-        null, "http_etag": "\"c2793b468de9dc600f574b379d36c5ceb970f6ec\"", "mail_host":
-        "example.com", "self_link": "http://localhost:9001/3.1/domains/example.com",
-        "url_host": "example.com"}], "http_etag": "\"9e49b8d9ee4beeff7754c2baba5ab997c16e93da\"",
-        "start": 0, "total_size": 1}'}
-    headers:
-      content-length: ['338']
-      content-type: [application/json; charset=UTF-8]
-    status: {code: 200, message: OK}
-- request:
-    body: null
-    headers:
-      accept-encoding: ['gzip, deflate']
-    method: GET
-    uri: http://localhost:9001/3.1/domains/example.com
-  response:
-    body: {string: '{"base_url": "http://example.com", "description": null, "http_etag":
-        "\"c2793b468de9dc600f574b379d36c5ceb970f6ec\"", "mail_host": "example.com",
-        "self_link": "http://localhost:9001/3.1/domains/example.com", "url_host":
-        "example.com"}'}
-    headers:
-      content-length: ['233']
+      content-length: ['172']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -151,12 +114,10 @@ interactions:
     method: GET
     uri: http://localhost:9001/3.1/domains/example.net
   response:
-    body: {string: '{"base_url": "http://example.net", "description": null, "http_etag":
-        "\"b163d346bcad844a4b587f4c2cf9036add9425b9\"", "mail_host": "example.net",
-        "self_link": "http://localhost:9001/3.1/domains/example.net", "url_host":
-        "example.net"}'}
+    body: {string: '{"description": null, "http_etag": "\"593e581e7bf6c9599b156d6d52a6ca5d56f174f3\"",
+        "mail_host": "example.net", "self_link": "http://localhost:9001/3.1/domains/example.net"}'}
     headers:
-      content-length: ['233']
+      content-length: ['172']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -180,12 +141,10 @@ interactions:
     method: GET
     uri: http://localhost:9001/3.1/domains/example.org
   response:
-    body: {string: '{"base_url": "http://example.org", "description": null, "http_etag":
-        "\"5f32ac85eb0e8b6e8a66279099dae9c05919a19b\"", "mail_host": "example.org",
-        "self_link": "http://localhost:9001/3.1/domains/example.org", "url_host":
-        "example.org"}'}
+    body: {string: '{"description": null, "http_etag": "\"9db56968670dce724a7280d88f5b29c8ba0cb516\"",
+        "mail_host": "example.org", "self_link": "http://localhost:9001/3.1/domains/example.org"}'}
     headers:
-      content-length: ['233']
+      content-length: ['172']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -195,19 +154,16 @@ interactions:
     method: GET
     uri: http://localhost:9001/3.1/domains
   response:
-    body: {string: '{"entries": [{"base_url": "http://example.com", "description":
-        null, "http_etag": "\"c2793b468de9dc600f574b379d36c5ceb970f6ec\"", "mail_host":
-        "example.com", "self_link": "http://localhost:9001/3.1/domains/example.com",
-        "url_host": "example.com"}, {"base_url": "http://example.net", "description":
-        null, "http_etag": "\"b163d346bcad844a4b587f4c2cf9036add9425b9\"", "mail_host":
-        "example.net", "self_link": "http://localhost:9001/3.1/domains/example.net",
-        "url_host": "example.net"}, {"base_url": "http://example.org", "description":
-        null, "http_etag": "\"5f32ac85eb0e8b6e8a66279099dae9c05919a19b\"", "mail_host":
-        "example.org", "self_link": "http://localhost:9001/3.1/domains/example.org",
-        "url_host": "example.org"}], "http_etag": "\"adec5a98735648f7bd24632b6d6704c15b3057a1\"",
-        "start": 0, "total_size": 3}'}
+    body: {string: '{"entries": [{"description": null, "http_etag": "\"d6e3312427f77f8bae17740af4d812349a811a55\"",
+        "mail_host": "example.com", "self_link": "http://localhost:9001/3.1/domains/example.com"},
+        {"description": null, "http_etag": "\"593e581e7bf6c9599b156d6d52a6ca5d56f174f3\"",
+        "mail_host": "example.net", "self_link": "http://localhost:9001/3.1/domains/example.net"},
+        {"description": null, "http_etag": "\"9db56968670dce724a7280d88f5b29c8ba0cb516\"",
+        "mail_host": "example.org", "self_link": "http://localhost:9001/3.1/domains/example.org"}],
+        "http_etag": "\"cbb432be6bf5871343ad67746a268dcd9d52f0a7\"", "start": 0, "total_size":
+        3}'}
     headers:
-      content-length: ['808']
+      content-length: ['625']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -217,12 +173,10 @@ interactions:
     method: GET
     uri: http://localhost:9001/3.1/domains/example.com
   response:
-    body: {string: '{"base_url": "http://example.com", "description": null, "http_etag":
-        "\"c2793b468de9dc600f574b379d36c5ceb970f6ec\"", "mail_host": "example.com",
-        "self_link": "http://localhost:9001/3.1/domains/example.com", "url_host":
-        "example.com"}'}
+    body: {string: '{"description": null, "http_etag": "\"d6e3312427f77f8bae17740af4d812349a811a55\"",
+        "mail_host": "example.com", "self_link": "http://localhost:9001/3.1/domains/example.com"}'}
     headers:
-      content-length: ['233']
+      content-length: ['172']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -232,12 +186,10 @@ interactions:
     method: GET
     uri: http://localhost:9001/3.1/domains/example.net
   response:
-    body: {string: '{"base_url": "http://example.net", "description": null, "http_etag":
-        "\"b163d346bcad844a4b587f4c2cf9036add9425b9\"", "mail_host": "example.net",
-        "self_link": "http://localhost:9001/3.1/domains/example.net", "url_host":
-        "example.net"}'}
+    body: {string: '{"description": null, "http_etag": "\"593e581e7bf6c9599b156d6d52a6ca5d56f174f3\"",
+        "mail_host": "example.net", "self_link": "http://localhost:9001/3.1/domains/example.net"}'}
     headers:
-      content-length: ['233']
+      content-length: ['172']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -247,12 +199,10 @@ interactions:
     method: GET
     uri: http://localhost:9001/3.1/domains/example.org
   response:
-    body: {string: '{"base_url": "http://example.org", "description": null, "http_etag":
-        "\"5f32ac85eb0e8b6e8a66279099dae9c05919a19b\"", "mail_host": "example.org",
-        "self_link": "http://localhost:9001/3.1/domains/example.org", "url_host":
-        "example.org"}'}
+    body: {string: '{"description": null, "http_etag": "\"9db56968670dce724a7280d88f5b29c8ba0cb516\"",
+        "mail_host": "example.org", "self_link": "http://localhost:9001/3.1/domains/example.org"}'}
     headers:
-      content-length: ['233']
+      content-length: ['172']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -273,16 +223,14 @@ interactions:
     method: GET
     uri: http://localhost:9001/3.1/domains
   response:
-    body: {string: '{"entries": [{"base_url": "http://example.com", "description":
-        null, "http_etag": "\"c2793b468de9dc600f574b379d36c5ceb970f6ec\"", "mail_host":
-        "example.com", "self_link": "http://localhost:9001/3.1/domains/example.com",
-        "url_host": "example.com"}, {"base_url": "http://example.net", "description":
-        null, "http_etag": "\"b163d346bcad844a4b587f4c2cf9036add9425b9\"", "mail_host":
-        "example.net", "self_link": "http://localhost:9001/3.1/domains/example.net",
-        "url_host": "example.net"}], "http_etag": "\"efe8f468769c64edbf5178c3513aa86777dbcbe6\"",
-        "start": 0, "total_size": 2}'}
+    body: {string: '{"entries": [{"description": null, "http_etag": "\"d6e3312427f77f8bae17740af4d812349a811a55\"",
+        "mail_host": "example.com", "self_link": "http://localhost:9001/3.1/domains/example.com"},
+        {"description": null, "http_etag": "\"593e581e7bf6c9599b156d6d52a6ca5d56f174f3\"",
+        "mail_host": "example.net", "self_link": "http://localhost:9001/3.1/domains/example.net"}],
+        "http_etag": "\"ca79d1241b5c323f634284232ad894799b5a3c63\"", "start": 0, "total_size":
+        2}'}
     headers:
-      content-length: ['573']
+      content-length: ['451']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -292,12 +240,10 @@ interactions:
     method: GET
     uri: http://localhost:9001/3.1/domains/example.com
   response:
-    body: {string: '{"base_url": "http://example.com", "description": null, "http_etag":
-        "\"c2793b468de9dc600f574b379d36c5ceb970f6ec\"", "mail_host": "example.com",
-        "self_link": "http://localhost:9001/3.1/domains/example.com", "url_host":
-        "example.com"}'}
+    body: {string: '{"description": null, "http_etag": "\"d6e3312427f77f8bae17740af4d812349a811a55\"",
+        "mail_host": "example.com", "self_link": "http://localhost:9001/3.1/domains/example.com"}'}
     headers:
-      content-length: ['233']
+      content-length: ['172']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -307,12 +253,10 @@ interactions:
     method: GET
     uri: http://localhost:9001/3.1/domains/example.net
   response:
-    body: {string: '{"base_url": "http://example.net", "description": null, "http_etag":
-        "\"b163d346bcad844a4b587f4c2cf9036add9425b9\"", "mail_host": "example.net",
-        "self_link": "http://localhost:9001/3.1/domains/example.net", "url_host":
-        "example.net"}'}
+    body: {string: '{"description": null, "http_etag": "\"593e581e7bf6c9599b156d6d52a6ca5d56f174f3\"",
+        "mail_host": "example.net", "self_link": "http://localhost:9001/3.1/domains/example.net"}'}
     headers:
-      content-length: ['233']
+      content-length: ['172']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -395,12 +339,10 @@ interactions:
     method: GET
     uri: http://localhost:9001/3.1/domains/example.net
   response:
-    body: {string: '{"base_url": "http://example.net", "description": null, "http_etag":
-        "\"b163d346bcad844a4b587f4c2cf9036add9425b9\"", "mail_host": "example.net",
-        "self_link": "http://localhost:9001/3.1/domains/example.net", "url_host":
-        "example.net"}'}
+    body: {string: '{"description": null, "http_etag": "\"593e581e7bf6c9599b156d6d52a6ca5d56f174f3\"",
+        "mail_host": "example.net", "self_link": "http://localhost:9001/3.1/domains/example.net"}'}
     headers:
-      content-length: ['233']
+      content-length: ['172']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -410,12 +352,10 @@ interactions:
     method: GET
     uri: http://localhost:9001/3.1/domains/example.net
   response:
-    body: {string: '{"base_url": "http://example.net", "description": null, "http_etag":
-        "\"b163d346bcad844a4b587f4c2cf9036add9425b9\"", "mail_host": "example.net",
-        "self_link": "http://localhost:9001/3.1/domains/example.net", "url_host":
-        "example.net"}'}
+    body: {string: '{"description": null, "http_etag": "\"593e581e7bf6c9599b156d6d52a6ca5d56f174f3\"",
+        "mail_host": "example.net", "self_link": "http://localhost:9001/3.1/domains/example.net"}'}
     headers:
-      content-length: ['233']
+      content-length: ['172']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -670,18 +610,18 @@ interactions:
         "", "digest_last_sent_at": null, "digest_send_periodic": true, "digest_size_threshold":
         30.0, "digest_volume_frequency": "monthly", "digests_enabled": true, "display_name":
         "Test-2", "filter_content": false, "first_strip_reply_to": false, "fqdn_listname":
-        "test-2@example.com", "goodbye_message_uri": "", "http_etag": "\"3272a446c5b633f9239950e473d0fac2200709d6\"",
+        "test-2@example.com", "http_etag": "\"1838ebe9bcc6e5014109254cc1965cdce39fe940\"",
         "include_rfc2369_headers": true, "join_address": "test-2-join@example.com",
         "last_post_at": null, "leave_address": "test-2-leave@example.com", "list_name":
         "test-2", "mail_host": "example.com", "moderator_password": null, "next_digest_number":
         1, "no_reply_address": "noreply@example.com", "owner_address": "test-2-owner@example.com",
         "post_id": 1, "posting_address": "test-2@example.com", "posting_pipeline":
         "default-posting-pipeline", "reply_goes_to_list": "no_munging", "reply_to_address":
-        "", "request_address": "test-2-request@example.com", "scheme": "http", "send_welcome_message":
+        "", "request_address": "test-2-request@example.com", "send_welcome_message":
         true, "subject_prefix": "[Test-2] ", "subscription_policy": "confirm", "volume":
-        1, "web_host": "example.com", "welcome_message_uri": "mailman:///welcome.txt"}'}
+        1}'}
     headers:
-      content-length: ['1788']
+      content-length: ['1667']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -1356,8 +1296,8 @@ interactions:
     uri: http://localhost:9001/3.1/users/00000000000000000000000000000006
   response:
     body: {string: '{"created_on": "2005-08-01T07:49:23", "display_name": "Dana",
-        "http_etag": "\"77f837a1de269628c18563696142b1cf1f680aec\"", "is_server_owner":
-        false, "password": "$6$rounds=716172$bqCzVqTdUG8GhBUh$oNnCSty6aJzNMH1Z9yeyihD38NnpU3PjI08mqJ1dcA8GlFx1GpgvJgpnY7rJ9orAAGmnWlGpQCZ7biCqmzJXP.",
+        "http_etag": "\"5a515248712e941f6e5ae4b57a7d6ab71a9d8450\"", "is_server_owner":
+        false, "password": "$6$rounds=621813$D9ff38gOq0GwLfpU$3nrV2NEutgISfTQZX6/iU9uMFpOP8hUYkj1Lht7tI1ebCrBkRwTZoVBsABY.TUHNBXJq5gEcVjRK9QkUWFbyo0",
         "self_link": "http://localhost:9001/3.1/users/00000000000000000000000000000006",
         "user_id": "00000000000000000000000000000006"}'}
     headers:
@@ -1563,8 +1503,8 @@ interactions:
     uri: http://localhost:9001/3.1/users/00000000000000000000000000000007
   response:
     body: {string: '{"created_on": "2005-08-01T07:49:23", "display_name": "Ler", "http_etag":
-        "\"7597b426e3682a9230413b14314dfd02cabfca97\"", "is_server_owner": false,
-        "password": "$6$rounds=709934$ZWNk3j7u8xzm.Q.q$czMZRABLCrBBbq8j4Q5jogaLz9LZB1UJfTHeqN.FdPcS5AcTKLofcX4R6TmUb6Td/zPgartOFe1NatLaud7ar0",
+        "\"98cb5dcff218d807185720a4142f2b4d485d20a1\"", "is_server_owner": false,
+        "password": "$6$rounds=621519$.5rSUQ1ftqTFcm0J$i3/f6UDe/bQL2bKOPY0UzGrROJqbaw4O3t2Biig/T3GW075tqERwQKbH3Z2SzpgT3.hTgEX.yC2tIFA15TFQr0",
         "self_link": "http://localhost:9001/3.1/users/00000000000000000000000000000007",
         "user_id": "00000000000000000000000000000007"}'}
     headers:
@@ -1579,8 +1519,8 @@ interactions:
     uri: http://localhost:9001/3.1/users/ler@primus.org
   response:
     body: {string: '{"created_on": "2005-08-01T07:49:23", "display_name": "Ler", "http_etag":
-        "\"7597b426e3682a9230413b14314dfd02cabfca97\"", "is_server_owner": false,
-        "password": "$6$rounds=709934$ZWNk3j7u8xzm.Q.q$czMZRABLCrBBbq8j4Q5jogaLz9LZB1UJfTHeqN.FdPcS5AcTKLofcX4R6TmUb6Td/zPgartOFe1NatLaud7ar0",
+        "\"98cb5dcff218d807185720a4142f2b4d485d20a1\"", "is_server_owner": false,
+        "password": "$6$rounds=621519$.5rSUQ1ftqTFcm0J$i3/f6UDe/bQL2bKOPY0UzGrROJqbaw4O3t2Biig/T3GW075tqERwQKbH3Z2SzpgT3.hTgEX.yC2tIFA15TFQr0",
         "self_link": "http://localhost:9001/3.1/users/00000000000000000000000000000007",
         "user_id": "00000000000000000000000000000007"}'}
     headers:
@@ -1607,8 +1547,8 @@ interactions:
     uri: http://localhost:9001/3.1/users/ler@primus.org
   response:
     body: {string: '{"created_on": "2005-08-01T07:49:23", "display_name": "Sir Ler",
-        "http_etag": "\"135739d4db4194643cdde158fd88b71fcfe51deb\"", "is_server_owner":
-        false, "password": "$6$rounds=709934$ZWNk3j7u8xzm.Q.q$czMZRABLCrBBbq8j4Q5jogaLz9LZB1UJfTHeqN.FdPcS5AcTKLofcX4R6TmUb6Td/zPgartOFe1NatLaud7ar0",
+        "http_etag": "\"d141470eb433b26d85bc0591b168bc2d684cfe98\"", "is_server_owner":
+        false, "password": "$6$rounds=621519$.5rSUQ1ftqTFcm0J$i3/f6UDe/bQL2bKOPY0UzGrROJqbaw4O3t2Biig/T3GW075tqERwQKbH3Z2SzpgT3.hTgEX.yC2tIFA15TFQr0",
         "self_link": "http://localhost:9001/3.1/users/00000000000000000000000000000007",
         "user_id": "00000000000000000000000000000007"}'}
     headers:
@@ -1635,8 +1575,8 @@ interactions:
     uri: http://localhost:9001/3.1/users/00000000000000000000000000000007
   response:
     body: {string: '{"created_on": "2005-08-01T07:49:23", "display_name": "Sir Ler",
-        "http_etag": "\"a16bce94800de447adb7c9d9f0ff8842dc484263\"", "is_server_owner":
-        false, "password": "$6$rounds=701525$099otOP1QmWaGj5p$2VnpS6kgYQ4qOqR8DPy8Rg9o/DTJYPt6MiNUxU7SUQ5/fpglOiwe8E8b4MIXgjodWvXQHa247hgXjjygIHFMU1",
+        "http_etag": "\"108a7ce4bc802f2466c2a8fd2e48a22e4aa3bd0d\"", "is_server_owner":
+        false, "password": "$6$rounds=609870$uG/6B0GK3FYoFDYt$dgjlLxURInmV6ZGcjRxDTjd2ayIDJRk1kba4wkiEQW5CApmSde6j.lfM6/V8rJI1wzIklPkYo5ukTzpLCFvQx.",
         "self_link": "http://localhost:9001/3.1/users/00000000000000000000000000000007",
         "user_id": "00000000000000000000000000000007"}'}
     headers:
@@ -1712,18 +1652,18 @@ interactions:
         "", "digest_last_sent_at": null, "digest_send_periodic": true, "digest_size_threshold":
         30.0, "digest_volume_frequency": "monthly", "digests_enabled": true, "display_name":
         "Test-1", "filter_content": false, "first_strip_reply_to": false, "fqdn_listname":
-        "test-1@example.com", "goodbye_message_uri": "", "http_etag": "\"187b87e9749f5b31ad6f68d15c00d817eb2b6892\"",
+        "test-1@example.com", "http_etag": "\"83b1b2a09001435af96a0e81dd9568a5e52ee85d\"",
         "include_rfc2369_headers": true, "join_address": "test-1-join@example.com",
         "last_post_at": null, "leave_address": "test-1-leave@example.com", "list_name":
         "test-1", "mail_host": "example.com", "moderator_password": null, "next_digest_number":
         1, "no_reply_address": "noreply@example.com", "owner_address": "test-1-owner@example.com",
         "post_id": 1, "posting_address": "test-1@example.com", "posting_pipeline":
         "default-posting-pipeline", "reply_goes_to_list": "no_munging", "reply_to_address":
-        "", "request_address": "test-1-request@example.com", "scheme": "http", "send_welcome_message":
+        "", "request_address": "test-1-request@example.com", "send_welcome_message":
         true, "subject_prefix": "[Test-1] ", "subscription_policy": "confirm", "volume":
-        1, "web_host": "example.com", "welcome_message_uri": "mailman:///welcome.txt"}'}
+        1}'}
     headers:
-      content-length: ['1788']
+      content-length: ['1667']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -1757,18 +1697,17 @@ interactions:
         true, "digest_size_threshold": 30.0, "digest_volume_frequency": "monthly",
         "digests_enabled": true, "display_name": "Test Numero Uno", "filter_content":
         false, "first_strip_reply_to": false, "fqdn_listname": "test-1@example.com",
-        "goodbye_message_uri": "", "http_etag": "\"6f9da3c34604abd98549ba44f6c5fb72fdbf46d4\"",
-        "include_rfc2369_headers": true, "join_address": "test-1-join@example.com",
-        "last_post_at": null, "leave_address": "test-1-leave@example.com", "list_name":
-        "test-1", "mail_host": "example.com", "moderator_password": null, "next_digest_number":
-        1, "no_reply_address": "noreply@example.com", "owner_address": "test-1-owner@example.com",
-        "post_id": 1, "posting_address": "test-1@example.com", "posting_pipeline":
-        "default-posting-pipeline", "reply_goes_to_list": "no_munging", "reply_to_address":
-        "", "request_address": "test-1-request@example.com", "scheme": "http", "send_welcome_message":
-        true, "subject_prefix": "[Test-1] ", "subscription_policy": "confirm", "volume":
-        1, "web_host": "example.com", "welcome_message_uri": "mailman:///welcome.txt"}'}
+        "http_etag": "\"8abc45714454ca0557c75e3f0898769bda74e5cd\"", "include_rfc2369_headers":
+        true, "join_address": "test-1-join@example.com", "last_post_at": null, "leave_address":
+        "test-1-leave@example.com", "list_name": "test-1", "mail_host": "example.com",
+        "moderator_password": null, "next_digest_number": 1, "no_reply_address": "noreply@example.com",
+        "owner_address": "test-1-owner@example.com", "post_id": 1, "posting_address":
+        "test-1@example.com", "posting_pipeline": "default-posting-pipeline", "reply_goes_to_list":
+        "no_munging", "reply_to_address": "", "request_address": "test-1-request@example.com",
+        "send_welcome_message": true, "subject_prefix": "[Test-1] ", "subscription_policy":
+        "confirm", "volume": 1}'}
     headers:
-      content-length: ['1827']
+      content-length: ['1706']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -2122,7 +2061,7 @@ interactions:
         "", "digest_last_sent_at": null, "digest_send_periodic": true, "digest_size_threshold":
         30.0, "digest_volume_frequency": "monthly", "digests_enabled": true, "display_name":
         "Confirm-first", "filter_content": false, "first_strip_reply_to": false, "fqdn_listname":
-        "confirm-first@example.com", "goodbye_message_uri": "", "http_etag": "\"c37e496c0728b8f56cd5ad4d77136925524071b6\"",
+        "confirm-first@example.com", "http_etag": "\"8efadff2c2276cd05881009733d9fd26416b96bc\"",
         "include_rfc2369_headers": true, "join_address": "confirm-first-join@example.com",
         "last_post_at": null, "leave_address": "confirm-first-leave@example.com",
         "list_name": "confirm-first", "mail_host": "example.com", "moderator_password":
@@ -2130,11 +2069,10 @@ interactions:
         "owner_address": "confirm-first-owner@example.com", "post_id": 1, "posting_address":
         "confirm-first@example.com", "posting_pipeline": "default-posting-pipeline",
         "reply_goes_to_list": "no_munging", "reply_to_address": "", "request_address":
-        "confirm-first-request@example.com", "scheme": "http", "send_welcome_message":
-        true, "subject_prefix": "[Confirm-first] ", "subscription_policy": "confirm",
-        "volume": 1, "web_host": "example.com", "welcome_message_uri": "mailman:///welcome.txt"}'}
+        "confirm-first-request@example.com", "send_welcome_message": true, "subject_prefix":
+        "[Confirm-first] ", "subscription_policy": "confirm", "volume": 1}'}
     headers:
-      content-length: ['1858']
+      content-length: ['1737']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -2183,7 +2121,7 @@ interactions:
         "", "digest_last_sent_at": null, "digest_send_periodic": true, "digest_size_threshold":
         30.0, "digest_volume_frequency": "monthly", "digests_enabled": true, "display_name":
         "Confirm-first", "filter_content": false, "first_strip_reply_to": false, "fqdn_listname":
-        "confirm-first@example.com", "goodbye_message_uri": "", "http_etag": "\"09db387b813e7ec5fb413a561a8e6ff72f6fdd83\"",
+        "confirm-first@example.com", "http_etag": "\"cd41ddf29dc5a15472edceccc6f668e066460aac\"",
         "include_rfc2369_headers": true, "join_address": "confirm-first-join@example.com",
         "last_post_at": null, "leave_address": "confirm-first-leave@example.com",
         "list_name": "confirm-first", "mail_host": "example.com", "moderator_password":
@@ -2191,11 +2129,10 @@ interactions:
         "owner_address": "confirm-first-owner@example.com", "post_id": 1, "posting_address":
         "confirm-first@example.com", "posting_pipeline": "default-posting-pipeline",
         "reply_goes_to_list": "no_munging", "reply_to_address": "", "request_address":
-        "confirm-first-request@example.com", "scheme": "http", "send_welcome_message":
-        true, "subject_prefix": "[Confirm-first] ", "subscription_policy": "moderate",
-        "volume": 1, "web_host": "example.com", "welcome_message_uri": "mailman:///welcome.txt"}'}
+        "confirm-first-request@example.com", "send_welcome_message": true, "subject_prefix":
+        "[Confirm-first] ", "subscription_policy": "moderate", "volume": 1}'}
     headers:
-      content-length: ['1859']
+      content-length: ['1738']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -2467,22 +2404,23 @@ interactions:
         "files": [], "http_etag": "\"61bc9a38eb1d39757e0016eb4dba3a716d4ed33d\"",
         "name": "pipeline", "self_link": "http://localhost:9001/3.1/queues/pipeline"},
         {"count": 10, "directory": "/home/abompard/fedora/hk/mailmanclient/var/queue/retry",
-        "files": ["1470915617.945047+237b734caf525ae8fedc14277e42b1633c535b06", "1470915618.0312111+193fb343fb083614e9b61f0a2927526a3876a52d",
-        "1470915619.1190557+d4a0215e9b60372fae07732db77488ac1336217a", "1470915619.1933222+15bb11e44ff0c8d75b0277e6b7dc5041bd34e9d2",
-        "1470915619.2736802+222d172248593ad92a3ab35bd962ffc200eeaa7c", "1470915619.3473442+5d2b636700a1cfd0fdc96e26eb9998f56c7c84d5",
-        "1470915631.4489696+19ac94eb7a787242aefaec956215887acdf49799", "1470915632.5291245+b47ab414926b5f909e58eee589d10b4eb4dbbcbc",
-        "1470915637.6855347+366262c143b0c008dd42df39511c83053cce0beb", "1470915637.761283+692708c2246cd47cb1def07c05dde2ba156c2762"],
-        "http_etag": "\"85df5eff62085e0757e1072c9ad3758ca9f093e7\"", "name": "retry",
+        "files": ["1470912051.8599303+b57eb978c0be5f7a07db453e6b21794614b298a9", "1470912051.974071+3cdbd1640b6e2ad8c32f02ef6f645a241b3d86ac",
+        "1470912052.3117614+0ba80b2631dcca73eded9c3d474b27d947f7dd57", "1470912052.3901052+ba3453a13835d884fa34e82bc55944d1396e9354",
+        "1470912052.482194+3229f9013177235e7c43934420937e7b71df2028", "1470912053.5467+fd15487f31ad7566b548c14941b8c5b992fb4de5",
+        "1470912063.74+1529668466952be4e848705b65f73ed1d46c77f8", "1470912065.8197181+7dadbb95c137b649a3325680c13423df9cc54426",
+        "1470912070.965738+662bf63da0ad4f56f594bcdcd9a19a76e9c5f2db", "1470912071.0527222+b94ba364d5afe6e034ed261412919c7e258c87d0"],
+        "http_etag": "\"947abcaa28c3c998f6ce7305b59036fe1d9b206f\"", "name": "retry",
         "self_link": "http://localhost:9001/3.1/queues/retry"}, {"count": 0, "directory":
         "/home/abompard/fedora/hk/mailmanclient/var/queue/shunt", "files": [], "http_etag":
         "\"80409db379d11b01f5406e22b652a85ba2965b41\"", "name": "shunt", "self_link":
-        "http://localhost:9001/3.1/queues/shunt"}, {"count": 0, "directory": "/home/abompard/fedora/hk/mailmanclient/var/queue/virgin",
-        "files": [], "http_etag": "\"0b9bddba59b3ff8c79cb24a8c2ce1ef005088037\"",
-        "name": "virgin", "self_link": "http://localhost:9001/3.1/queues/virgin"}],
-        "http_etag": "\"98c2b33e421cc66c77ff36ff2de74aa1b9b2fb65\"", "self_link":
-        "http://localhost:9001/3.1/queues", "start": 0, "total_size": 12}'}
+        "http://localhost:9001/3.1/queues/shunt"}, {"count": 1, "directory": "/home/abompard/fedora/hk/mailmanclient/var/queue/virgin",
+        "files": ["1470912071.0479617+3063292ec4360fa5e061cdfeb179d26015ad9ea9"],
+        "http_etag": "\"0393b92bacfe88f6fa14df7e231b1ce95d816867\"", "name": "virgin",
+        "self_link": "http://localhost:9001/3.1/queues/virgin"}], "http_etag": "\"33ac1a9d770e23bab1a9b9b69290b2b23a0adb2d\"",
+        "self_link": "http://localhost:9001/3.1/queues", "start": 0, "total_size":
+        12}'}
     headers:
-      content-length: ['3561']
+      content-length: ['3613']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -2497,7 +2435,7 @@ interactions:
     headers:
       content-length: ['0']
       content-type: [application/json; charset=UTF-8]
-      location: ['http://localhost:9001/3.1/queues/in/1470915638.9220169+a569ef5147da58130fa448ee27767f2058e96d38']
+      location: ['http://localhost:9001/3.1/queues/in/1470912071.628017+f69cbd535b04ee385eea63683a61f3f02b8f533d']
     status: {code: 201, message: Created}
 - request:
     body: null
@@ -2507,11 +2445,11 @@ interactions:
     uri: http://localhost:9001/3.1/queues/in
   response:
     body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailmanclient/var/queue/in",
-        "files": ["1470915638.9220169+a569ef5147da58130fa448ee27767f2058e96d38"],
-        "http_etag": "\"9ce5e49919e86ddb3d75faaf065ee3a27a67ee33\"", "name": "in",
-        "self_link": "http://localhost:9001/3.1/queues/in"}'}
+        "files": ["1470912071.628017+f69cbd535b04ee385eea63683a61f3f02b8f533d"], "http_etag":
+        "\"158545108b14132d3216ef01d9212a140b463ea8\"", "name": "in", "self_link":
+        "http://localhost:9001/3.1/queues/in"}'}
     headers:
-      content-length: ['281']
+      content-length: ['280']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -2522,11 +2460,11 @@ interactions:
     uri: http://localhost:9001/3.1/queues/in
   response:
     body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailmanclient/var/queue/in",
-        "files": ["1470915638.9220169+a569ef5147da58130fa448ee27767f2058e96d38"],
-        "http_etag": "\"9ce5e49919e86ddb3d75faaf065ee3a27a67ee33\"", "name": "in",
-        "self_link": "http://localhost:9001/3.1/queues/in"}'}
+        "files": ["1470912071.628017+f69cbd535b04ee385eea63683a61f3f02b8f533d"], "http_etag":
+        "\"158545108b14132d3216ef01d9212a140b463ea8\"", "name": "in", "self_link":
+        "http://localhost:9001/3.1/queues/in"}'}
     headers:
-      content-length: ['281']
+      content-length: ['280']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -2537,11 +2475,11 @@ interactions:
     uri: http://localhost:9001/3.1/queues/in
   response:
     body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailmanclient/var/queue/in",
-        "files": ["1470915638.9220169+a569ef5147da58130fa448ee27767f2058e96d38"],
-        "http_etag": "\"9ce5e49919e86ddb3d75faaf065ee3a27a67ee33\"", "name": "in",
-        "self_link": "http://localhost:9001/3.1/queues/in"}'}
+        "files": ["1470912071.628017+f69cbd535b04ee385eea63683a61f3f02b8f533d"], "http_etag":
+        "\"158545108b14132d3216ef01d9212a140b463ea8\"", "name": "in", "self_link":
+        "http://localhost:9001/3.1/queues/in"}'}
     headers:
-      content-length: ['281']
+      content-length: ['280']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -2552,11 +2490,11 @@ interactions:
     uri: http://localhost:9001/3.1/queues/in
   response:
     body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailmanclient/var/queue/in",
-        "files": ["1470915638.9220169+a569ef5147da58130fa448ee27767f2058e96d38"],
-        "http_etag": "\"9ce5e49919e86ddb3d75faaf065ee3a27a67ee33\"", "name": "in",
-        "self_link": "http://localhost:9001/3.1/queues/in"}'}
+        "files": ["1470912071.628017+f69cbd535b04ee385eea63683a61f3f02b8f533d"], "http_etag":
+        "\"158545108b14132d3216ef01d9212a140b463ea8\"", "name": "in", "self_link":
+        "http://localhost:9001/3.1/queues/in"}'}
     headers:
-      content-length: ['281']
+      content-length: ['280']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -2567,11 +2505,41 @@ interactions:
     uri: http://localhost:9001/3.1/queues/in
   response:
     body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailmanclient/var/queue/in",
-        "files": ["1470915638.9220169+a569ef5147da58130fa448ee27767f2058e96d38"],
-        "http_etag": "\"9ce5e49919e86ddb3d75faaf065ee3a27a67ee33\"", "name": "in",
-        "self_link": "http://localhost:9001/3.1/queues/in"}'}
+        "files": ["1470912071.628017+f69cbd535b04ee385eea63683a61f3f02b8f533d"], "http_etag":
+        "\"158545108b14132d3216ef01d9212a140b463ea8\"", "name": "in", "self_link":
+        "http://localhost:9001/3.1/queues/in"}'}
     headers:
-      content-length: ['281']
+      content-length: ['280']
+      content-type: [application/json; charset=UTF-8]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
+    uri: http://localhost:9001/3.1/queues/in
+  response:
+    body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailmanclient/var/queue/in",
+        "files": ["1470912071.628017+f69cbd535b04ee385eea63683a61f3f02b8f533d"], "http_etag":
+        "\"158545108b14132d3216ef01d9212a140b463ea8\"", "name": "in", "self_link":
+        "http://localhost:9001/3.1/queues/in"}'}
+    headers:
+      content-length: ['280']
+      content-type: [application/json; charset=UTF-8]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
+    uri: http://localhost:9001/3.1/queues/in
+  response:
+    body: {string: '{"count": 1, "directory": "/home/abompard/fedora/hk/mailmanclient/var/queue/in",
+        "files": ["1470912071.628017+f69cbd535b04ee385eea63683a61f3f02b8f533d"], "http_etag":
+        "\"158545108b14132d3216ef01d9212a140b463ea8\"", "name": "in", "self_link":
+        "http://localhost:9001/3.1/queues/in"}'}
+    headers:
+      content-length: ['280']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:
@@ -2651,20 +2619,33 @@ interactions:
     method: GET
     uri: http://localhost:9001/3.1/lists/test-1@example.com/held
   response:
+    body: {string: '{"http_etag": "\"32223434a0f3af4cdc4673d1fbc5bac1f6d98fd3\"",
+        "start": 0, "total_size": 0}'}
+    headers:
+      content-length: ['90']
+      content-type: [application/json; charset=UTF-8]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: GET
+    uri: http://localhost:9001/3.1/lists/test-1@example.com/held
+  response:
     body: {string: '{"entries": [{"_parsemsg": false, "envsender": "noreply@example.com",
-        "hold_date": "2005-08-01T07:49:23", "http_etag": "\"084f3a985314d04118642e3ee3ae8f80f56ac697\"",
+        "hold_date": "2005-08-01T07:49:23", "http_etag": "\"e76dcb703cc6b26ff4a6adb1b2f013c97800b478\"",
         "lang": "en", "listid": "test-1.example.com", "message_id": "<moderated_01>",
         "moderation_action": "hold", "moderation_reasons": ["The message is not from
         a list member"], "moderation_sender": "nomember@example.com", "msg": "From:
         nomember@example.com\nTo: test-1@example.com\nSubject: Something\nMessage-ID:
-        <moderated_01>\nDate: Thu, 11 Aug 2016 13:40:38 +0200\nX-Mailman-Rule-Hits:
+        <moderated_01>\nDate: Thu, 11 Aug 2016 12:41:11 +0200\nX-Mailman-Rule-Hits:
         nonmember-moderation\nX-Mailman-Rule-Misses: approved; emergency; loop; member-moderation\nMessage-ID-Hash:
         KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\nX-Message-ID-Hash: KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\n\nSome
         text.\n\n", "original_size": 249, "reason": "", "request_id": 1, "rule_hits":
         ["nonmember-moderation"], "rule_misses": ["approved", "emergency", "loop",
         "member-moderation"], "self_link": "http://localhost:9001/3.1/lists/test-1.example.com/held/1",
         "sender": "nomember@example.com", "subject": "Something", "version": 3}],
-        "http_etag": "\"341c83ecfbf65d86189578721428b08c6f841319\"", "start": 0, "total_size":
+        "http_etag": "\"a7ba4bb62b3ecbda02a95879c08d0337803c7ceb\"", "start": 0, "total_size":
         1}'}
     headers:
       content-length: ['1166']
@@ -2678,12 +2659,12 @@ interactions:
     uri: http://localhost:9001/3.1/lists/test-1@example.com/held/1
   response:
     body: {string: '{"_parsemsg": false, "envsender": "noreply@example.com", "hold_date":
-        "2005-08-01T07:49:23", "http_etag": "\"084f3a985314d04118642e3ee3ae8f80f56ac697\"",
+        "2005-08-01T07:49:23", "http_etag": "\"e76dcb703cc6b26ff4a6adb1b2f013c97800b478\"",
         "lang": "en", "listid": "test-1.example.com", "message_id": "<moderated_01>",
         "moderation_action": "hold", "moderation_reasons": ["The message is not from
         a list member"], "moderation_sender": "nomember@example.com", "msg": "From:
         nomember@example.com\nTo: test-1@example.com\nSubject: Something\nMessage-ID:
-        <moderated_01>\nDate: Thu, 11 Aug 2016 13:40:38 +0200\nX-Mailman-Rule-Hits:
+        <moderated_01>\nDate: Thu, 11 Aug 2016 12:41:11 +0200\nX-Mailman-Rule-Hits:
         nonmember-moderation\nX-Mailman-Rule-Misses: approved; emergency; loop; member-moderation\nMessage-ID-Hash:
         KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\nX-Message-ID-Hash: KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\n\nSome
         text.\n\n", "original_size": 249, "reason": "", "request_id": 1, "rule_hits":
@@ -2714,19 +2695,19 @@ interactions:
     uri: http://localhost:9001/3.1/lists/test-1@example.com/held
   response:
     body: {string: '{"entries": [{"_parsemsg": false, "envsender": "noreply@example.com",
-        "hold_date": "2005-08-01T07:49:23", "http_etag": "\"084f3a985314d04118642e3ee3ae8f80f56ac697\"",
+        "hold_date": "2005-08-01T07:49:23", "http_etag": "\"e76dcb703cc6b26ff4a6adb1b2f013c97800b478\"",
         "lang": "en", "listid": "test-1.example.com", "message_id": "<moderated_01>",
         "moderation_action": "hold", "moderation_reasons": ["The message is not from
         a list member"], "moderation_sender": "nomember@example.com", "msg": "From:
         nomember@example.com\nTo: test-1@example.com\nSubject: Something\nMessage-ID:
-        <moderated_01>\nDate: Thu, 11 Aug 2016 13:40:38 +0200\nX-Mailman-Rule-Hits:
+        <moderated_01>\nDate: Thu, 11 Aug 2016 12:41:11 +0200\nX-Mailman-Rule-Hits:
         nonmember-moderation\nX-Mailman-Rule-Misses: approved; emergency; loop; member-moderation\nMessage-ID-Hash:
         KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\nX-Message-ID-Hash: KU3PI265JYL67T3OV6XE5CQP3QOXKKHB\n\nSome
         text.\n\n", "original_size": 249, "reason": "", "request_id": 1, "rule_hits":
         ["nonmember-moderation"], "rule_misses": ["approved", "emergency", "loop",
         "member-moderation"], "self_link": "http://localhost:9001/3.1/lists/test-1.example.com/held/1",
         "sender": "nomember@example.com", "subject": "Something", "version": 3}],
-        "http_etag": "\"341c83ecfbf65d86189578721428b08c6f841319\"", "start": 0, "total_size":
+        "http_etag": "\"a7ba4bb62b3ecbda02a95879c08d0337803c7ceb\"", "start": 0, "total_size":
         1}'}
     headers:
       content-length: ['1166']
@@ -3213,16 +3194,14 @@ interactions:
     method: GET
     uri: http://localhost:9001/3.1/domains
   response:
-    body: {string: '{"entries": [{"base_url": "http://example.com", "description":
-        null, "http_etag": "\"c2793b468de9dc600f574b379d36c5ceb970f6ec\"", "mail_host":
-        "example.com", "self_link": "http://localhost:9001/3.1/domains/example.com",
-        "url_host": "example.com"}, {"base_url": "http://example.net", "description":
-        null, "http_etag": "\"b163d346bcad844a4b587f4c2cf9036add9425b9\"", "mail_host":
-        "example.net", "self_link": "http://localhost:9001/3.1/domains/example.net",
-        "url_host": "example.net"}], "http_etag": "\"efe8f468769c64edbf5178c3513aa86777dbcbe6\"",
-        "start": 0, "total_size": 2}'}
+    body: {string: '{"entries": [{"description": null, "http_etag": "\"d6e3312427f77f8bae17740af4d812349a811a55\"",
+        "mail_host": "example.com", "self_link": "http://localhost:9001/3.1/domains/example.com"},
+        {"description": null, "http_etag": "\"593e581e7bf6c9599b156d6d52a6ca5d56f174f3\"",
+        "mail_host": "example.net", "self_link": "http://localhost:9001/3.1/domains/example.net"}],
+        "http_etag": "\"ca79d1241b5c323f634284232ad894799b5a3c63\"", "start": 0, "total_size":
+        2}'}
     headers:
-      content-length: ['573']
+      content-length: ['451']
       content-type: [application/json; charset=UTF-8]
     status: {code: 200, message: OK}
 - request:

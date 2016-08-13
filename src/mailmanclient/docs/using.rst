@@ -45,13 +45,9 @@ is returned.
     >>> example_dot_com = client.create_domain('example.com')
     >>> example_dot_com
     <Domain "example.com">
-    >>> print(example_dot_com.base_url)
-    http://example.com
     >>> print(example_dot_com.description)
     None
     >>> print(example_dot_com.mail_host)
-    example.com
-    >>> print(example_dot_com.url_host)
     example.com
 
 You can also get an existing domain independently using its mail host.
@@ -59,16 +55,6 @@ You can also get an existing domain independently using its mail host.
     >>> example = client.get_domain('example.com')
     >>> example
     <Domain "example.com">
-    >>> print(example_dot_com.base_url)
-    http://example.com
-
-Additionally you can get an existing domain using its web host.
-
-    >>> example = client.get_domain(web_host='http://example.com')
-    >>> example
-    <Domain "example.com">
-    >>> print(example_dot_com.base_url)
-    http://example.com
 
 After creating a few more domains, we can print the list of all domains.
 
@@ -592,13 +578,13 @@ for the settings is returned which behaves much like a dictionary.
 
     >>> settings = test_one.settings
     >>> len(settings)
-    55
+    51
 
     >>> for attr in sorted(settings):
     ...     print(attr + ': ' + str(settings[attr]))
     acceptable_aliases: []
     ...
-    welcome_message_uri: mailman:///welcome.txt
+    volume: 1
 
     >>> print(settings['display_name'])
     Test-1

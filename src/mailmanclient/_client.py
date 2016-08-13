@@ -40,6 +40,7 @@ from six.moves.urllib_parse import (
 
 
 DEFAULT_PAGE_ITEM_COUNT = 50
+MISSING = object()
 
 
 class MailmanConnectionError(Exception):
@@ -454,7 +455,7 @@ class Client:
             return []
         return [Domain(self._connection, entry['self_link'])
                 for entry in sorted(content['entries'],
-                                    key=itemgetter('url_host'))]
+                                    key=itemgetter('mail_host'))]
 
     @property
     def members(self):
@@ -482,11 +483,14 @@ class Client:
     def get_user_page(self, count=50, page=1):
         return Page(self._connection, 'users', User, count, page)
 
-    def create_domain(self, mail_host, base_url=None,
+    def create_domain(self, mail_host, base_url=MISSING,
                       description=None, owner=None):
+        if base_url is not MISSING:
+            warnings.warn(
+                'The `base_url` parameter in the `create_domain()` method is '
+                'deprecated. It is not used any more and will be removed in '
+                'the future.', DeprecationWarning, stacklevel=2)
         data = dict(mail_host=mail_host)
-        if base_url is not None:
-            data['base_url'] = base_url
         if description is not None:
             data['description'] = description
         if owner is not None:
@@ -498,20 +502,16 @@ class Client:
         response, content = self._connection.call(
             'domains/{0}'.format(mail_host), None, 'DELETE')
 
-    def get_domain(self, mail_host=None, web_host=None):
+    def get_domain(self, mail_host, web_host=MISSING):
         """Get domain by its mail_host or its web_host."""
-        if mail_host is not None:
-            response, content = self._connection.call(
-                'domains/{0}'.format(mail_host))
-            return Domain(self._connection, content['self_link'])
-        elif web_host is not None:
-            for domain in self.domains:
-                # note: `base_url` property will be renamed to `web_host`
-                # in Mailman3Alpha8
-                if domain.base_url == web_host:
-                    return domain
-            else:
-                return None
+        if web_host is not MISSING:
+            warnings.warn(
+                'The `web_host` parameter in the `get_domain()` method is '
+                'deprecated. It is not used any more and will be removed in '
+                'the future.', DeprecationWarning, stacklevel=2)
+        response, content = self._connection.call(
+            'domains/{0}'.format(mail_host))
+        return Domain(self._connection, content['self_link'])
 
     def create_user(self, email, password, display_name=''):
         response, content = self._connection.call(
@@ -546,10 +546,26 @@ class Client:
 
 class Domain(RESTObject):
 
-    _properties = ('base_url', 'description', 'mail_host', 'self_link', 'url_host')
+    _properties = ('description', 'mail_host', 'self_link')
 
     def __repr__(self):
         return '<Domain "{0}">'.format(self.mail_host)
+
+    @property
+    def web_host(self):
+        warnings.warn(
+            'The `Domain.web_host` attribute is deprecated. It is not used '
+            'any more and will be removed in the future.',
+            DeprecationWarning, stacklevel=2)
+        return 'http://{}'.format(self.mail_host)
+
+    @property
+    def base_url(self):
+        warnings.warn(
+            'The `Domain.base_url` attribute is deprecated. It is not used '
+            'any more and will be removed in the future.',
+            DeprecationWarning, stacklevel=2)
+        return 'http://{}'.format(self.mail_host)
 
     @property
     def owners(self):

@@ -1,4 +1,4 @@
-# Copyright (C) 2010-2015 by the Free Software Foundation, Inc.
+# Copyright (C) 2010-2016 by the Free Software Foundation, Inc.
 #
 # This file is part of mailman.client.
 #
@@ -14,18 +14,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailman.client.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Package contents."""
 
-from __future__ import absolute_import, print_function, unicode_literals
+__version__ = '1.0.1'
 
-
-from mailmanclient.constants import __version__
-from mailmanclient._client import Client, MailmanConnectionError
-
-
-__metaclass__ = type
-__all__ = [
-    'Client',
-    'MailmanConnectionError',
-    '__version__',
-    ]
+DEFAULT_PAGE_ITEM_COUNT = 50
+MISSING = object()

@@ -21,7 +21,7 @@ from setuptools import setup, find_packages
 
 
 require_python(0x20600f0)
-__version__ = get_version('src/mailmanclient/__init__.py')
+__version__ = get_version('src/mailmanclient/constants.py')
 
 
 setup(

@@ -25,7 +25,8 @@ import warnings
 from base64 import b64encode
 from collections import Sequence, MutableMapping
 from httplib2 import Http
-from mailmanclient import __version__
+from mailmanclient.constants import (
+    __version__, DEFAULT_PAGE_ITEM_COUNT, MISSING)
 from operator import itemgetter
 from six.moves.urllib_error import HTTPError
 from six.moves.urllib_parse import (
@@ -37,10 +38,6 @@ __all__ = [
     'Client',
     'MailmanConnectionError',
 ]
-
-
-DEFAULT_PAGE_ITEM_COUNT = 50
-MISSING = object()
 
 
 class MailmanConnectionError(Exception):

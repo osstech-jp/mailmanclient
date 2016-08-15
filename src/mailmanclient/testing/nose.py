@@ -17,11 +17,6 @@
 
 """nose2 test infrastructure."""
 
-__all__ = [
-    'NosePlugin',
-    ]
-
-
 import os
 import re
 import errno
@@ -34,12 +29,16 @@ from nose2.events import Plugin
 from .vcr_helpers import get_vcr
 
 
+__all__ = [
+    'NosePlugin',
+    ]
+
+
 DOT = '.'
 FLAGS = doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE | doctest.REPORT_NDIFF
 TOPDIR = os.path.dirname(mailmanclient.__file__)
 
 
-
 class NosePlugin(Plugin):
     configSection = 'mailman'
 
@@ -48,12 +47,14 @@ class NosePlugin(Plugin):
         self.patterns = []
         self.stderr = False
         self.record = False
+
         def set_stderr(ignore):
             self.stderr = True
         self.addArgument(self.patterns, 'P', 'pattern',
                          'Add a test matching pattern')
         self.addFlag(set_stderr, 'E', 'stderr',
                      'Enable stderr logging to sub-runners')
+
         def set_record(ignore):
             self.record = True
         self.addFlag(set_record, 'R', 'rerecord',
@@ -124,8 +125,8 @@ class NosePlugin(Plugin):
         test.shortDescription = lambda: None
         event.extraTests.append(test)
 
-    ## def startTest(self, event):
-    ##     import sys; print('vvvvv', event.test, file=sys.stderr)
+    # def startTest(self, event):
+    #     import sys; print('vvvvv', event.test, file=sys.stderr)
 
-    ## def stopTest(self, event):
-    ##     import sys; print('^^^^^', event.test, file=sys.stderr)
+    # def stopTest(self, event):
+    #     import sys; print('^^^^^', event.test, file=sys.stderr)

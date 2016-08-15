@@ -16,7 +16,7 @@
 # along with mailman.client.  If not, see <http://www.gnu.org/licenses/>.
 
 from setup_helpers import (
-    description, find_doctests, get_version, long_description, require_python)
+    description, get_version, long_description, require_python)
 from setuptools import setup, find_packages
 
 
@@ -28,7 +28,7 @@ setup(
     name='mailmanclient',
     version=__version__,
     packages=find_packages('src'),
-    package_dir = {'': 'src'},
+    package_dir={'': 'src'},
     include_package_data=True,
     maintainer='Barry Warsaw',
     maintainer_email='barry@list.org',

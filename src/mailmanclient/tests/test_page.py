@@ -18,18 +18,17 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-__metaclass__ = type
-__all__ = [
-    'TestPage',
-    ]
-
-
 import unittest
 
 from mailmanclient._client import Page, DEFAULT_PAGE_ITEM_COUNT
 from mock import Mock
-from six.moves.urllib_error import HTTPError
 from six.moves.urllib_parse import urlsplit, parse_qs
+
+
+__metaclass__ = type
+__all__ = [
+    'TestPage',
+    ]
 
 
 class TestPage(unittest.TestCase):

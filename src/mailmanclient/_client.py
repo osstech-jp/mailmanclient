@@ -18,13 +18,6 @@
 
 from __future__ import absolute_import, unicode_literals
 
-__metaclass__ = type
-__all__ = [
-    'Client',
-    'MailmanConnectionError',
-]
-
-
 import six
 import json
 import warnings
@@ -37,6 +30,13 @@ from operator import itemgetter
 from six.moves.urllib_error import HTTPError
 from six.moves.urllib_parse import (
     urlencode, urljoin, urlsplit, urlunsplit, parse_qs)
+
+
+__metaclass__ = type
+__all__ = [
+    'Client',
+    'MailmanConnectionError',
+]
 
 
 DEFAULT_PAGE_ITEM_COUNT = 50
@@ -133,12 +133,13 @@ class RESTBase:
       for API elements that behave like an object, with REST data accessed
       through attributes. If this value is None, the REST data is used to
       list available properties.
-    :cvar _writable_properties: list of properties that can be written to using a
-      `PATCH` request. If this value is `None`, all properties are writable.
+    :cvar _writable_properties: list of properties that can be written to using
+        a `PATCH` request. If this value is `None`, all properties are
+        writable.
     :cvar _read_only_properties: list of properties that cannot be written to
       (defaults to `self_link` only).
-    :cvar _autosave: automatically send a `PATCH` request to the API when a value
-      is changed. Otherwise, the `save()` method must be called.
+    :cvar _autosave: automatically send a `PATCH` request to the API when a
+        value is changed. Otherwise, the `save()` method must be called.
     """
 
     _properties = None
@@ -169,7 +170,7 @@ class RESTBase:
         if self._rest_data is None:
             response, content = self._connection.call(self._url)
             if isinstance(content, dict) and 'http_etag' in content:
-                del content['http_etag'] # We don't care about etags.
+                del content['http_etag']  # We don't care about etags.
             self._rest_data = content
         return self._rest_data
 
@@ -185,14 +186,14 @@ class RESTBase:
 
     def _set(self, key, value):
         if (key in self._read_only_properties or (
-            self._writable_properties is not None
-            and key not in self._writable_properties)):
+                self._writable_properties is not None
+                and key not in self._writable_properties)):
             raise ValueError('value is read-only')
         # Don't check that the key is in _properties, the accepted values for
         # write may be different from the returned values (eg: User.password
         # and User.cleartext_password).
         if key in self.rest_data and self.rest_data[key] == value:
-            return # Nothing to do
+            return  # Nothing to do
         self._changed_rest_data[key] = value
         if self._autosave:
             self.save()
@@ -217,7 +218,7 @@ class RESTObject(RESTBase):
             # Transform the KeyError into the more appropriate AttributeError
             raise AttributeError(
                 "'{0}' object has no attribute '{1}'".format(
-                self.__class__.__name__, name))
+                    self.__class__.__name__, name))
 
     def __setattr__(self, name, value):
         # RESTObject must list REST-specific properties or we won't be able to
@@ -280,7 +281,7 @@ class RESTList(RESTBase, Sequence):
     returned member of the list.
     """
 
-    _factory = lambda x: x
+    _factory = lambda x: x  # flake8: noqa
 
     @property
     def rest_data(self):
@@ -683,7 +684,8 @@ class MailingList(RESTObject):
     @property
     def settings(self):
         if self._settings is None:
-            self._settings = Settings(self._connection,
+            self._settings = Settings(
+                self._connection,
                 'lists/{0}/config'.format(self.fqdn_listname))
         return self._settings
 
@@ -800,9 +802,10 @@ class MailingList(RESTObject):
 
     def manage_request(self, token, action):
         """Alias for moderate_request, kept for compatibility"""
-        warnings.warn('The `manage_request()` method has been replaced by '
-                      '`moderate_request()` and will be removed in the future.',
-                      DeprecationWarning, stacklevel=2)
+        warnings.warn(
+            'The `manage_request()` method has been replaced by '
+            '`moderate_request()` and will be removed in the future.',
+            DeprecationWarning, stacklevel=2)
         return self.moderate_request(token, action)
 
     def accept_request(self, request_id):
@@ -859,11 +862,11 @@ class MailingList(RESTObject):
             subscriber=address,
             display_name=display_name,
             )
-        if pre_verified == True:
+        if pre_verified:
             data['pre_verified'] = True
-        if pre_confirmed == True:
+        if pre_confirmed:
             data['pre_confirmed'] = True
-        if pre_approved == True:
+        if pre_approved:
             data['pre_approved'] = True
         response, content = self._connection.call('members', data)
         # If a member is not immediately subscribed (i.e. verificatoin,
@@ -1074,8 +1077,10 @@ class Member(RESTObject, PreferencesMixin):
 
 class User(RESTObject, PreferencesMixin):
 
-    _properties = ('created_on', 'display_name', 'is_server_owner', 'password', 'self_link', 'user_id')
-    _writable_properties = ('cleartext_password', 'display_name', 'is_server_owner')
+    _properties = ('created_on', 'display_name', 'is_server_owner',
+                   'password', 'self_link', 'user_id')
+    _writable_properties = ('cleartext_password', 'display_name',
+                            'is_server_owner')
 
     def __init__(self, connection, url, data=None):
         super(User, self).__init__(connection, url, data)

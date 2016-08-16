@@ -1204,9 +1204,8 @@ class Address(RESTObject, PreferencesMixin):
 
 class HeldMessage(RESTObject):
 
-    _properties = ('hold_date', 'message_id', 'moderation_reasons', 'msg',
-                   'reason', 'request_id', 'self_link', 'sender', 'subject',
-                   'type')
+    _properties = ('hold_date', 'message_id', 'msg', 'reason', 'request_id',
+                   'self_link', 'sender', 'subject', 'type')
 
     def __repr__(self):
         return '<HeldMessage "{0}" by {1}>'.format(

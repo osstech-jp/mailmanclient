@@ -649,6 +649,30 @@ permanent.
     by_user
 
 
+Pipelines and Chains
+====================
+
+The available pipelines and chains can also be retrieved:
+
+    >>> pipelines = client.pipelines['pipelines']
+    >>> for pipeline in pipelines:
+    ...     print(pipeline)
+    default-owner-pipeline
+    default-posting-pipeline
+    virgin
+    >>> chains = client.chains['chains']
+    >>> for chain in chains:
+    ...     print(chain)
+    accept
+    default-owner-chain
+    default-posting-chain
+    discard
+    header-match
+    hold
+    moderation
+    reject
+
+
 Owners and Moderators
 =====================
 

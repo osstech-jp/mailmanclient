@@ -45,7 +45,6 @@ You can also install it via ``pip``::
 
 See the GitLab project page for access to the development branch, issues, etc.
 
-
 Acknowledgements
 ================
 
@@ -57,6 +56,7 @@ Many thanks to Florian Fuchs for his contribution of an initial REST client.
    :caption: Table of Contents
 
    using.rst
+   apiref.rst
    testing.rst
 
 

@@ -35,7 +35,7 @@ class TestPage(unittest.TestCase):
 
     def test_url_simple(self):
         connection = Mock()
-        connection.call.return_value = (None, {})
+        connection.call.return_value = (None, {'start': 0, 'total_size': 0})
         page = Page(connection, '/some-path', None)
         built_qs = parse_qs(urlsplit(page._build_url()).query)
         self.assertEqual(built_qs, dict(
@@ -44,7 +44,7 @@ class TestPage(unittest.TestCase):
 
     def test_url_with_qs(self):
         connection = Mock()
-        connection.call.return_value = (None, {})
+        connection.call.return_value = (None, {'start': 0, 'total_size': 0})
         page = Page(connection, '/some-path?with=a&query=string', None)
         built_qs = parse_qs(urlsplit(page._build_url()).query)
         self.assertEqual(built_qs, {

@@ -363,12 +363,11 @@ class Page:
     def _create_page(self):
         self._entries = []
         response, content = self._connection.call(self._build_url())
-        if 'entries' in content:
-            self.total_size = content["total_size"]
-            for entry in content['entries']:
-                instance = self._model(
-                    self._connection, entry['self_link'], entry)
-                self._entries.append(instance)
+        self.total_size = content["total_size"]
+        for entry in content.get('entries', []):
+            instance = self._model(
+                self._connection, entry['self_link'], entry)
+            self._entries.append(instance)
 
     @property
     def nr(self):

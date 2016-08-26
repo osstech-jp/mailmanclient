@@ -1,6 +1,6 @@
-===================
-Mailman REST Client
-===================
+=============
+Example Usage
+=============
 
 This is the official Python bindings for the GNU Mailman REST API.  In order
 to talk to Mailman, the engine's REST server must be running.  You begin by

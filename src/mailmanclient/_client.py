@@ -426,6 +426,16 @@ class Client:
         return Preferences(self._connection, 'system/preferences')
 
     @property
+    def pipelines(self):
+        response, content = self._connection.call('system/pipelines')
+        return content
+
+    @property
+    def chains(self):
+        response, content = self._connection.call('system/chains')
+        return content
+
+    @property
     def queues(self):
         response, content = self._connection.call('queues')
         queues = {}

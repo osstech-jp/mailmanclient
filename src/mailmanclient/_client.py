@@ -249,7 +249,10 @@ class RESTDict(RESTBase, MutableMapping):
         raise NotImplementedError("REST dictionnary keys can't be deleted.")
 
     def __iter__(self):
-        return self.rest_data.__iter__()
+        for key in self.rest_data:
+            if self._properties is not None and key not in self._properties:
+                continue
+            yield key
 
     def __len__(self):
         return len(self.rest_data)
@@ -258,7 +261,7 @@ class RESTDict(RESTBase, MutableMapping):
         return self.rest_data.get(key, default)
 
     def keys(self):
-        return self.rest_data.keys()
+        return list(self)
 
     def update(self, other):
         # Optimize the update to call save() only once

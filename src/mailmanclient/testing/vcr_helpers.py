@@ -17,16 +17,16 @@
 
 """Helpers for VCR"""
 
-__all__ = [
-    'get_vcr',
-    ]
-
-
 import vcr
 
 from functools import update_wrapper
 from six import binary_type, text_type
 from six.moves.urllib.parse import urlparse, urlunparse, parse_qsl, urlencode
+
+
+__all__ = [
+    'get_vcr',
+    ]
 
 
 def filter_response_headers(response):
@@ -35,6 +35,7 @@ def filter_response_headers(response):
         if header in response['headers']:
             del response['headers'][header]
     return response
+
 
 def reorder_request_params(request):
     def reorder_params(params):
@@ -72,7 +73,6 @@ def get_vcr(**kwargs):
         )
 
 
-
 class vcr_testcase:
     """
     Decorator for TestCases that use VCR.
@@ -88,15 +88,18 @@ class vcr_testcase:
     def decorate_class(self, testcase):
         """Create a subclass that will add setUp instructions."""
         vcr_instance = self.vcr
+
         class VCRTestCase(testcase):
             vcr = vcr_instance
+
             def setUp(self):
                 cm = self.vcr.use_cassette('.'.join([
-                    #testcase.__module__.rpartition('.')[2],
+                    # testcase.__module__.rpartition('.')[2],
                     testcase.__name__, self._testMethodName, 'yaml']))
                 self.cassette = cm.__enter__()
                 self.addCleanup(cm.__exit__, None, None, None)
                 super(VCRTestCase, self).setUp()
 
-        return update_wrapper(VCRTestCase, testcase,
+        return update_wrapper(
+            VCRTestCase, testcase,
             assigned=('__module__', '__name__'), updated=[])

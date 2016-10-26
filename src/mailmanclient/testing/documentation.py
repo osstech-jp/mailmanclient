@@ -23,6 +23,9 @@ distributions.  doctest discovery currently requires file system traversal.
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+from inspect import isfunction, ismethod
+
+
 __metaclass__ = type
 __all__ = [
     'setup',
@@ -30,10 +33,6 @@ __all__ = [
     ]
 
 
-from inspect import isfunction, ismethod
-
-
-
 def stop():
     """Call into pdb.set_trace()"""
     # Do the import here so that you get the wacky special hacked pdb instead
@@ -57,7 +56,6 @@ def dump(results):
             print('{0}: {1}'.format(key, results[key]))
 
 
-
 def setup(testobj):
     """Test setup."""
     # Make sure future statements in our doctests are the same as everywhere
@@ -75,7 +73,6 @@ def setup(testobj):
     testobj.globs['cleanups'] = []
 
 
-
 def teardown(testobj):
     for cleanup in testobj.globs['cleanups']:
         if isfunction(cleanup) or ismethod(cleanup):

@@ -18,6 +18,11 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+import os
+import re
+import sys
+import codecs
+
 
 __metaclass__ = type
 __all__ = [
@@ -29,17 +34,10 @@ __all__ = [
     ]
 
 
-import os
-import re
-import sys
-import codecs
-
-
 DEFAULT_VERSION_RE = re.compile(r'(?P<version>\d+\.\d(?:\.\d+)?)')
 NL = '\n'
 
 
-
 def require_python(minimum):
     """Require at least a minimum Python version.
 
@@ -69,7 +67,6 @@ def require_python(minimum):
         sys.exit(1)
 
 
-
 def get_version(filename, pattern=None):
     """Extract the __version__ from a file without importing it.
 
@@ -103,7 +100,6 @@ def get_version(filename, pattern=None):
     raise AssertionError('No __version__ assignment found')
 
 
-
 def find_doctests(start='.', extension='.txt'):
     """Find separate-file doctests in the package.
 
@@ -126,7 +122,6 @@ def find_doctests(start='.', extension='.txt'):
     return doctests
 
 
-
 def long_description(*filenames):
     """Provide a long description."""
     res = []

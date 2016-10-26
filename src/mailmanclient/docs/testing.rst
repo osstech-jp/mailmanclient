@@ -1,6 +1,10 @@
-======================
-Running the test suite
-======================
+========================
+Developing MailmanClient
+========================
+
+
+Running Tests
+=============
 
 The test suite is run with the `tox`_ tool, which allows it to be run against
 multiple versions of Python.  There are two modes to the test suite:

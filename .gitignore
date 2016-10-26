@@ -5,3 +5,4 @@ mailman.client.egg-info
 __pycache__
 *.egg-info
 *.pyc
+_build/

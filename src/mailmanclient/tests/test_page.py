@@ -18,25 +18,24 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+import unittest
+
+from mailmanclient._client import Page, DEFAULT_PAGE_ITEM_COUNT
+from mock import Mock
+from six.moves.urllib_parse import urlsplit, parse_qs
+
+
 __metaclass__ = type
 __all__ = [
     'TestPage',
     ]
 
 
-import unittest
-
-from mailmanclient._client import Page, DEFAULT_PAGE_ITEM_COUNT
-from mock import Mock
-from six.moves.urllib_error import HTTPError
-from six.moves.urllib_parse import urlsplit, parse_qs
-
-
 class TestPage(unittest.TestCase):
 
     def test_url_simple(self):
         connection = Mock()
-        connection.call.return_value = (None, {})
+        connection.call.return_value = (None, {'start': 0, 'total_size': 0})
         page = Page(connection, '/some-path', None)
         built_qs = parse_qs(urlsplit(page._build_url()).query)
         self.assertEqual(built_qs, dict(
@@ -45,7 +44,7 @@ class TestPage(unittest.TestCase):
 
     def test_url_with_qs(self):
         connection = Mock()
-        connection.call.return_value = (None, {})
+        connection.call.return_value = (None, {'start': 0, 'total_size': 0})
         page = Page(connection, '/some-path?with=a&query=string', None)
         built_qs = parse_qs(urlsplit(page._build_url()).query)
         self.assertEqual(built_qs, {

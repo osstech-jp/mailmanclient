@@ -11,3 +11,7 @@ python3.4:
 python3.5:
   script:
   - tox -e py35
+
+lint:
+  script:
+  - tox -e lint

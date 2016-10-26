@@ -18,13 +18,6 @@
 
 from __future__ import absolute_import, unicode_literals
 
-__metaclass__ = type
-__all__ = [
-    'Client',
-    'MailmanConnectionError',
-]
-
-
 import six
 import json
 import warnings
@@ -32,14 +25,19 @@ import warnings
 from base64 import b64encode
 from collections import Sequence, MutableMapping
 from httplib2 import Http
-from mailmanclient import __version__
+from mailmanclient.constants import (
+    __version__, DEFAULT_PAGE_ITEM_COUNT, MISSING)
 from operator import itemgetter
 from six.moves.urllib_error import HTTPError
 from six.moves.urllib_parse import (
     urlencode, urljoin, urlsplit, urlunsplit, parse_qs)
 
 
-DEFAULT_PAGE_ITEM_COUNT = 50
+__metaclass__ = type
+__all__ = [
+    'Client',
+    'MailmanConnectionError',
+]
 
 
 class MailmanConnectionError(Exception):
@@ -132,12 +130,13 @@ class RESTBase:
       for API elements that behave like an object, with REST data accessed
       through attributes. If this value is None, the REST data is used to
       list available properties.
-    :cvar _writable_properties: list of properties that can be written to using a
-      `PATCH` request. If this value is `None`, all properties are writable.
+    :cvar _writable_properties: list of properties that can be written to using
+        a `PATCH` request. If this value is `None`, all properties are
+        writable.
     :cvar _read_only_properties: list of properties that cannot be written to
       (defaults to `self_link` only).
-    :cvar _autosave: automatically send a `PATCH` request to the API when a value
-      is changed. Otherwise, the `save()` method must be called.
+    :cvar _autosave: automatically send a `PATCH` request to the API when a
+        value is changed. Otherwise, the `save()` method must be called.
     """
 
     _properties = None
@@ -168,7 +167,7 @@ class RESTBase:
         if self._rest_data is None:
             response, content = self._connection.call(self._url)
             if isinstance(content, dict) and 'http_etag' in content:
-                del content['http_etag'] # We don't care about etags.
+                del content['http_etag']  # We don't care about etags.
             self._rest_data = content
         return self._rest_data
 
@@ -184,14 +183,14 @@ class RESTBase:
 
     def _set(self, key, value):
         if (key in self._read_only_properties or (
-            self._writable_properties is not None
-            and key not in self._writable_properties)):
+                self._writable_properties is not None
+                and key not in self._writable_properties)):
             raise ValueError('value is read-only')
         # Don't check that the key is in _properties, the accepted values for
         # write may be different from the returned values (eg: User.password
         # and User.cleartext_password).
         if key in self.rest_data and self.rest_data[key] == value:
-            return # Nothing to do
+            return  # Nothing to do
         self._changed_rest_data[key] = value
         if self._autosave:
             self.save()
@@ -216,7 +215,7 @@ class RESTObject(RESTBase):
             # Transform the KeyError into the more appropriate AttributeError
             raise AttributeError(
                 "'{0}' object has no attribute '{1}'".format(
-                self.__class__.__name__, name))
+                    self.__class__.__name__, name))
 
     def __setattr__(self, name, value):
         # RESTObject must list REST-specific properties or we won't be able to
@@ -225,6 +224,10 @@ class RESTObject(RESTBase):
         if name not in self._properties:
             return super(RESTObject, self).__setattr__(name, value)
         return self._set(name, value)
+
+    def delete(self):
+        self._connection.call(self._url, method='DELETE')
+        self._reset_cache()
 
 
 class RESTDict(RESTBase, MutableMapping):
@@ -275,7 +278,7 @@ class RESTList(RESTBase, Sequence):
     returned member of the list.
     """
 
-    _factory = lambda x: x
+    _factory = lambda x: x  # flake8: noqa
 
     @property
     def rest_data(self):
@@ -296,12 +299,20 @@ class RESTList(RESTBase, Sequence):
     def __getitem__(self, key):
         return self._factory(self.rest_data[key])
 
+    def __delitem__(self, key):
+        self[key].delete()
+        self._reset_cache()
+
     def __len__(self):
         return len(self.rest_data)
 
     def __iter__(self):
         for entry in self.rest_data:
             yield self._factory(entry)
+
+    def clear(self):
+        self._connection.call(self._url, method='DELETE')
+        self._reset_cache()
 
 
 class PreferencesMixin:
@@ -352,12 +363,11 @@ class Page:
     def _create_page(self):
         self._entries = []
         response, content = self._connection.call(self._build_url())
-        if 'entries' in content:
-            self.total_size = content["total_size"]
-            for entry in content['entries']:
-                instance = self._model(
-                    self._connection, entry['self_link'], entry)
-                self._entries.append(instance)
+        self.total_size = content["total_size"]
+        for entry in content.get('entries', []):
+            instance = self._model(
+                self._connection, entry['self_link'], entry)
+            self._entries.append(instance)
 
     @property
     def nr(self):
@@ -422,6 +432,15 @@ class Client:
                 self._connection, 'system/configuration/{}'.format(section),
                 section)
                 for section in content['sections']}
+    @property
+    def pipelines(self):
+        response, content = self._connection.call('system/pipelines')
+        return content
+
+    @property
+    def chains(self):
+        response, content = self._connection.call('system/chains')
+        return content
 
     @property
     def queues(self):
@@ -450,7 +469,7 @@ class Client:
             return []
         return [Domain(self._connection, entry['self_link'])
                 for entry in sorted(content['entries'],
-                                    key=itemgetter('url_host'))]
+                                    key=itemgetter('mail_host'))]
 
     @property
     def members(self):
@@ -478,11 +497,14 @@ class Client:
     def get_user_page(self, count=50, page=1):
         return Page(self._connection, 'users', User, count, page)
 
-    def create_domain(self, mail_host, base_url=None,
+    def create_domain(self, mail_host, base_url=MISSING,
                       description=None, owner=None):
+        if base_url is not MISSING:
+            warnings.warn(
+                'The `base_url` parameter in the `create_domain()` method is '
+                'deprecated. It is not used any more and will be removed in '
+                'the future.', DeprecationWarning, stacklevel=2)
         data = dict(mail_host=mail_host)
-        if base_url is not None:
-            data['base_url'] = base_url
         if description is not None:
             data['description'] = description
         if owner is not None:
@@ -494,20 +516,16 @@ class Client:
         response, content = self._connection.call(
             'domains/{0}'.format(mail_host), None, 'DELETE')
 
-    def get_domain(self, mail_host=None, web_host=None):
+    def get_domain(self, mail_host, web_host=MISSING):
         """Get domain by its mail_host or its web_host."""
-        if mail_host is not None:
-            response, content = self._connection.call(
-                'domains/{0}'.format(mail_host))
-            return Domain(self._connection, content['self_link'])
-        elif web_host is not None:
-            for domain in self.domains:
-                # note: `base_url` property will be renamed to `web_host`
-                # in Mailman3Alpha8
-                if domain.base_url == web_host:
-                    return domain
-            else:
-                return None
+        if web_host is not MISSING:
+            warnings.warn(
+                'The `web_host` parameter in the `get_domain()` method is '
+                'deprecated. It is not used any more and will be removed in '
+                'the future.', DeprecationWarning, stacklevel=2)
+        response, content = self._connection.call(
+            'domains/{0}'.format(mail_host))
+        return Domain(self._connection, content['self_link'])
 
     def create_user(self, email, password, display_name=''):
         response, content = self._connection.call(
@@ -542,10 +560,26 @@ class Client:
 
 class Domain(RESTObject):
 
-    _properties = ('base_url', 'description', 'mail_host', 'self_link', 'url_host')
+    _properties = ('description', 'mail_host', 'self_link')
 
     def __repr__(self):
         return '<Domain "{0}">'.format(self.mail_host)
+
+    @property
+    def web_host(self):
+        warnings.warn(
+            'The `Domain.web_host` attribute is deprecated. It is not used '
+            'any more and will be removed in the future.',
+            DeprecationWarning, stacklevel=2)
+        return 'http://{}'.format(self.mail_host)
+
+    @property
+    def base_url(self):
+        warnings.warn(
+            'The `Domain.base_url` attribute is deprecated. It is not used '
+            'any more and will be removed in the future.',
+            DeprecationWarning, stacklevel=2)
+        return 'http://{}'.format(self.mail_host)
 
     @property
     def owners(self):
@@ -586,9 +620,6 @@ class Domain(RESTObject):
         url = self._url + '/owners'
         response, content = self._connection.call(
             url, {'owner': owner})
-
-    def delete(self):
-        self._connection.call(self._url, None, 'DELETE')
 
 
 class MailingList(RESTObject):
@@ -666,7 +697,8 @@ class MailingList(RESTObject):
     @property
     def settings(self):
         if self._settings is None:
-            self._settings = Settings(self._connection,
+            self._settings = Settings(
+                self._connection,
                 'lists/{0}/config'.format(self.fqdn_listname))
         return self._settings
 
@@ -783,9 +815,10 @@ class MailingList(RESTObject):
 
     def manage_request(self, token, action):
         """Alias for moderate_request, kept for compatibility"""
-        warnings.warn('The `manage_request()` method has been replaced by '
-                      '`moderate_request()` and will be removed in the future.',
-                      DeprecationWarning, stacklevel=2)
+        warnings.warn(
+            'The `manage_request()` method has been replaced by '
+            '`moderate_request()` and will be removed in the future.',
+            DeprecationWarning, stacklevel=2)
         return self.moderate_request(token, action)
 
     def accept_request(self, request_id):
@@ -842,11 +875,11 @@ class MailingList(RESTObject):
             subscriber=address,
             display_name=display_name,
             )
-        if pre_verified == True:
+        if pre_verified:
             data['pre_verified'] = True
-        if pre_confirmed == True:
+        if pre_confirmed:
             data['pre_confirmed'] = True
-        if pre_approved == True:
+        if pre_approved:
             data['pre_approved'] = True
         response, content = self._connection.call('members', data)
         # If a member is not immediately subscribed (i.e. verificatoin,
@@ -872,10 +905,6 @@ class MailingList(RESTObject):
             # The member link does not exist, i.e. he is not a member
             raise ValueError('%s is not a member address of %s' %
                              (email, self.fqdn_listname))
-
-    def delete(self):
-        response, content = self._connection.call(
-            'lists/{0}'.format(self.fqdn_listname), None, 'DELETE')
 
     @property
     def bans(self):
@@ -953,21 +982,24 @@ class Bans(RESTList):
             else:
                 return True
 
-    def __delitem__(self, key):
-        self[key].delete()
-        self._reset_cache()
-
     def add(self, email):
         response, content = self._connection.call(self._url, dict(email=email))
         self._reset_cache()
         return BannedAddress(self._connection, response['location'])
 
-    def remove(self, email):
+    def find_by_email(self, email):
         for ban in self:
             if ban.email == email:
-                ban.delete()
-                return
-        raise ValueError('The address {} is not banned'.format(email))
+                return ban
+        return None
+
+    def remove(self, email):
+        ban = self.find_by_email(email)
+        if ban is not None:
+            ban.delete()
+            self._reset_cache()
+        else:
+            raise ValueError('The address {} is not banned'.format(email))
 
 
 class BannedAddress(RESTObject):
@@ -982,10 +1014,6 @@ class BannedAddress(RESTObject):
     def mailinglist(self):
         return MailingList(
             self._connection, 'lists/{0}'.format(self.list_id))
-
-    def delete(self):
-        self._connection.call(self._url, method='DELETE')
-        self._reset_cache()
 
 
 class HeaderMatches(RESTList):
@@ -1006,10 +1034,6 @@ class HeaderMatches(RESTList):
     def __repr__(self):
         return '<HeaderMatches for "{0}">'.format(self._mlist.list_id)
 
-    def __delitem__(self, key):
-        self[key].delete()
-        self._reset_cache()
-
     def add(self, header, pattern, action=None):
         """
         :param header: The header to consider.
@@ -1027,10 +1051,6 @@ class HeaderMatches(RESTList):
         self._reset_cache()
         return HeaderMatch(self._connection, response['location'])
 
-    def clear(self):
-        self._connection.call(self._url, method='DELETE')
-        self._reset_cache()
-
 
 class HeaderMatch(RESTObject):
 
@@ -1039,10 +1059,6 @@ class HeaderMatch(RESTObject):
 
     def __repr__(self):
         return '<HeaderMatch on "{0}">'.format(self.header)
-
-    def delete(self):
-        self._connection.call(self._url, method='DELETE')
-        self._reset_cache()
 
 
 class Member(RESTObject, PreferencesMixin):
@@ -1067,16 +1083,17 @@ class Member(RESTObject, PreferencesMixin):
 
     def unsubscribe(self):
         """Unsubscribe the member from a mailing list.
-
-        :param self_link: The REST resource to delete
         """
+        # TODO: call .delete() instead?
         self._connection.call(self.self_link, method='DELETE')
 
 
 class User(RESTObject, PreferencesMixin):
 
-    _properties = ('created_on', 'display_name', 'is_server_owner', 'password', 'self_link', 'user_id')
-    _writable_properties = ('cleartext_password', 'display_name', 'is_server_owner')
+    _properties = ('created_on', 'display_name', 'is_server_owner',
+                   'password', 'self_link', 'user_id')
+    _writable_properties = ('cleartext_password', 'display_name',
+                            'is_server_owner')
 
     def __init__(self, connection, url, data=None):
         super(User, self).__init__(connection, url, data)
@@ -1125,19 +1142,28 @@ class User(RESTObject, PreferencesMixin):
             self._subscription_list_ids = list_ids
         return self._subscription_list_ids
 
-    def add_address(self, email):
-        # Adds another email adress to the user record and returns an
-        # Address object.
+    def add_address(self, email, absorb_existing=False):
+        """
+        Adds another email adress to the user record and returns an
+        _Address object.
+
+        :param email: The address to add
+        :type  email: str.
+        :param absorb_existing: set this to True if you want to add the address
+            even if it already exists. It will import the existing user into
+            the current one, not overwriting any previously set value.
+        :type  absorb_existing: bool.
+        """
         url = '{0}/addresses'.format(self._url)
-        response, content = self._connection.call(url, {'email': email})
+        data = {'email': email}
+        if absorb_existing:
+            data['absorb_existing'] = 1
+        response, content = self._connection.call(url, data)
         address = {
             'email': email,
             'self_link': response['location'],
         }
         return Address(self._connection, address['self_link'], address)
-
-    def delete(self):
-        response, content = self._connection.call(self._url, method='DELETE')
 
 
 class Addresses(RESTList):
@@ -1146,6 +1172,20 @@ class Addresses(RESTList):
         super(Addresses, self).__init__(connection, url, data)
         self._factory = lambda data: Address(
             self._connection, data['self_link'], data)
+
+    def find_by_email(self, email):
+        for address in self:
+            if address.email == email:
+                return address
+        return None
+
+    def remove(self, email):
+        address = self.find_by_email(email)
+        if address is not None:
+            address.delete()
+            self._reset_cache()
+        else:
+            raise ValueError('The address {} does not exist'.format(email))
 
 
 class Address(RESTObject, PreferencesMixin):
@@ -1163,6 +1203,10 @@ class Address(RESTObject, PreferencesMixin):
         else:
             return None
 
+    @property
+    def verified(self):
+        return self.verified_on is not None
+
     def verify(self):
         self._connection.call(
             'addresses/{0}/verify'.format(self.email), method='POST')
@@ -1176,9 +1220,8 @@ class Address(RESTObject, PreferencesMixin):
 
 class HeldMessage(RESTObject):
 
-    _properties = ('hold_date', 'message_id', 'moderation_reasons', 'msg',
-                   'reason', 'request_id', 'self_link', 'sender', 'subject',
-                   'type')
+    _properties = ('hold_date', 'message_id', 'msg', 'reason', 'request_id',
+                   'self_link', 'sender', 'subject', 'type')
 
     def __repr__(self):
         return '<HeldMessage "{0}" by {1}>'.format(

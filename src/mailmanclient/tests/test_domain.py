@@ -18,16 +18,16 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-__metaclass__ = type
-__all__ = [
-    'TestDomains',
-    ]
-
-
 import unittest
 
 from mailmanclient import Client
 from six.moves.urllib_error import HTTPError
+
+
+__metaclass__ = type
+__all__ = [
+    'TestDomains',
+    ]
 
 
 class TestDomains(unittest.TestCase):

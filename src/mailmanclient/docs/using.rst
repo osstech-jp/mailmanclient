@@ -578,7 +578,7 @@ for the settings is returned which behaves much like a dictionary.
 
     >>> settings = test_one.settings
     >>> len(settings)
-    51
+    52
 
     >>> for attr in sorted(settings):
     ...     print(attr + ': ' + str(settings[attr]))
@@ -921,30 +921,54 @@ You can use the `add` method on the ban list to ban an email address::
     anna@example.com
     >>> 'anna@example.com' in client.bans
     True
-    >>> list(client.bans)
-    [anna@example.com]
+    >>> client.bans.add('bill@example.com')
+    bill@example.com
+    >>> print(list(client.bans))
+    [anna@example.com, bill@example.com]
 
-You can use the `delete()` method on a banned address to unban it::
+The list of banned addresses can be paginated using the ``get_bans_page()``
+method::
+
+    >>> print(list(client.get_bans_page(count=1, page=1)))
+    [anna@example.com]
+    >>> print(list(client.get_bans_page(count=1, page=2)))
+    [bill@example.com]
+
+You can use the ``delete()`` method on a banned address to unban it, or the
+``remove()`` method on the ban list::
 
     >>> banned_anna.delete()
     >>> 'anna@example.com' in client.bans
     False
-    >>> list(client.bans)
+    >>> print(list(client.bans))
+    [bill@example.com]
+    >>> client.bans.remove('bill@example.com')
+    >>> 'bill@example.com' in client.bans
+    False
+    >>> print(list(client.bans))
     []
+
 
 The mailing-list-specific ban lists work in the same way::
 
-    >>> list(test_one.bans)
+    >>> print(list(test_one.bans))
     []
     >>> banned_anna = test_one.bans.add('anna@example.com')
     >>> 'anna@example.com' in test_one.bans
     True
-    >>> list(test_one.bans)
+    >>> test_one.bans.add('bill@example.com')
+    bill@example.com
+    >>> print(list(test_one.bans))
+    [anna@example.com, bill@example.com]
+    >>> print(list(test_one.get_bans_page(count=1, page=1)))
     [anna@example.com]
+    >>> print(list(test_one.get_bans_page(count=1, page=2)))
+    [bill@example.com]
     >>> banned_anna.delete()
     >>> 'anna@example.com' in test_one.bans
     False
-    >>> list(test_one.bans)
+    >>> test_one.bans.remove('bill@example.com')
+    >>> print(list(test_one.bans))
     []
 
 

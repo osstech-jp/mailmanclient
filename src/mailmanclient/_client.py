@@ -551,7 +551,10 @@ class Client:
 
     @property
     def bans(self):
-        return Bans(self._connection, 'bans', None)
+        return Bans(self._connection, 'bans', mlist=None)
+
+    def get_bans_page(self, count=50, page=1):
+        return Page(self._connection, 'bans', BannedAddress, count, page)
 
 
 class Domain(RESTObject):
@@ -905,7 +908,11 @@ class MailingList(RESTObject):
     @property
     def bans(self):
         url = 'lists/{0}/bans'.format(self.list_id)
-        return Bans(self._connection, url, self)
+        return Bans(self._connection, url, mlist=self)
+
+    def get_bans_page(self, count=50, page=1):
+        url = 'lists/{0}/bans'.format(self.list_id)
+        return Page(self._connection, url, BannedAddress, count, page)
 
     @property
     def header_matches(self):
@@ -942,13 +949,13 @@ class Bans(RESTList):
     The list of banned addresses from a mailing-list or from the whole site.
     """
 
-    def __init__(self, connection, url, mlist):
+    def __init__(self, connection, url, data=None, mlist=None):
         """
         :param mlist: The corresponding list object, or None if it is a global
             ban list.
         :type mlist: MailingList or None.
         """
-        super(Bans, self).__init__(connection, url)
+        super(Bans, self).__init__(connection, url, data)
         self._mlist = mlist
         self._factory = lambda data: BannedAddress(
             self._connection, data['self_link'], data)

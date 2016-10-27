@@ -449,14 +449,23 @@ class Client:
 
     @property
     def lists(self):
-        response, content = self._connection.call('lists')
+        return self.get_lists()
+
+    def get_lists(self, advertised=None):
+        url = 'lists'
+        if advertised:
+            url += '?advertised=true'
+        response, content = self._connection.call(url)
         if 'entries' not in content:
             return []
         return [MailingList(self._connection, entry['self_link'], entry)
                 for entry in content['entries']]
 
-    def get_list_page(self, count=50, page=1):
-        return Page(self._connection, 'lists', MailingList, count, page)
+    def get_list_page(self, count=50, page=1, advertised=None):
+        url = 'lists'
+        if advertised:
+            url += '?advertised=true'
+        return Page(self._connection, url, MailingList, count, page)
 
     @property
     def domains(self):
@@ -591,13 +600,23 @@ class Domain(RESTObject):
 
     @property
     def lists(self):
-        response, content = self._connection.call(
-            'domains/{0}/lists'.format(self.mail_host))
+        return self.get_lists()
+
+    def get_lists(self, advertised=None):
+        url = 'domains/{0}/lists'.format(self.mail_host)
+        if advertised:
+            url += '?advertised=true'
+        response, content = self._connection.call(url)
         if 'entries' not in content:
             return []
         return [MailingList(self._connection, entry['self_link'], entry)
-                for entry in sorted(content['entries'],
-                                    key=itemgetter('fqdn_listname'))]
+                for entry in content['entries']]
+
+    def get_list_page(self, count=50, page=1, advertised=None):
+        url = 'domains/{0}/lists'.format(self.mail_host)
+        if advertised:
+            url += '?advertised=true'
+        return Page(self._connection, url, MailingList, count, page)
 
     def create_list(self, list_name):
         fqdn_listname = '{0}@{1}'.format(list_name, self.mail_host)

@@ -119,6 +119,17 @@ And you can print all the known mailing lists.
     <List "test-3@example.com">
     <List "test-3@example.net">
 
+You can also select advertised lists only.
+::
+
+    >>> my_list.settings['advertised'] = False
+    >>> my_list.settings.save()
+    >>> for mlist in client.get_lists(advertised=True):
+    ...     print(mlist)
+    <List "test-2@example.com">
+    <List "test-3@example.com">
+    <List "test-3@example.net">
+
 List results can be retrieved as pages:
 
     >>> page = client.get_list_page(count=2, page=1)
@@ -140,12 +151,31 @@ List results can be retrieved as pages:
     <List "test-3@example.com">
     <List "test-3@example.net">
 
+Pages can also use the advertised filter:
+
+    >>> page = client.get_list_page(count=2, page=1, advertised=True)
+    >>> for m_list in page:
+    ...     print(m_list)
+    <List "test-2@example.com">
+    <List "test-3@example.com">
+
 If you only want to know all lists for a specific domain, use the domain
 object.
 
     >>> for mlist in example.lists:
     ...     print(mlist)
     <List "test-1@example.com">
+    <List "test-2@example.com">
+    <List "test-3@example.com">
+
+It is also possible to display only advertised lists when using the domain.
+
+    >>> for mlist in example.get_lists(advertised=True):
+    ...     print(mlist)
+    <List "test-2@example.com">
+    <List "test-3@example.com">
+    >>> for mlist in example.get_list_page(count=2, page=1, advertised=True):
+    ...     print(mlist)
     <List "test-2@example.com">
     <List "test-3@example.com">
 

@@ -608,7 +608,7 @@ for the settings is returned which behaves much like a dictionary.
 
     >>> settings = test_one.settings
     >>> len(settings)
-    52
+    56
 
     >>> for attr in sorted(settings):
     ...     print(attr + ': ' + str(settings[attr]))
@@ -896,7 +896,7 @@ A held message can be retrieved by ID, and have attributes:
     >>> print(heldmsg.subject)
     Something
     >>> print(heldmsg.reason)
-    <BLANKLINE>
+    The message is not from a list member
     >>> print(heldmsg.sender)
     nomember@example.com
     >>> 'Message-ID: <moderated_01>' in heldmsg.msg

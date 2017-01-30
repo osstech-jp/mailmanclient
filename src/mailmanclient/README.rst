@@ -52,7 +52,7 @@ You may contact the developers via mailman-developers@python.org
 Copyright
 =========
 
-Copyright (C) 2010-2015 by The Free Software Foundation, Inc.
+Copyright (C) 2010-2017 by The Free Software Foundation, Inc.
 
 This file is part of mailman.client.
 

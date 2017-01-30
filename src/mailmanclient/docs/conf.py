@@ -47,7 +47,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Mailman Client'
-copyright = u'2012, The Free Software Foundation'
+copyright = u'2012-2017, The Free Software Foundation'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -229,7 +229,7 @@ man_pages = [
 epub_title = u'mailmanclient'
 epub_author = u'Mailman Coders'
 epub_publisher = u'Mailman Coders'
-epub_copyright = u'2012, The Free Software Foundation'
+epub_copyright = u'2012-2017, The Free Software Foundation'
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.

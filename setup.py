@@ -37,8 +37,7 @@ setup(
         'src/mailmanclient/README.rst',
         'src/mailmanclient/NEWS.rst'),
     license='LGPLv3',
-    url='http://launchpad.net/mailman.client',
-    download_url='https://launchpad.net/mailman.client/+download',
+    url='https://www.list.org/',
     install_requires=[
         'httplib2',
         'six',

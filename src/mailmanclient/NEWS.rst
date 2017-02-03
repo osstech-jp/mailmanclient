@@ -2,10 +2,17 @@
 NEWS for mailman.client
 =======================
 
+3.1 (2017-XX-XX)
+================
+
+ * Bug fixes.
+ * Align with Mailman 3.1 Core REST API.
+
+
 1.0.1 (2015-11-14)
 ==================
 
- * Bugfix release
+ * Bugfix release.
 
 
 1.0.0 (2015-04-17)

@@ -578,7 +578,7 @@ for the settings is returned which behaves much like a dictionary.
 
     >>> settings = test_one.settings
     >>> len(settings)
-    51
+    56
 
     >>> for attr in sorted(settings):
     ...     print(attr + ': ' + str(settings[attr]))
@@ -866,7 +866,7 @@ A held message can be retrieved by ID, and have attributes:
     >>> print(heldmsg.subject)
     Something
     >>> print(heldmsg.reason)
-    <BLANKLINE>
+    The message is not from a list member
     >>> print(heldmsg.sender)
     nomember@example.com
     >>> 'Message-ID: <moderated_01>' in heldmsg.msg
@@ -1039,7 +1039,127 @@ from the list's ``header_matches`` attribute to see the change.
     0
 
 
+Configuration
+=============
+
+Mailman Core exposes all its configuration through REST API. All these
+configuration options are read-only.
+
+    >>> cfg = client.configuration
+    >>> for key in sorted(cfg):
+    ...     print(cfg[key])
+    <Configuration: "antispam">
+    <Configuration: "archiver.mail_archive">
+    <Configuration: "archiver.master">
+    <Configuration: "archiver.mhonarc">
+    <Configuration: "archiver.prototype">
+    <Configuration: "bounces">
+    <Configuration: "database">
+    <Configuration: "devmode">
+    <Configuration: "digests">
+    <Configuration: "dmarc">
+    <Configuration: "language.ar">
+    <Configuration: "language.ast">
+    <Configuration: "language.ca">
+    <Configuration: "language.cs">
+    <Configuration: "language.da">
+    <Configuration: "language.de">
+    <Configuration: "language.el">
+    <Configuration: "language.en">
+    <Configuration: "language.es">
+    <Configuration: "language.et">
+    <Configuration: "language.eu">
+    <Configuration: "language.fi">
+    <Configuration: "language.fr">
+    <Configuration: "language.gl">
+    <Configuration: "language.he">
+    <Configuration: "language.hr">
+    <Configuration: "language.hu">
+    <Configuration: "language.ia">
+    <Configuration: "language.it">
+    <Configuration: "language.ja">
+    <Configuration: "language.ko">
+    <Configuration: "language.lt">
+    <Configuration: "language.nl">
+    <Configuration: "language.no">
+    <Configuration: "language.pl">
+    <Configuration: "language.pt">
+    <Configuration: "language.pt_BR">
+    <Configuration: "language.ro">
+    <Configuration: "language.ru">
+    <Configuration: "language.sk">
+    <Configuration: "language.sl">
+    <Configuration: "language.sr">
+    <Configuration: "language.sv">
+    <Configuration: "language.tr">
+    <Configuration: "language.uk">
+    <Configuration: "language.vi">
+    <Configuration: "language.zh_CN">
+    <Configuration: "language.zh_TW">
+    <Configuration: "logging.archiver">
+    <Configuration: "logging.bounce">
+    <Configuration: "logging.config">
+    <Configuration: "logging.database">
+    <Configuration: "logging.debug">
+    <Configuration: "logging.error">
+    <Configuration: "logging.fromusenet">
+    <Configuration: "logging.http">
+    <Configuration: "logging.locks">
+    <Configuration: "logging.mischief">
+    <Configuration: "logging.root">
+    <Configuration: "logging.runner">
+    <Configuration: "logging.smtp">
+    <Configuration: "logging.subscribe">
+    <Configuration: "logging.vette">
+    <Configuration: "mailman">
+    <Configuration: "mta">
+    <Configuration: "nntp">
+    <Configuration: "passwords">
+    <Configuration: "paths.dev">
+    <Configuration: "paths.fhs">
+    <Configuration: "paths.here">
+    <Configuration: "paths.local">
+    <Configuration: "runner.archive">
+    <Configuration: "runner.bad">
+    <Configuration: "runner.bounces">
+    <Configuration: "runner.command">
+    <Configuration: "runner.digest">
+    <Configuration: "runner.in">
+    <Configuration: "runner.lmtp">
+    <Configuration: "runner.nntp">
+    <Configuration: "runner.out">
+    <Configuration: "runner.pipeline">
+    <Configuration: "runner.rest">
+    <Configuration: "runner.retry">
+    <Configuration: "runner.shunt">
+    <Configuration: "runner.virgin">
+    <Configuration: "shell">
+    <Configuration: "styles">
+    <Configuration: "webservice">
+
+
+Each configuration object is a dictionary and you can iterate over them:
+
+     >>> for key in sorted(cfg['mailman']):
+     ...     print('{} : {}'.format(key, cfg['mailman'][key]))
+     cache_life : 7d
+     default_language : en
+     email_commands_max_lines : 10
+     filtered_messages_are_preservable : no
+     html_to_plain_text_command : /usr/bin/lynx -dump $filename
+     layout : here
+     listname_chars : [-_.0-9a-z]
+     noreply_address : noreply
+     pending_request_life : 3d
+     post_hook :
+     pre_hook :
+     self_link : ...
+     sender_headers : from from_ reply-to sender
+     site_owner : changeme@example.com
+
 ..
     Clean up.
     >>> for domain in client.domains:
     ...     domain.delete()
+    >>> for user in client.users:
+    ...     user.delete()

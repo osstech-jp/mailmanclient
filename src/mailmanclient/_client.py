@@ -428,10 +428,9 @@ class Client:
     @property
     def configuration(self):
         response, content = self._connection.call('system/configuration')
-        return {section:ConfigSection(
-                self._connection, 'system/configuration/{}'.format(section),
-                section)
-                for section in content['sections']}
+        return {section : Configuration(
+            self._connection, section) for section in content['sections']}
+
     @property
     def pipelines(self):
         response, content = self._connection.call('system/pipelines')
@@ -1269,14 +1268,17 @@ class Preferences(RESTDict):
         response, content = self._connection.call(self._url, method='DELETE')
 
 
-class ConfigSection(RESTDict):
+class Configuration(RESTDict):
+
     _writable_properties = ()
-    def __init__(self, connection, url, name):
-        super(ConfigSection, self).__init__(connection, url)
+
+    def __init__(self, connection, name):
+        super(Configuration, self).__init__(
+            connection, 'system/configuration/{}'.format(name))
         self.name = name
 
     def __repr__(self):
-        return '<ConfigSection: {}>'.format(self.name)
+        return '<Configuration: "{}">'.format(self.name)
 
 
 class Settings(RESTDict):

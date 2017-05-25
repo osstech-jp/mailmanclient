@@ -1097,3 +1097,5 @@ from the list's ``header_matches`` attribute to see the change.
     Clean up.
     >>> for domain in client.domains:
     ...     domain.delete()
+    >>> for user in client.users:
+    ...     user.delete()

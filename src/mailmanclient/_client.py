@@ -89,11 +89,15 @@ class Connection:
         headers = {
             'User-Agent': 'GNU Mailman REST client v{0}'.format(__version__),
             }
+        data_str = None
         if data is not None:
-            data = urlencode(data, doseq=True)
+            for k, v in data.items():
+                if not isinstance(v, bytes):
+                    data[k] = six.text_type(v).encode('utf-8')
+            data_str = urlencode(data, doseq=True)
             headers['Content-Type'] = 'application/x-www-form-urlencoded'
         if method is None:
-            if data is None:
+            if data_str is None:
                 method = 'GET'
             else:
                 method = 'POST'
@@ -102,7 +106,7 @@ class Connection:
             headers['Authorization'] = 'Basic ' + self.basic_auth
         url = urljoin(self.baseurl, path)
         try:
-            response, content = Http().request(url, method, data, headers)
+            response, content = Http().request(url, method, data_str, headers)
             # If we did not get a 2xx status code, make this look like a
             # urllib2 exception, for backward compatibility.
             if response.status // 100 != 2:

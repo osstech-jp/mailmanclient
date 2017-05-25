@@ -60,7 +60,7 @@ def reorder_request_params(request):
         except UnicodeDecodeError:
             pass
     if isinstance(request.body, text_type):
-        request._body = reorder_params(request._body)
+        request._body = reorder_params(request._body.encode('utf-8'))
     return request
 
 

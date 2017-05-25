@@ -21,16 +21,12 @@ Mailman Client
 The ``mailmanclient`` library provides official Python bindings for the GNU
 Mailman 3 REST API.
 
-Note that the test suite current requires that a Mailman 3 server be running.
-It should be running using a dummy or throw-away database, as this will make
-changes to the running system.  TBD: mock the real Mailman engine so that it
-is not necessary in order to run these tests.
-
 
 Requirements
 ============
 
-``mailmanclient`` requires Python 2.6 or newer.
+``mailmanclient`` requires Python 2.6 or Python 2.7. Python3 support is on its
+way and will be added soon.
 
 
 Project details

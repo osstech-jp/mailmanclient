@@ -7,6 +7,7 @@ NEWS for mailman.client
 
  * Bug fixes.
  * Align with Mailman 3.1 Core REST API.
+ * Python3 compatibility is broken because of a urllib bug.
 
 
 1.0.1 (2015-11-14)

@@ -2,7 +2,14 @@
 NEWS for mailman.client
 =======================
 
-3.1 (2017-XX-XX)
+
+3.1.1 (2017-XX-XX)
+==================
+
+ * Move the testing infrastructure from nose2 to pytest
+
+
+3.1 (2017-05-25)
 ================
 
  * Bug fixes.

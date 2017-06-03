@@ -25,38 +25,63 @@ Mailman 3 REST API.
 Requirements
 ============
 
-``mailmanclient`` requires Python 2.6 or Python 2.7. Python3 support is on its
-way and will be added soon.
+``mailmanclient`` requires Python 2.7 or newer.
+
+
+Documentation
+=============
+
+A `simple guide`_ to using the library is available within this package, in
+the form of doctests.   The manual is also available online at:
+
+    http://mailmanclient.readthedocs.org/en/latest/
 
 
 Project details
 ===============
 
-You may download the latest version of the package from the Python
-`Cheese Shop`_ or from GitLab_.
+The project home page is:
 
-You can also install it via ``pip``::
+    https://gitlab.com/mailman/mailmanclient
 
-    $ sudo pip install mailmanclient
+You should report bugs at:
 
-See the GitLab project page for access to the development branch, issues, etc.
+    https://gitlab.com/mailman/mailmanclient/issues
+
+You can download the latest version of the package either from the `Cheese Shop`_:
+
+    http://pypi.python.org/pypi/mailmanclient
+
+or from the GitLab page above.  Of course you can also just install it with
+``pip`` from the command line::
+
+    $ pip install mailmanclient
+
+You can grab the latest development copy of the code using Git, from the Gitlab
+home page above. If you have Git installed, you can grab your own branch of
+the code like this::
+
+    $ git clone https://gitlab.com/mailman/mailmanclient.git
+
+You may contact the developers via mailman-developers@python.org
 
 
 Acknowledgements
 ================
 
-Many thanks to Florian Fuchs for his contribution of an initial REST client.
+Many thanks to Florian Fuchs for his contribution of an initial REST
+client. Also thanks to all the contributors of Mailman Client who have
+contributed code, raised issues or devoted their time in any capacity!
 
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Table of Contents
 
-   using.rst
-   apiref.rst
-   testing.rst
-   src/mailmanclient/NEWS.rst
+   src/mailmanclient/docs/NEWS.rst
+   src/mailmanclient/docs/using.rst
+   src/mailmanclient/docs/apiref.rst
+   src/mailmanclient/docs/testing.rst
 
-
+.. _`simple guide`: https://mailmanclient.readthedocs.io/en/latest/using.html
 .. _`Cheese Shop`: https://pypi.python.org/pypi/mailmanclient
-.. _GitLab: https://gitlab.com/mailman/mailmanclient

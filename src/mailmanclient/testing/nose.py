@@ -60,24 +60,32 @@ class NosePlugin(Plugin):
         self.addFlag(set_record, 'R', 'rerecord',
                      """Force re-recording of test responses.  Requires
                      Mailman to be running.""")
-        self._data_path = os.path.join(TOPDIR, 'tests', 'data', 'tape.yaml')
+        self._data_path = os.path.join(TOPDIR, 'tests', 'data')
         self._resources = ExitStack()
         self._recorder = get_vcr()
 
-    def startTestRun(self, event):
+    def startTest(self, event):
         # Check to see if we're running the test suite in record mode.  If so,
         # delete any existing recording.
+        if isinstance(event.test, doctest.DocFileCase):
+            cassette_filename = event.test.id() + ".yaml"
+        else:
+            cassette_filename = ".".join([
+                event.test.__class__.__name__,
+                event.test._testMethodName,
+                'yaml'])
+        cassette_path = os.path.join(self._data_path, cassette_filename)
         if self.record:
             try:
-                os.remove(self._data_path)
+                os.remove(cassette_path)
             except OSError as error:
                 if error.errno != errno.ENOENT:
                     raise
         # This will automatically create the recording file.
         self._resources.enter_context(
-            self._recorder.use_cassette(self._data_path))
+            self._recorder.use_cassette(cassette_path))
 
-    def stopTestRun(self, event):
+    def stopTest(self, event):
         # Stop all recording.
         self._resources.close()
 

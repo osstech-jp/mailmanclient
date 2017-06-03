@@ -1,0 +1,59 @@
+interactions:
+- request:
+    body: !!python/unicode 'display_name=J%C3%A9r%C3%B4me&email=jeremy%40example.com&password=1234'
+    headers:
+      accept-encoding: ['gzip, deflate']
+      !!python/unicode 'content-type': [!!python/unicode 'application/x-www-form-urlencoded']
+    method: !!python/unicode 'POST'
+    uri: http://localhost:9001/3.1/users
+  response:
+    body: {string: !!python/unicode ''}
+    headers:
+      content-length: ['0']
+      content-type: [application/json; charset=UTF-8]
+      location: ['http://localhost:9001/3.1/users/0000000000000000000000000000000d']
+    status: {code: 201, message: Created}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: !!python/unicode 'GET'
+    uri: http://localhost:9001/3.1/users/0000000000000000000000000000000d
+  response:
+    body: {string: !!python/unicode '{"created_on": "2005-08-01T07:49:23", "display_name":
+        "J\u00e9r\u00f4me", "http_etag": "\"d78f048ae1392154b9563088e8f784ef26e5be62\"",
+        "is_server_owner": false, "password": "$6$rounds=656000$OnXXy2o/Ekoi2lAu$F4C.1ma.fdl9ovvmkjWloLrdn4z2.Z47vV1wvcBQK008zDXw0Dyl2Gp2GH3qQmCAuuY7MC5qmnkPR9vKE2j.u/",
+        "self_link": "http://localhost:9001/3.1/users/0000000000000000000000000000000d",
+        "user_id": "0000000000000000000000000000000d"}'}
+    headers:
+      content-length: ['424']
+      content-type: [application/json; charset=UTF-8]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: !!python/unicode 'GET'
+    uri: http://localhost:9001/3.1/users/jeremy@example.com
+  response:
+    body: {string: !!python/unicode '{"created_on": "2005-08-01T07:49:23", "display_name":
+        "J\u00e9r\u00f4me", "http_etag": "\"d78f048ae1392154b9563088e8f784ef26e5be62\"",
+        "is_server_owner": false, "password": "$6$rounds=656000$OnXXy2o/Ekoi2lAu$F4C.1ma.fdl9ovvmkjWloLrdn4z2.Z47vV1wvcBQK008zDXw0Dyl2Gp2GH3qQmCAuuY7MC5qmnkPR9vKE2j.u/",
+        "self_link": "http://localhost:9001/3.1/users/0000000000000000000000000000000d",
+        "user_id": "0000000000000000000000000000000d"}'}
+    headers:
+      content-length: ['424']
+      content-type: [application/json; charset=UTF-8]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      accept-encoding: ['gzip, deflate']
+    method: !!python/unicode 'DELETE'
+    uri: http://localhost:9001/3.1/users/0000000000000000000000000000000d
+  response:
+    body: {string: !!python/unicode ''}
+    headers:
+      content-length: ['0']
+    status: {code: 204, message: No Content}
+version: 1

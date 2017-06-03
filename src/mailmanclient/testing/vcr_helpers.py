@@ -20,7 +20,7 @@
 import vcr
 
 from functools import update_wrapper
-from six import binary_type, text_type
+from six import binary_type, text_type, PY3
 from six.moves.urllib.parse import urlparse, urlunparse, parse_qsl, urlencode
 
 
@@ -39,7 +39,12 @@ def filter_response_headers(response):
 
 def reorder_request_params(request):
     def reorder_params(params):
-        parsed = parse_qsl(params)
+        if PY3:
+            if isinstance(params, binary_type):
+                params = params.decode("ascii")
+            parsed = parse_qsl(params, encoding="utf-8")
+        else:
+            parsed = parse_qsl(params)
         if parsed:
             return urlencode(sorted(parsed, key=lambda kv: kv[0]))
         else:

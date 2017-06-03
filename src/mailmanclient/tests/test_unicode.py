@@ -21,19 +21,18 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-__metaclass__ = type
-__all__ = [
-    'TestUnicode',
-    ]
-
-import sys
 import unittest
 
 from mailmanclient import Client
 from six.moves.urllib_error import HTTPError
 
 
-@unittest.skipIf(sys.version_info.major == 3, "Expected failure on Py3.")
+__metaclass__ = type
+__all__ = [
+    'TestUnicode',
+    ]
+
+
 class TestUnicode(unittest.TestCase):
     def setUp(self):
         self._client = Client(

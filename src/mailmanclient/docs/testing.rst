@@ -65,6 +65,15 @@ it contains the following::
     [webservice]
     port: 9001
 
+    [archiver.mhonarc]
+    enable: yes
+
+    [archiver.mail_archive]
+    enable: yes
+
+    [archiver.prototype]
+    enable: yes
+
 Now you can start Mailman 3::
 
     $ .tox/py34/bin/mailman start

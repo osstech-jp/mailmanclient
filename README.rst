@@ -18,6 +18,18 @@
 Mailman Client
 ==============
 
+.. image:: https://gitlab.com/mailman/mailmanclient/badges/master/build.svg
+    :target: https://gitlab.com/mailman/mailmanclient/commits/master
+
+.. image:: https://readthedocs.org/projects/mailmanclient/badge
+    :target: https://mailmanclient.readthedocs.io
+
+.. image:: http://img.shields.io/pypi/v/mailmanclient.svg
+    :target: https://pypi.python.org/pypi/mailmanclient
+
+.. image:: http://img.shields.io/pypi/dm/mailmanclient.svg
+    :target: https://pypi.python.org/pypi/mailmanclient
+
 The ``mailmanclient`` library provides official Python bindings for the GNU
 Mailman 3 REST API.
 

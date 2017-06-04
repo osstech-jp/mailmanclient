@@ -6,7 +6,7 @@ NEWS for mailman.client
 3.1.1 (2017-XX-XX)
 ==================
 
- * Move the testing infrastructure from nose2 to pytest
+ * Python3 compatibility is fixed, mailmanclient is now compatible through Python2.7 - Python3.6
 
 
 3.1 (2017-05-25)

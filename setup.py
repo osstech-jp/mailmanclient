@@ -15,8 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailman.client.  If not, see <http://www.gnu.org/licenses/>.
 
-from setup_helpers import (
-    description, get_version, long_description, require_python)
+from setup_helpers import description, get_version, require_python
 from setuptools import setup, find_packages
 
 
@@ -33,9 +32,7 @@ setup(
     maintainer='Barry Warsaw',
     maintainer_email='barry@list.org',
     description=description('README.rst'),
-    long_description=long_description(
-        'src/mailmanclient/README.rst',
-        'src/mailmanclient/NEWS.rst'),
+    long_description=open('README.rst').read(),
     license='LGPLv3',
     url='https://www.list.org/',
     install_requires=[

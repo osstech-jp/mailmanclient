@@ -14,11 +14,10 @@
 
 import sys
 import os
-from setup_helpers import get_version
 
 # import the source code directory into Python Path for use with Auto Module
 APP_ROOT = os.path.dirname(__file__)
-sys.path.insert(0, os.path.split(APP_ROOT)[0])
+sys.path.insert(0, APP_ROOT)
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -55,6 +54,7 @@ copyright = u'2012-2017, The Free Software Foundation'
 # built documents.
 #
 # The short X.Y version.
+from setup_helpers import get_version                           # noqa
 _version = get_version('src/mailmanclient/constants.py')
 version = '.'.join(_version.split('.')[0:2])
 # The full version, including alpha/beta/rc tags.
@@ -100,7 +100,7 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'default'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

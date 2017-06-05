@@ -15,3 +15,7 @@ python3.5:
 lint:
   script:
   - tox -e lint
+
+docs:
+  script:
+  - tox -e docs

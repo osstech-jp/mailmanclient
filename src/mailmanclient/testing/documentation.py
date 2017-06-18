@@ -15,30 +15,14 @@
 # You should have received a copy of the GNU General Public License along with
 # GNU Mailman.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Harness for testing Mailman's documentation.
-
-Note that doctest extraction does not currently work for zip file
-distributions.  doctest discovery currently requires file system traversal.
-"""
+"""Harness for testing Mailman's documentation."""
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-from inspect import isfunction, ismethod
-
-
 __metaclass__ = type
 __all__ = [
-    'setup',
-    'teardown'
+    'dump',
     ]
-
-
-def stop():
-    """Call into pdb.set_trace()"""
-    # Do the import here so that you get the wacky special hacked pdb instead
-    # of Python's normal pdb.
-    import pdb
-    pdb.set_trace()
 
 
 def dump(results):
@@ -54,28 +38,3 @@ def dump(results):
                     print('    {0}: {1}'.format(entry_key, entry[entry_key]))
         else:
             print('{0}: {1}'.format(key, results[key]))
-
-
-def setup(testobj):
-    """Test setup."""
-    # Make sure future statements in our doctests are the same as everywhere
-    # else.
-    testobj.globs['absolute_import'] = absolute_import
-    testobj.globs['print_function'] = print_function
-    testobj.globs['unicode_literals'] = unicode_literals
-    # In general, I don't like adding convenience functions, since I think
-    # doctests should do the imports themselves.  It makes for better
-    # documentation that way.  However, a few are really useful, or help to
-    # hide some icky test implementation details.
-    testobj.globs['stop'] = stop
-    testobj.globs['dump'] = dump
-    # Add this so that cleanups can be automatically added by the doctest.
-    testobj.globs['cleanups'] = []
-
-
-def teardown(testobj):
-    for cleanup in testobj.globs['cleanups']:
-        if isfunction(cleanup) or ismethod(cleanup):
-            cleanup()
-        else:
-            cleanup[0](*cleanup[1:])

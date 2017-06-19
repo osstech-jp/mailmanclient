@@ -241,7 +241,7 @@ class RESTDict(RESTBase, MutableMapping):
         return repr(self.rest_data)
 
     def __unicode__(self):
-        return unicode(self.rest_data)
+        return six.text_type(self.rest_data)
 
     def __getitem__(self, key):
         return self._get(key)
@@ -301,7 +301,7 @@ class RESTList(RESTBase, Sequence):
         return repr(self.rest_data)
 
     def __unicode__(self):
-        return unicode(self.rest_data)
+        return six.text_type(self.rest_data)
 
     def __getitem__(self, key):
         return self._factory(self.rest_data[key])
@@ -1260,7 +1260,7 @@ class HeldMessage(RESTObject):
             self.request_id, self.sender)
 
     def __unicode__(self):
-        return unicode(self.rest_data)
+        return six.text_type(self.rest_data)
 
     def moderate(self, action):
         """Moderate a held message.

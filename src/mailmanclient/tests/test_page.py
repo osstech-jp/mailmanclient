@@ -18,6 +18,7 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+import pytest
 import unittest
 
 from mailmanclient._client import Page, DEFAULT_PAGE_ITEM_COUNT
@@ -31,6 +32,7 @@ __all__ = [
     ]
 
 
+@pytest.mark.vcr()
 class TestPage(unittest.TestCase):
 
     def test_url_simple(self):

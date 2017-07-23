@@ -21,6 +21,7 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+import pytest
 import unittest
 
 from mailmanclient import Client
@@ -33,6 +34,7 @@ __all__ = [
     ]
 
 
+@pytest.mark.vcr()
 class TestUnicode(unittest.TestCase):
     def setUp(self):
         self._client = Client(

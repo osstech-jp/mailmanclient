@@ -20,7 +20,7 @@ We can retrieve basic information about the server.
     >>> dump(client.system)
     api_version: 3.1
     http_etag: "..."
-    mailman_version: GNU Mailman 3.1... (...)
+    mailman_version: GNU Mailman ... (...)
     python_version: ...
     self_link: http://localhost:9001/3.1/system/versions
 
@@ -360,8 +360,7 @@ If you use an address which is not a member of test_two `ValueError` is raised:
     >>> test_two.unsubscribe('nomember@example.com')
     Traceback (most recent call last):
     ...
-    ValueError: nomember@example.com is not a member address of
-    test-2@example.com
+    ValueError: nomember@example.com is not a member address of test-2@example.com
 
 After a while, Anna decides to unsubscribe from the Test One mailing list,
 though she keeps her Test Two membership active.
@@ -389,8 +388,7 @@ If you try to unsubscribe an address which is not a member address
     >>> test_one.unsubscribe('nomember@example.com')
     Traceback (most recent call last):
     ...
-    ValueError: nomember@example.com is not a member address of
-    test-1@example.com
+    ValueError: nomember@example.com is not a member address of test-1@example.com
 
 
 Non-Members
@@ -624,7 +622,7 @@ We can access all valid list settings as attributes.
     >>> print(settings['fqdn_listname'])
     test-1@example.com
     >>> print(settings['description'])
-
+    <BLANKLINE>
     >>> settings['description'] = 'A very meaningful description.'
     >>> settings['display_name'] = 'Test Numero Uno'
 
@@ -1205,15 +1203,13 @@ Each configuration object is a dictionary and you can iterate over them:
      listname_chars : [-_.0-9a-z]
      noreply_address : noreply
      pending_request_life : 3d
-     post_hook :
-     pre_hook :
-     self_link : ...
+     post_hook : 
+     pre_hook : 
+     self_link : http://localhost:9001/3.1/system/configuration/mailman
      sender_headers : from from_ reply-to sender
      site_owner : changeme@example.com
 
-..
-    Clean up.
-    >>> for domain in client.domains:
-    ...     domain.delete()
-    >>> for user in client.users:
-    ...     user.delete()
+..   >>> for domain in client.domains:
+     ...    domain.delete()
+     >>> for user in client.users:
+     ...    user.delete()

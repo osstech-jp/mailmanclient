@@ -32,8 +32,8 @@ To run the test suite in replay mode (the default), just run the following::
 
     $ tox
 
-This will attempt to run the test suite against Python 2.6, 2.7, 3.2, 3.3, and
-3.4, or whatever combination of those that are available on your system.
+This will attempt to run the test suite against Python 2.7, 3.4, 3.5 and 3.6 or
+whatever combination of those that are available on your system.
 
 
 Record mode

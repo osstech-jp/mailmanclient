@@ -1,5 +1,5 @@
 =======================
-NEWS for mailman.client
+NEWS for mailmanclient
 =======================
 
 

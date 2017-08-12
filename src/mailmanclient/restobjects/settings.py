@@ -13,18 +13,35 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
-
-"""Package contents."""
-
-from __future__ import absolute_import, print_function, unicode_literals
-
-from mailmanclient.client import Client
-from mailmanclient.constants import __version__
-from mailmanclient.restbase.connection import MailmanConnectionError
+from mailmanclient.restbase.base import RESTDict
 
 __metaclass__ = type
 __all__ = [
-    'Client',
-    'MailmanConnectionError',
-    '__version__',
-    ]
+    'Settings'
+]
+
+
+class Settings(RESTDict):
+
+    _read_only_properties = (
+        'bounces_address',
+        'created_at',
+        'digest_last_sent_at',
+        'fqdn_listname',
+        'join_address',
+        'last_post_at',
+        'leave_address',
+        'list_id',
+        'list_name',
+        'mail_host',
+        'next_digest_number',
+        'no_reply_address',
+        'owner_address',
+        'post_id',
+        'posting_address',
+        'request_address',
+        'scheme',
+        'self_link',
+        'volume',
+        'web_host',
+        )

@@ -1,30 +1,31 @@
 # Copyright (C) 2016-2017 The Free Software Foundation, Inc.
 #
-# This file is part of mailman.client.
+# This file is part of mailmanclient.
 #
-# mailman.client is free software: you can redistribute it and/or modify it
+# mailmanclient is free software: you can redistribute it and/or modify it
 # under the terms of the GNU Lesser General Public License as published by the
 # Free Software Foundation, version 3 of the License.
 #
-# mailman.client is distributed in the hope that it will be useful, but
+# mailmanclient is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 # or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
 # License for more details.
 #
 # You should have received a copy of the GNU Lesser General Public License
-# along with mailman.client.  If not, see <http://www.gnu.org/licenses/>.
+# along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
 
 """Test Page corner cases."""
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-import pytest
 import unittest
 
-from mailmanclient._client import Page, DEFAULT_PAGE_ITEM_COUNT
+import pytest
 from mock import Mock
 from six.moves.urllib_parse import urlsplit, parse_qs
 
+from mailmanclient.constants import DEFAULT_PAGE_ITEM_COUNT
+from mailmanclient.restbase.page import Page
 
 __metaclass__ = type
 __all__ = [

@@ -1,4 +1,4 @@
-# Copyright (C) 2017 The Free Software Foundation, Inc.
+# Copyright (C) 2010-2017 The Free Software Foundation, Inc.
 #
 # This file is part of mailmanclient.
 #
@@ -13,24 +13,22 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
+from mailmanclient.restbase.base import RESTDict
 
-"""Wrappers for doctests to run with pytest"""
-
-from __future__ import absolute_import, print_function, unicode_literals
-
-import pytest
-
-from mailmanclient.testing.documentation import dump
+__metaclass__ = type
+__all__ = [
+    'Configuration'
+]
 
 
-def pytest_collection_modifyitems(items):
-    for item in items:
-        item.add_marker(pytest.mark.vcr)
+class Configuration(RESTDict):
 
+    _writable_properties = ()
 
-@pytest.fixture(autouse=True)
-def import_stuff(doctest_namespace):
-    doctest_namespace['absolute_import'] = absolute_import
-    doctest_namespace['print_function'] = print_function
-    doctest_namespace['unicode_literals'] = unicode_literals
-    doctest_namespace['dump'] = dump
+    def __init__(self, connection, name):
+        super(Configuration, self).__init__(
+            connection, 'system/configuration/{}'.format(name))
+        self.name = name
+
+    def __repr__(self):
+        return '<Configuration: "{}">'.format(self.name)

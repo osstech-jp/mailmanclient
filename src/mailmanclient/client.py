@@ -26,7 +26,7 @@ from mailmanclient.restobjects.address import Address
 from mailmanclient.restobjects.ban import Bans, BannedAddress
 from mailmanclient.restobjects.configuration import Configuration
 from mailmanclient.restobjects.domain import Domain
-from mailmanclient.restobjects.list import MailingList
+from mailmanclient.restobjects.mailinglist import MailingList
 from mailmanclient.restobjects.member import Member
 from mailmanclient.restobjects.preferences import Preferences
 from mailmanclient.restobjects.queue import Queue

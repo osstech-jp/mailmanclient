@@ -15,7 +15,7 @@
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
 import warnings
 
-from mailmanclient.restobjects.list import MailingList
+from mailmanclient.restobjects.mailinglist import MailingList
 from mailmanclient.restbase.base import RESTObject
 from mailmanclient.restbase.page import Page
 

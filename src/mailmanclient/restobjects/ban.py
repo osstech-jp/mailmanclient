@@ -15,7 +15,7 @@
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
 from six.moves.urllib_error import HTTPError
 
-from mailmanclient.restobjects.list import MailingList
+from mailmanclient.restobjects.mailinglist import MailingList
 from mailmanclient.restbase.base import RESTList, RESTObject
 
 __metaclass__ = type

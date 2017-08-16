@@ -21,10 +21,39 @@ from __future__ import absolute_import, print_function, unicode_literals
 from mailmanclient.client import Client
 from mailmanclient.constants import __version__
 from mailmanclient.restbase.connection import MailmanConnectionError
+from mailmanclient.restobjects.address import Address, Addresses
+from mailmanclient.restobjects.ban import Bans, BannedAddress
+from mailmanclient.restobjects.configuration import Configuration
+from mailmanclient.restobjects.header_match import HeaderMatch, HeaderMatches
+from mailmanclient.restobjects.held_message import HeldMessage
+from mailmanclient.restobjects.archivers import ListArchivers
+from mailmanclient.restobjects.mailinglist import MailingList
+from mailmanclient.restobjects.member import Member
+from mailmanclient.restobjects.preferences import Preferences, PreferencesMixin
+from mailmanclient.restobjects.queue import Queue
+from mailmanclient.restobjects.settings import Settings
+from mailmanclient.restobjects.user import User
+
 
 __metaclass__ = type
 __all__ = [
+    'Address',
+    'Addresses',
+    'Bans',
+    'BannedAddress',
     'Client',
+    'Configuration',
+    'HeaderMatch',
+    'HeaderMatches',
+    'HeldMessage',
+    'ListArchivers',
+    'MailingList',
     'MailmanConnectionError',
+    'Member',
+    'Preferences',
+    'PreferencesMixin',
+    'Queue',
+    'Settings',
+    'User',
     '__version__',
-    ]
+]

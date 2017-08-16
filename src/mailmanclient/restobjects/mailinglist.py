@@ -19,7 +19,7 @@ from six.moves.urllib_error import HTTPError
 from six.moves.urllib_parse import urlencode
 
 from mailmanclient.restobjects.header_match import HeaderMatches
-from mailmanclient.restobjects.list_archivers import ListArchivers
+from mailmanclient.restobjects.archivers import ListArchivers
 from mailmanclient.restobjects.member import Member
 from mailmanclient.restobjects.settings import Settings
 from mailmanclient.restobjects.held_message import HeldMessage
@@ -93,7 +93,7 @@ class MailingList(RESTObject):
             'subscriber': address,
             'role': role,
             'list_id': self.list_id,
-            }
+        }
         url = 'members/find?{}'.format(urlencode(data, doseq=True))
         if page is None:
             response, content = self._connection.call(url, data)
@@ -284,7 +284,7 @@ class MailingList(RESTObject):
             list_id=self.list_id,
             subscriber=address,
             display_name=display_name,
-            )
+        )
         if pre_verified:
             data['pre_verified'] = True
         if pre_confirmed:

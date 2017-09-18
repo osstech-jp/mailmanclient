@@ -36,7 +36,7 @@ setup(
     license='LGPLv3',
     url='https://www.list.org/',
     classifiers=[
-        'GNU General Public License v3 or later (GPLv3+)',
+        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)', # noqa
         'Operating System :: POSIX',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.4',

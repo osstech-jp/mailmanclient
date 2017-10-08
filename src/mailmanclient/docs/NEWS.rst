@@ -3,13 +3,15 @@ NEWS for mailmanclient
 =======================
 
 
-3.1.1 (2017-XX-XX)
+3.1.1 (2017-10-07)
 ==================
 
  * Python3 compatibility is fixed, mailmanclient is now compatible through Python2.7 - Python3.6
  * Internal source code is now split into several class-specific modules as
    compared to previously a single giant _client module.
  * All the RestObjects, like MailingList, are now exposed from the top level import.
+ * Old `mailmanclient._client` module is added back for compatibility with
+   versions of Postorius that use some internal APIs.
 
 
 3.1 (2017-05-25)

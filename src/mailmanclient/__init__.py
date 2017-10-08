@@ -13,10 +13,14 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
+#
+# flake8: noqa
 
 """Package contents."""
 
 from __future__ import absolute_import, print_function, unicode_literals
+
+import six
 
 from mailmanclient.client import Client
 from mailmanclient.constants import __version__
@@ -57,3 +61,8 @@ __all__ = [
     'User',
     '__version__',
 ]
+
+if six.PY2:
+    __all__ = [str(x) for x in __all__]
+elif six.PY3:
+    __all__ = [bytes(x, 'utf-8') for x in __all__]

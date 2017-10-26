@@ -3,6 +3,13 @@ NEWS for mailmanclient
 =======================
 
 
+3.1.2 (201X-XX-XX)
+==================
+
+ * Add '.pc' (patch directory) to list of ignored patterns when building the
+   documentation with Sphinx.
+
+
 3.1.1 (2017-10-07)
 ==================
 

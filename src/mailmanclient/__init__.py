@@ -28,6 +28,7 @@ from mailmanclient.restbase.connection import MailmanConnectionError
 from mailmanclient.restobjects.address import Address, Addresses
 from mailmanclient.restobjects.ban import Bans, BannedAddress
 from mailmanclient.restobjects.configuration import Configuration
+from mailmanclient.restobjects.domain import Domain
 from mailmanclient.restobjects.header_match import HeaderMatch, HeaderMatches
 from mailmanclient.restobjects.held_message import HeldMessage
 from mailmanclient.restobjects.archivers import ListArchivers
@@ -47,6 +48,7 @@ __all__ = [
     'BannedAddress',
     'Client',
     'Configuration',
+    'Domain'
     'HeaderMatch',
     'HeaderMatches',
     'HeldMessage',

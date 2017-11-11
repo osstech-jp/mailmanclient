@@ -8,62 +8,62 @@ API Reference
    :private-members:
    :inherited-members:
 
-.. autoclass:: mailmanclient._client.Domain
+.. autoclass:: mailmanclient.Domain
    :members:
    :undoc-members:
 
-.. autoclass:: mailmanclient._client.MailingList
+.. autoclass:: mailmanclient.MailingList
    :members:
    :undoc-members:
 
-.. autoclass:: mailmanclient._client.ListArchivers
+.. autoclass:: mailmanclient.ListArchivers
    :members:
    :undoc-members:
 
-.. autoclass:: mailmanclient._client.Bans
+.. autoclass:: mailmanclient.Bans
    :members:
    :undoc-members:
 
-.. autoclass:: mailmanclient._client.BannedAddress
+.. autoclass:: mailmanclient.BannedAddress
    :members:
    :undoc-members:
 
-.. autoclass:: mailmanclient._client.HeaderMatches
+.. autoclass:: mailmanclient.HeaderMatches
    :members:
    :undoc-members:
 
-.. autoclass:: mailmanclient._client.HeaderMatch
+.. autoclass:: mailmanclient.HeaderMatch
    :members:
    :undoc-members:
 
-.. autoclass:: mailmanclient._client.Member
+.. autoclass:: mailmanclient.Member
    :members:
    :undoc-members:
 
-.. autoclass:: mailmanclient._client.User
+.. autoclass:: mailmanclient.User
    :members:
    :undoc-members:
 
-.. autoclass:: mailmanclient._client.Addresses
+.. autoclass:: mailmanclient.Addresses
    :members:
    :undoc-members:
 
-.. autoclass:: mailmanclient._client.Address
+.. autoclass:: mailmanclient.Address
    :members:
    :undoc-members:
 
-.. autoclass:: mailmanclient._client.HeldMessage
+.. autoclass:: mailmanclient.HeldMessage
    :members:
    :undoc-members:
 
-.. autoclass:: mailmanclient._client.Preferences
+.. autoclass:: mailmanclient.Preferences
    :members:
    :undoc-members:
 
-.. autoclass:: mailmanclient._client.Settings
+.. autoclass:: mailmanclient.Settings
    :members:
    :undoc-members:
 
-.. autoclass:: mailmanclient._client.Queue
+.. autoclass:: mailmanclient.Queue
    :members:
    :undoc-members:

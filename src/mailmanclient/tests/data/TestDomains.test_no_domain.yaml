@@ -3,12 +3,16 @@ interactions:
     body: null
     headers:
       accept-encoding: ['gzip, deflate']
-    method: !!python/unicode 'GET'
+      authorization: [!!python/unicode 'Basic cmVzdGFkbWluOnJlc3RwYXNz']
+      user-agent: [GNU Mailman REST client v3.1.2a1]
+    method: GET
     uri: http://localhost:9001/3.0/domains/example.org
   response:
     body: {string: !!python/unicode '404 Not Found'}
     headers:
       content-length: ['13']
       content-type: [application/json; charset=UTF-8]
+      date: ['Sun, 25 Feb 2018 03:57:24 GMT']
+      server: [WSGIServer/0.2 CPython/3.5.2]
     status: {code: 404, message: Not Found}
 version: 1

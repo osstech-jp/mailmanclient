@@ -27,7 +27,7 @@ __all__ = [
 
 class Domain(RESTObject):
 
-    _properties = ('description', 'mail_host', 'self_link')
+    _properties = ('alias_domain', 'description', 'mail_host', 'self_link')
 
     def __repr__(self):
         return '<Domain "{0}">'.format(self.mail_host)

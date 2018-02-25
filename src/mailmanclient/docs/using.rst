@@ -49,6 +49,18 @@ is returned.
     None
     >>> print(example_dot_com.mail_host)
     example.com
+    >>> print(example_dot_com.alias_domain)
+    None
+
+A domain can have an alias_domain attribute to help with some unusual Postfix
+configurations.
+
+    >>> example_dot_edu = client.create_domain('example.edu',
+    ...                                        alias_domain='x.example.edu')
+    >>> example_dot_edu
+    <Domain "example.edu">
+    >>> print(example_dot_edu.alias_domain)
+    x.example.edu
 
 You can also get an existing domain independently using its mail host.
 
@@ -66,6 +78,7 @@ After creating a few more domains, we can print the list of all domains.
     >>> for mail_host in client.domains:
     ...     print(mail_host)
     <Domain "example.com">
+    <Domain "example.edu">
     <Domain "example.net">
     <Domain "example.org">
 
@@ -75,6 +88,7 @@ Also, domain can be deleted.
     >>> for mail_host in client.domains:
     ...     print(mail_host)
     <Domain "example.com">
+    <Domain "example.edu">
     <Domain "example.net">
 
 
@@ -606,7 +620,7 @@ for the settings is returned which behaves much like a dictionary.
 
     >>> settings = test_one.settings
     >>> len(settings)
-    56
+    57
 
     >>> for attr in sorted(settings):
     ...     print(attr + ': ' + str(settings[attr]))
@@ -695,6 +709,7 @@ The available pipelines and chains can also be retrieved:
     default-owner-chain
     default-posting-chain
     discard
+    dmarc
     header-match
     hold
     moderation
@@ -1158,6 +1173,7 @@ configuration options are read-only.
     <Configuration: "logging.http">
     <Configuration: "logging.locks">
     <Configuration: "logging.mischief">
+    <Configuration: "logging.plugins">
     <Configuration: "logging.root">
     <Configuration: "logging.runner">
     <Configuration: "logging.smtp">
@@ -1171,6 +1187,7 @@ configuration options are read-only.
     <Configuration: "paths.fhs">
     <Configuration: "paths.here">
     <Configuration: "paths.local">
+    <Configuration: "plugin.master">
     <Configuration: "runner.archive">
     <Configuration: "runner.bad">
     <Configuration: "runner.bounces">

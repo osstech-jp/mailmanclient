@@ -1,4 +1,4 @@
-# Copyright (C) 2016-2017 The Free Software Foundation, Inc.
+# Copyright (C) 2016-2018 by the Free Software Foundation, Inc.
 #
 # This file is part of mailmanclient.
 #

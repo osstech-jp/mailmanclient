@@ -151,7 +151,7 @@ class Client:
         return Page(self._connection, 'users', User, count, page)
 
     def create_domain(self, mail_host, base_url=MISSING,
-                      description=None, owner=None):
+                      description=None, owner=None, alias_domain=None):
         if base_url is not MISSING:
             warnings.warn(
                 'The `base_url` parameter in the `create_domain()` method is '
@@ -162,6 +162,8 @@ class Client:
             data['description'] = description
         if owner is not None:
             data['owner'] = owner
+        if alias_domain is not None:
+            data['alias_domain'] = alias_domain
         response, content = self._connection.call('domains', data)
         return Domain(self._connection, response['location'])
 

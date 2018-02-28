@@ -54,3 +54,12 @@ class TestUnicode(unittest.TestCase):
             email=self.email, password='1234',
             display_name=self.unicode_string)
         self.assertEqual(user.display_name, self.unicode_string)
+
+    def test_repr(self):
+        user = self._client.create_user(
+            email=self.email, password='1234',
+            display_name=self.unicode_string)
+        try:
+            repr(user)
+        except UnicodeEncodeError as e:
+            self.fail(e)

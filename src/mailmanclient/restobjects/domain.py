@@ -30,7 +30,10 @@ class Domain(RESTObject):
     _properties = ('alias_domain', 'description', 'mail_host', 'self_link')
 
     def __repr__(self):
-        return '<Domain "{0}">'.format(self.mail_host)
+        return '<Domain {0!r}>'.format(self.mail_host)
+
+    def __str__(self):
+        return self.mail_host
 
     @property
     def web_host(self):

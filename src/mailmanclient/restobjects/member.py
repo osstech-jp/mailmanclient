@@ -29,10 +29,13 @@ class Member(RESTObject, PreferencesMixin):
     _writable_properties = ('address', 'delivery_mode', 'moderation_action')
 
     def __repr__(self):
-        return '<Member "{0}" on "{1}">'.format(self.email, self.list_id)
+        return '<Member {0!r} on {1!r}>'.format(self.email, self.list_id)
+
+    def __str__(self):
+        return 'Member "{0}" on "{1}"'.format(self.email, self.list_id)
 
     def __unicode__(self):
-        return '<Member "{0}" on "{1}">'.format(self.email, self.list_id)
+        return u'Member "{0}" on "{1}"'.format(self.email, self.list_id)
 
     @property
     def address(self):

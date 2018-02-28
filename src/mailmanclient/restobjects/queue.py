@@ -26,7 +26,7 @@ class Queue(RESTObject):
     _properties = ('name', 'directory', 'files')
 
     def __repr__(self):
-        return '<Queue: {}>'.format(self.name)
+        return '<Queue: {!r}>'.format(self.name)
 
     def inject(self, list_id, text):
         self._connection.call(self._url, dict(list_id=list_id, text=text))

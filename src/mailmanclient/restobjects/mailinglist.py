@@ -42,7 +42,7 @@ class MailingList(RESTObject):
         self._settings = None
 
     def __repr__(self):
-        return '<List "{0}">'.format(self.fqdn_listname)
+        return '<List {0!r}>'.format(self.fqdn_listname)
 
     @property
     def owners(self):

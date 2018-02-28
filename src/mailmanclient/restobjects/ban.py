@@ -45,7 +45,7 @@ class Bans(RESTList):
         if self._mlist is None:
             return '<Global bans>'
         else:
-            return '<Bans on "{0}">'.format(self._mlist.list_id)
+            return '<Bans on {0!r}>'.format(self._mlist.list_id)
 
     def __contains__(self, item):
         # Accept email addresses and BannedAddress restobjects
@@ -92,6 +92,9 @@ class BannedAddress(RESTObject):
     _writable_properties = []
 
     def __repr__(self):
+        return "<BannedAddress {!r}>".format(self.email)
+
+    def __str__(self):
         return self.email
 
     @property

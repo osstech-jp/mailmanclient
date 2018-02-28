@@ -31,4 +31,4 @@ class Configuration(RESTDict):
         self.name = name
 
     def __repr__(self):
-        return '<Configuration: "{}">'.format(self.name)
+        return '<Configuration: {!r}>'.format(self.name)

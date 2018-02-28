@@ -42,4 +42,7 @@ class ListArchivers(RESTDict):
         self._mlist = mlist
 
     def __repr__(self):
-        return '<Archivers on "{0}">'.format(self._mlist.list_id)
+        return '<Archivers on {0!r}>'.format(self._mlist.list_id)
+
+    def __str__(self):
+        return 'Archivers on {}'.format(self._mlist.list_id)

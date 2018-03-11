@@ -726,9 +726,10 @@ Owners and moderators are properties of the list object.
     >>> test_one.moderators
     []
 
-Owners can be added via the ``add_owner`` method:
+Owners can be added via the ``add_owner`` method and they can have an optional
+``display_name`` associated like other ``members``:
 
-    >>> test_one.add_owner('foo@example.com')
+    >>> test_one.add_owner('foo@example.com', display_name='Foo')
     >>> for owner in test_one.owners:
     ...     print(owner)
     foo@example.com
@@ -740,7 +741,7 @@ The owner of the list not automatically added as a member:
 
 Moderators can be added similarly:
 
-    >>> test_one.add_moderator('bar@example.com')
+    >>> test_one.add_moderator('bar@example.com', display_name='Bar')
     >>> for moderator in test_one.moderators:
     ...     print(moderator)
     bar@example.com

@@ -160,15 +160,16 @@ class MailingList(RESTObject):
         archivers.update(new_value)
         archivers.save()
 
-    def add_owner(self, address):
-        self.add_role('owner', address)
+    def add_owner(self, address, display_name=None):
+        self.add_role('owner', address, display_name)
 
-    def add_moderator(self, address):
-        self.add_role('moderator', address)
+    def add_moderator(self, address, display_name=None):
+        self.add_role('moderator', address, display_name)
 
-    def add_role(self, role, address):
+    def add_role(self, role, address, display_name=None):
         data = dict(list_id=self.list_id,
                     subscriber=address,
+                    display_name=display_name,
                     role=role)
         self._connection.call('members', data)
 

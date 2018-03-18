@@ -38,7 +38,7 @@ class User(RESTObject, PreferencesMixin):
         self._subscription_list_ids = None
 
     def __repr__(self):
-        return '<User "{0}" ({1})>'.format(self.display_name, self.user_id)
+        return '<User {0!r} ({1})>'.format(self.display_name, self.user_id)
 
     @property
     def addresses(self):

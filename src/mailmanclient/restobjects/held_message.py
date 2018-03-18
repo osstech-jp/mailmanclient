@@ -29,7 +29,7 @@ class HeldMessage(RESTObject):
                    'self_link', 'sender', 'subject', 'type')
 
     def __repr__(self):
-        return '<HeldMessage "{0}" by {1}>'.format(
+        return '<HeldMessage {0!r} by {1}>'.format(
             self.request_id, self.sender)
 
     def __unicode__(self):

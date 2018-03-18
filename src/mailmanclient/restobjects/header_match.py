@@ -38,7 +38,10 @@ class HeaderMatches(RESTList):
             self._connection, data['self_link'], data)
 
     def __repr__(self):
-        return '<HeaderMatches for "{0}">'.format(self._mlist.list_id)
+        return '<HeaderMatches for {0!r}>'.format(self._mlist.list_id)
+
+    def __str__(self):
+        return 'Header matches for "{}"'.format(self._mlist.list_id)
 
     def add(self, header, pattern, action=None):
         """
@@ -64,4 +67,7 @@ class HeaderMatch(RESTObject):
     _writable_properties = ('header', 'pattern', 'position', 'action')
 
     def __repr__(self):
-        return '<HeaderMatch on "{0}">'.format(self.header)
+        return '<HeaderMatch on {0!r}>'.format(self.header)
+
+    def __str__(self):
+        return 'Header match on "{}"'.format(self.header)

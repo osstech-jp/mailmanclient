@@ -43,8 +43,6 @@ It's easy to create a new domain; when you do, a proxy object for that domain
 is returned.
 
     >>> example_dot_com = client.create_domain('example.com')
-    >>> example_dot_com
-    <Domain "example.com">
     >>> print(example_dot_com.description)
     None
     >>> print(example_dot_com.mail_host)
@@ -57,39 +55,38 @@ configurations.
 
     >>> example_dot_edu = client.create_domain('example.edu',
     ...                                        alias_domain='x.example.edu')
-    >>> example_dot_edu
-    <Domain "example.edu">
+    >>> print(example_dot_edu.mail_host)
+    example.edu
     >>> print(example_dot_edu.alias_domain)
     x.example.edu
 
 You can also get an existing domain independently using its mail host.
 
     >>> example = client.get_domain('example.com')
-    >>> example
-    <Domain "example.com">
+    >>> print(example.mail_host)
+    example.com
 
 After creating a few more domains, we can print the list of all domains.
 
-    >>> client.create_domain('example.net')
-    <Domain "example.net">
+    >>> example_net = client.create_domain('example.net')
     >>> example_org = client.create_domain('example.org')
-    >>> print(example_org)
-    <Domain "example.org">
-    >>> for mail_host in client.domains:
-    ...     print(mail_host)
-    <Domain "example.com">
-    <Domain "example.edu">
-    <Domain "example.net">
-    <Domain "example.org">
+    >>> print(example_org.mail_host)
+    example.org
+    >>> for domain in client.domains:
+    ...     print(domain.mail_host)
+    example.com
+    example.edu
+    example.net
+    example.org
 
 Also, domain can be deleted.
 
     >>> example_org.delete()
-    >>> for mail_host in client.domains:
-    ...     print(mail_host)
-    <Domain "example.com">
-    <Domain "example.edu">
-    <Domain "example.net">
+    >>> for domain in client.domains:
+    ...     print(domain.mail_host)
+    example.com
+    example.edu
+    example.net
 
 
 Mailing lists
@@ -98,8 +95,6 @@ Mailing lists
 Once you have a domain, you can create mailing lists in that domain.
 
     >>> test_one = example.create_list('test-1')
-    >>> test_one
-    <List "test-1@example.com">
     >>> print(test_one.fqdn_listname)
     test-1@example.com
     >>> print(test_one.mail_host)
@@ -112,26 +107,26 @@ Once you have a domain, you can create mailing lists in that domain.
 You can also retrieve the mailing list after the fact.
 
     >>> my_list = client.get_list('test-1@example.com')
-    >>> my_list
-    <List "test-1@example.com">
+    >>> print(my_list.fqdn_listname)
+    test-1@example.com
 
 And you can print all the known mailing lists.
 ::
 
-    >>> example.create_list('test-2')
-    <List "test-2@example.com">
+    >>> print(example.create_list('test-2').fqdn_listname)
+    test-2@example.com
     >>> domain = client.get_domain('example.net')
-    >>> domain.create_list('test-3')
-    <List "test-3@example.net">
-    >>> example.create_list('test-3')
-    <List "test-3@example.com">
+    >>> print(domain.create_list('test-3').fqdn_listname)
+    test-3@example.net
+    >>> print(example.create_list('test-3').fqdn_listname)
+    test-3@example.com
 
     >>> for mlist in client.lists:
-    ...     print(mlist)
-    <List "test-1@example.com">
-    <List "test-2@example.com">
-    <List "test-3@example.com">
-    <List "test-3@example.net">
+    ...     print(mlist.fqdn_listname)
+    test-1@example.com
+    test-2@example.com
+    test-3@example.com
+    test-3@example.net
 
 You can also select advertised lists only.
 ::
@@ -139,10 +134,10 @@ You can also select advertised lists only.
     >>> my_list.settings['advertised'] = False
     >>> my_list.settings.save()
     >>> for mlist in client.get_lists(advertised=True):
-    ...     print(mlist)
-    <List "test-2@example.com">
-    <List "test-3@example.com">
-    <List "test-3@example.net">
+    ...     print(mlist.fqdn_listname)
+    test-2@example.com
+    test-3@example.com
+    test-3@example.net
 
 List results can be retrieved as pages:
 
@@ -154,44 +149,44 @@ List results can be retrieved as pages:
     >>> page.total_size
     4
     >>> for m_list in page:
-    ...     print(m_list)
-    <List "test-1@example.com">
-    <List "test-2@example.com">
+    ...     print(m_list.fqdn_listname)
+    test-1@example.com
+    test-2@example.com
     >>> page = page.next
     >>> page.nr
     2
     >>> for m_list in page:
-    ...     print(m_list)
-    <List "test-3@example.com">
-    <List "test-3@example.net">
+    ...     print(m_list.fqdn_listname)
+    test-3@example.com
+    test-3@example.net
 
 Pages can also use the advertised filter:
 
     >>> page = client.get_list_page(count=2, page=1, advertised=True)
     >>> for m_list in page:
-    ...     print(m_list)
-    <List "test-2@example.com">
-    <List "test-3@example.com">
+    ...     print(m_list.fqdn_listname)
+    test-2@example.com
+    test-3@example.com
 
 If you only want to know all lists for a specific domain, use the domain
 object.
 
     >>> for mlist in example.lists:
-    ...     print(mlist)
-    <List "test-1@example.com">
-    <List "test-2@example.com">
-    <List "test-3@example.com">
+    ...     print(mlist.fqdn_listname)
+    test-1@example.com
+    test-2@example.com
+    test-3@example.com
 
 It is also possible to display only advertised lists when using the domain.
 
     >>> for mlist in example.get_lists(advertised=True):
-    ...     print(mlist)
-    <List "test-2@example.com">
-    <List "test-3@example.com">
+    ...     print(mlist.fqdn_listname)
+    test-2@example.com
+    test-3@example.com
     >>> for mlist in example.get_list_page(count=2, page=1, advertised=True):
-    ...     print(mlist)
-    <List "test-2@example.com">
-    <List "test-3@example.com">
+    ...     print(mlist.fqdn_listname)
+    test-2@example.com
+    test-3@example.com
 
 You can use a list instance to delete the list.
 
@@ -203,9 +198,9 @@ You can also delete a list using the client instance's delete_list method.
     >>> client.delete_list('test-3@example.com')
 
     >>> for mlist in client.lists:
-    ...     print(mlist)
-    <List "test-1@example.com">
-    <List "test-2@example.com">
+    ...     print(mlist.fqdn_listname)
+    test-1@example.com
+    test-2@example.com
 
 
 Membership
@@ -259,42 +254,42 @@ The ``pre_approved`` flag is used for lists that require moderator
 approval and should only be used if the subscription is initiated by a 
 moderator or admin. 
 
-    >>> test_one.subscribe('anna@example.com', 'Anna',
-    ...                    pre_verified=True,
-    ...                    pre_confirmed=True)
-    <Member "anna@example.com" on "test-1.example.com">
+    >>> print(test_one.subscribe('anna@example.com', 'Anna',
+    ...                          pre_verified=True,
+    ...                          pre_confirmed=True))
+    Member "anna@example.com" on "test-1.example.com"
 
-    >>> test_one.subscribe('bill@example.com', 'Bill',
-    ...                    pre_verified=True,
-    ...                    pre_confirmed=True)
-    <Member "bill@example.com" on "test-1.example.com">
+    >>> print(test_one.subscribe('bill@example.com', 'Bill',
+    ...                          pre_verified=True,
+    ...                          pre_confirmed=True))
+    Member "bill@example.com" on "test-1.example.com"
 
-    >>> test_two.subscribe('anna@example.com',
-    ...                    pre_verified=True,
-    ...                    pre_confirmed=True)
-    <Member "anna@example.com" on "test-2.example.com">
+    >>> print(test_two.subscribe('anna@example.com',
+    ...                          pre_verified=True,
+    ...                          pre_confirmed=True))
+    Member "anna@example.com" on "test-2.example.com"
 
-    >>> test_two.subscribe('cris@example.com', 'Cris',
-    ...                    pre_verified=True,
-    ...                    pre_confirmed=True)
-    <Member "cris@example.com" on "test-2.example.com">
+    >>> print(test_two.subscribe('cris@example.com', 'Cris',
+    ...                          pre_verified=True,
+    ...                          pre_confirmed=True))
+    Member "cris@example.com" on "test-2.example.com"
 
 We can retrieve all known memberships.  These are sorted first by mailing list
 name, then by email address.
 
     >>> for member in client.members:
     ...     print(member)
-    <Member "anna@example.com" on "test-1.example.com">
-    <Member "bill@example.com" on "test-1.example.com">
-    <Member "anna@example.com" on "test-2.example.com">
-    <Member "cris@example.com" on "test-2.example.com">
+    Member "anna@example.com" on "test-1.example.com"
+    Member "bill@example.com" on "test-1.example.com"
+    Member "anna@example.com" on "test-2.example.com"
+    Member "cris@example.com" on "test-2.example.com"
 
 We can also view the memberships for a single mailing list.
 
     >>> for member in test_one.members:
     ...     print(member)
-    <Member "anna@example.com" on "test-1.example.com">
-    <Member "bill@example.com" on "test-1.example.com">
+    Member "anna@example.com" on "test-1.example.com"
+    Member "bill@example.com" on "test-1.example.com"
 
 Membership lists can be paginated, to recieve only a part of the result.
 
@@ -305,16 +300,16 @@ Membership lists can be paginated, to recieve only a part of the result.
     4
     >>> for member in page:
     ...     print(member)
-    <Member "anna@example.com" on "test-1.example.com">
-    <Member "bill@example.com" on "test-1.example.com">
+    Member "anna@example.com" on "test-1.example.com"
+    Member "bill@example.com" on "test-1.example.com"
 
     >>> page = page.next
     >>> page.nr
     2
     >>> for member in page:
     ...     print(member)
-    <Member "anna@example.com" on "test-2.example.com">
-    <Member "cris@example.com" on "test-2.example.com">
+    Member "anna@example.com" on "test-2.example.com"
+    Member "cris@example.com" on "test-2.example.com"
 
     >>> page = test_one.get_member_page(count=1, page=1)
     >>> page.nr
@@ -323,7 +318,7 @@ Membership lists can be paginated, to recieve only a part of the result.
     2
     >>> for member in page:
     ...     print(member)
-    <Member "anna@example.com" on "test-1.example.com">
+    Member "anna@example.com" on "test-1.example.com"
     >>> page = page.next
     >>> page.nr
     2
@@ -331,20 +326,20 @@ Membership lists can be paginated, to recieve only a part of the result.
     2
     >>> for member in page:
     ...     print(member)
-    <Member "bill@example.com" on "test-1.example.com">
+    Member "bill@example.com" on "test-1.example.com"
 
 We can get a single membership too.
 
     >>> cris_test_two = test_two.get_member('cris@example.com')
-    >>> cris_test_two
-    <Member "cris@example.com" on "test-2.example.com">
+    >>> print(cris_test_two)
+    Member "cris@example.com" on "test-2.example.com"
     >>> print(cris_test_two.role)
     member
 
 A membership can also be retrieved without instantiating the list object first:
 
-    >>> client.get_member('test-2@example.com', 'cris@example.com')
-    <Member "cris@example.com" on "test-2.example.com">
+    >>> print(client.get_member('test-2@example.com', 'cris@example.com'))
+    Member "cris@example.com" on "test-2.example.com"
 
 A membership has preferences.
 
@@ -366,8 +361,9 @@ A membership has preferences.
 
 The membership object's ``user`` attribute will return a User object:
 
-    >>> cris_test_two.user
-    <User "Cris" (...)>
+    >>> cris_u = cris_test_two.user
+    >>> print(cris_u.display_name, cris_u.user_id)
+    Cris ...
 
 If you use an address which is not a member of test_two `ValueError` is raised:
 
@@ -384,17 +380,17 @@ though she keeps her Test Two membership active.
     >>> test_one.unsubscribe('anna@example.com')
     >>> for member in client.members:
     ...     print(member)
-    <Member "bill@example.com" on "test-1.example.com">
-    <Member "anna@example.com" on "test-2.example.com">
-    <Member "cris@example.com" on "test-2.example.com">
+    Member "bill@example.com" on "test-1.example.com"
+    Member "anna@example.com" on "test-2.example.com"
+    Member "cris@example.com" on "test-2.example.com"
 
 A little later, Cris decides to unsubscribe from the Test Two mailing list.
 
     >>> cris_test_two.unsubscribe()
     >>> for member in client.members:
     ...     print(member)
-    <Member "bill@example.com" on "test-1.example.com">
-    <Member "anna@example.com" on "test-2.example.com">
+    Member "bill@example.com" on "test-1.example.com"
+    Member "anna@example.com" on "test-2.example.com"
 
 If you try to unsubscribe an address which is not a member address
 `ValueError` is raised:
@@ -430,10 +426,12 @@ Users are people with one or more list memberships. To get a list of all users,
 access the clients user property.
 
     >>> for user in client.users:
-    ...     print(user)
-    <User "..." (...)>
-    <User "..." (...)>
-    <User "..." (...)>
+    ...     print(user.display_name)
+    Unverified
+    Unconfirmed
+    Anna
+    Bill
+    Cris
 
 The list of users can also be paginated:
 
@@ -444,11 +442,11 @@ The list of users can also be paginated:
     5
 
     >>> for user in page:
-    ...     print(user)
-    <User "Unverified" (...)>
-    <User "Unconfirmed" (...)>
-    <User "Anna" (...)>
-    <User "Bill" (...)>
+    ...     print(user.display_name)
+    Unverified
+    Unconfirmed
+    Anna
+    Bill
 
 You can get the next or previous pages without calling ``get_userpage`` again.
 
@@ -457,19 +455,19 @@ You can get the next or previous pages without calling ``get_userpage`` again.
     2
 
     >>> for user in page:
-    ...     print(user)
-    <User "Cris" (...)>
+    ...     print(user.display_name)
+    Cris
 
     >>> page = page.previous
     >>> page.nr
     1
 
     >>> for user in page:
-    ...     print(user)
-    <User "Unverified" (...)>
-    <User "Unconfirmed" (...)>
-    <User "Anna" (...)>
-    <User "Bill" (...)>
+    ...     print(user.display_name)
+    Unverified
+    Unconfirmed
+    Anna
+    Bill
 
 A single user can be retrieved using their email address.
 
@@ -489,7 +487,7 @@ Every user has a list of one or more addresses.
 
 Multiple addresses can be assigned to a user record:
 
-    >>> cris.add_address('cris.person@example.org')
+    >>> print(cris.add_address('cris.person@example.org'))
     cris.person@example.org
     >>> print(client.get_address('cris.person@example.org'))
     cris.person@example.org
@@ -501,10 +499,11 @@ Multiple addresses can be assigned to a user record:
 
 Trying to add an existing address will raise an error:
 
-    >>> client.create_user(email='dana@example.org',
-    ...                    password='somepass',
-    ...                    display_name='Dana')
-    <User "Dana" (...)>
+    >>> dana = client.create_user(email='dana@example.org',
+    ...                           password='somepass',
+    ...                           display_name='Dana')
+    >>> print(dana.display_name)
+    Dana
     >>> cris.add_address('dana@example.org')  # doctest: +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
     ...
@@ -512,7 +511,7 @@ Trying to add an existing address will raise an error:
 
 This can be overridden by using the ``absorb_existing`` flag:
 
-    >>> cris.add_address('dana@example.org', absorb_existing=True)
+    >>> print(cris.add_address('dana@example.org', absorb_existing=True))
     dana@example.org
 
 The user Chris will then be merged with Dana, acquiring all its subscriptions
@@ -564,10 +563,11 @@ them from their user's ``addresses`` list:
 
 
 Users can be added using ``create_user``. The display_name is optional:
-    >>> client.create_user(email='ler@primus.org',
-    ...                    password='somepass',
-    ...                    display_name='Ler')
-    <User "Ler" (...)>
+    >>> ler = client.create_user(email='ler@primus.org',
+    ...                          password='somepass',
+    ...                          display_name='Ler')
+    >>> print(ler.display_name)
+    Ler
     >>> ler = client.get_user('ler@primus.org')
     >>> print(ler.password)
     $...
@@ -602,7 +602,7 @@ A User's subscriptions can be access through their ``subscriptions`` property.
     >>> bill = client.get_user('bill@example.com')
     >>> for subscription in bill.subscriptions:
     ...     print(subscription)
-    <Member "bill@example.com" on "test-1.example.com">
+    Member "bill@example.com" on "test-1.example.com"
 
 If all you need are the list ids of all mailing lists a user is subscribed to,
 you can use the ``subscription_list_ids`` property.
@@ -736,8 +736,9 @@ Owners can be added via the ``add_owner`` method and they can have an optional
 
 The owner of the list not automatically added as a member:
 
-    >>> test_one.members
-    [<Member "bill@example.com" on "test-1.example.com">]
+    >>> for m in test_one.members:
+    ...     print(m)
+    Member "bill@example.com" on "test-1.example.com"
 
 Moderators can be added similarly:
 
@@ -748,24 +749,25 @@ Moderators can be added similarly:
 
 Moderators are also not automatically added as members:
 
-    >>> test_one.members
-    [<Member "bill@example.com" on "test-1.example.com">]
+    >>> for m in test_one.members:
+    ...     print(m)
+    Member "bill@example.com" on "test-1.example.com"
 
 Members and owners/moderators are separate entries in in the general members
 list:
 
-    >>> test_one.subscribe('bar@example.com', 'Bar',
-    ...                    pre_verified=True,
-    ...                    pre_confirmed=True)
-    <Member "bar@example.com" on "test-1.example.com">
+    >>> print(test_one.subscribe('bar@example.com', 'Bar',
+    ...                          pre_verified=True,
+    ...                          pre_confirmed=True))
+    Member "bar@example.com" on "test-1.example.com"
 
     >>> for member in client.members:
-    ...     print('%s: %s' %(member, member.role))
-    <Member "foo@example.com" on "test-1.example.com">: owner
-    <Member "bar@example.com" on "test-1.example.com">: moderator
-    <Member "bar@example.com" on "test-1.example.com">: member
-    <Member "bill@example.com" on "test-1.example.com">: member
-    <Member "anna@example.com" on "test-2.example.com">: member
+    ...     print('%s: %s' % (member, member.role))
+    Member "foo@example.com" on "test-1.example.com": owner
+    Member "bar@example.com" on "test-1.example.com": moderator
+    Member "bar@example.com" on "test-1.example.com": member
+    Member "bill@example.com" on "test-1.example.com": member
+    Member "anna@example.com" on "test-2.example.com": member
 
 Both owners and moderators can be removed:
 
@@ -965,18 +967,22 @@ You can use the `add` method on the ban list to ban an email address::
     anna@example.com
     >>> 'anna@example.com' in client.bans
     True
-    >>> client.bans.add('bill@example.com')
+    >>> print(client.bans.add('bill@example.com'))
     bill@example.com
-    >>> print(list(client.bans))
-    [anna@example.com, bill@example.com]
+    >>> for addr in list(client.bans):
+    ...     print(addr)
+    anna@example.com
+    bill@example.com
 
 The list of banned addresses can be paginated using the ``get_bans_page()``
 method::
 
-    >>> print(list(client.get_bans_page(count=1, page=1)))
-    [anna@example.com]
-    >>> print(list(client.get_bans_page(count=1, page=2)))
-    [bill@example.com]
+    >>> for addr in list(client.get_bans_page(count=1, page=1)):
+    ...     print(addr)
+    anna@example.com
+    >>> for addr in list(client.get_bans_page(count=1, page=2)):
+    ...     print(addr)
+    bill@example.com
 
 You can use the ``delete()`` method on a banned address to unban it, or the
 ``remove()`` method on the ban list::
@@ -984,8 +990,9 @@ You can use the ``delete()`` method on a banned address to unban it, or the
     >>> banned_anna.delete()
     >>> 'anna@example.com' in client.bans
     False
-    >>> print(list(client.bans))
-    [bill@example.com]
+    >>> for addr in list(client.bans):
+    ...     print(addr)
+    bill@example.com
     >>> client.bans.remove('bill@example.com')
     >>> 'bill@example.com' in client.bans
     False
@@ -1000,14 +1007,18 @@ The mailing-list-specific ban lists work in the same way::
     >>> banned_anna = test_one.bans.add('anna@example.com')
     >>> 'anna@example.com' in test_one.bans
     True
-    >>> test_one.bans.add('bill@example.com')
+    >>> print(test_one.bans.add('bill@example.com'))
     bill@example.com
-    >>> print(list(test_one.bans))
-    [anna@example.com, bill@example.com]
-    >>> print(list(test_one.get_bans_page(count=1, page=1)))
-    [anna@example.com]
-    >>> print(list(test_one.get_bans_page(count=1, page=2)))
-    [bill@example.com]
+    >>> for addr in list(test_one.bans):
+    ...     print(addr)
+    anna@example.com
+    bill@example.com
+    >>> for addr in list(test_one.get_bans_page(count=1, page=1)):
+    ...     print(addr)
+    anna@example.com
+    >>> for addr in list(test_one.get_bans_page(count=1, page=2)):
+    ...     print(addr)
+    bill@example.com
     >>> banned_anna.delete()
     >>> 'anna@example.com' in test_one.bans
     False
@@ -1024,7 +1035,7 @@ Each list object has an ``archivers`` attribute.
 
     >>> archivers = test_one.archivers
     >>> print(archivers)
-    <Archivers on "test-1.example.com">
+    Archivers on test-1.example.com
 
 The activation status of each available archiver can be accessed like a 
 key in a dictionary.
@@ -1067,7 +1078,7 @@ mailing list's ``header_matches`` attribute, which behaves like a list.
 
     >>> header_matches = test_one.header_matches
     >>> print(header_matches)
-    <HeaderMatches for "test-1.example.com">
+    Header matches for "test-1.example.com"
     >>> len(header_matches)
     0
 
@@ -1078,14 +1089,15 @@ Header matches can be added using the ``add()`` method. The arguments are:
 - the action to take when the header matches the pattern. This can be
   ``'accept'``, ``'discard'``, ``'reject'``, or ``'hold'``.
 
-    >>> header_matches.add('Subject', '^test: ', 'discard')
-    <HeaderMatch on "subject">
+    >>> print(header_matches.add('Subject', '^test: ', 'discard'))
+    Header match on "subject"
     >>> print(header_matches)
-    <HeaderMatches for "test-1.example.com">
+    Header matches for "test-1.example.com"
     >>> len(header_matches)
     1
-    >>> print(list(header_matches))
-    [<HeaderMatch on "subject">]
+    >>> for hm in list(header_matches):
+    ...     print(hm)
+    Header match on "subject"
 
 You can delete a header match by deleting it from the ``header_matches``
 collection.
@@ -1098,8 +1110,8 @@ You can also delete a header match using its ``delete()`` method, but be aware
 that the collection will not automatically be updated. Get a new collection
 from the list's ``header_matches`` attribute to see the change.
 
-    >>> header_matches.add('Subject', '^test: ', 'discard')
-    <HeaderMatch on "subject">
+    >>> print(header_matches.add('Subject', '^test: ', 'discard'))
+    Header match on "subject"
     >>> header_matches[0].delete()
     >>> len(header_matches) # not automatically updated
     1
@@ -1115,97 +1127,97 @@ configuration options are read-only.
 
     >>> cfg = client.configuration
     >>> for key in sorted(cfg):
-    ...     print(cfg[key])
-    <Configuration: "antispam">
-    <Configuration: "archiver.mail_archive">
-    <Configuration: "archiver.master">
-    <Configuration: "archiver.mhonarc">
-    <Configuration: "archiver.prototype">
-    <Configuration: "bounces">
-    <Configuration: "database">
-    <Configuration: "devmode">
-    <Configuration: "digests">
-    <Configuration: "dmarc">
-    <Configuration: "language.ar">
-    <Configuration: "language.ast">
-    <Configuration: "language.ca">
-    <Configuration: "language.cs">
-    <Configuration: "language.da">
-    <Configuration: "language.de">
-    <Configuration: "language.el">
-    <Configuration: "language.en">
-    <Configuration: "language.es">
-    <Configuration: "language.et">
-    <Configuration: "language.eu">
-    <Configuration: "language.fi">
-    <Configuration: "language.fr">
-    <Configuration: "language.gl">
-    <Configuration: "language.he">
-    <Configuration: "language.hr">
-    <Configuration: "language.hu">
-    <Configuration: "language.ia">
-    <Configuration: "language.it">
-    <Configuration: "language.ja">
-    <Configuration: "language.ko">
-    <Configuration: "language.lt">
-    <Configuration: "language.nl">
-    <Configuration: "language.no">
-    <Configuration: "language.pl">
-    <Configuration: "language.pt">
-    <Configuration: "language.pt_BR">
-    <Configuration: "language.ro">
-    <Configuration: "language.ru">
-    <Configuration: "language.sk">
-    <Configuration: "language.sl">
-    <Configuration: "language.sr">
-    <Configuration: "language.sv">
-    <Configuration: "language.tr">
-    <Configuration: "language.uk">
-    <Configuration: "language.vi">
-    <Configuration: "language.zh_CN">
-    <Configuration: "language.zh_TW">
-    <Configuration: "logging.archiver">
-    <Configuration: "logging.bounce">
-    <Configuration: "logging.config">
-    <Configuration: "logging.database">
-    <Configuration: "logging.debug">
-    <Configuration: "logging.error">
-    <Configuration: "logging.fromusenet">
-    <Configuration: "logging.http">
-    <Configuration: "logging.locks">
-    <Configuration: "logging.mischief">
-    <Configuration: "logging.plugins">
-    <Configuration: "logging.root">
-    <Configuration: "logging.runner">
-    <Configuration: "logging.smtp">
-    <Configuration: "logging.subscribe">
-    <Configuration: "logging.vette">
-    <Configuration: "mailman">
-    <Configuration: "mta">
-    <Configuration: "nntp">
-    <Configuration: "passwords">
-    <Configuration: "paths.dev">
-    <Configuration: "paths.fhs">
-    <Configuration: "paths.here">
-    <Configuration: "paths.local">
-    <Configuration: "plugin.master">
-    <Configuration: "runner.archive">
-    <Configuration: "runner.bad">
-    <Configuration: "runner.bounces">
-    <Configuration: "runner.command">
-    <Configuration: "runner.digest">
-    <Configuration: "runner.in">
-    <Configuration: "runner.lmtp">
-    <Configuration: "runner.nntp">
-    <Configuration: "runner.out">
-    <Configuration: "runner.pipeline">
-    <Configuration: "runner.rest">
-    <Configuration: "runner.retry">
-    <Configuration: "runner.shunt">
-    <Configuration: "runner.virgin">
-    <Configuration: "shell">
-    <Configuration: "styles">
-    <Configuration: "webservice">
+    ...     print(cfg[key].name)
+    antispam
+    archiver.mail_archive
+    archiver.master
+    archiver.mhonarc
+    archiver.prototype
+    bounces
+    database
+    devmode
+    digests
+    dmarc
+    language.ar
+    language.ast
+    language.ca
+    language.cs
+    language.da
+    language.de
+    language.el
+    language.en
+    language.es
+    language.et
+    language.eu
+    language.fi
+    language.fr
+    language.gl
+    language.he
+    language.hr
+    language.hu
+    language.ia
+    language.it
+    language.ja
+    language.ko
+    language.lt
+    language.nl
+    language.no
+    language.pl
+    language.pt
+    language.pt_BR
+    language.ro
+    language.ru
+    language.sk
+    language.sl
+    language.sr
+    language.sv
+    language.tr
+    language.uk
+    language.vi
+    language.zh_CN
+    language.zh_TW
+    logging.archiver
+    logging.bounce
+    logging.config
+    logging.database
+    logging.debug
+    logging.error
+    logging.fromusenet
+    logging.http
+    logging.locks
+    logging.mischief
+    logging.plugins
+    logging.root
+    logging.runner
+    logging.smtp
+    logging.subscribe
+    logging.vette
+    mailman
+    mta
+    nntp
+    passwords
+    paths.dev
+    paths.fhs
+    paths.here
+    paths.local
+    plugin.master
+    runner.archive
+    runner.bad
+    runner.bounces
+    runner.command
+    runner.digest
+    runner.in
+    runner.lmtp
+    runner.nntp
+    runner.out
+    runner.pipeline
+    runner.rest
+    runner.retry
+    runner.shunt
+    runner.virgin
+    shell
+    styles
+    webservice
 
 
 Each configuration object is a dictionary and you can iterate over them:

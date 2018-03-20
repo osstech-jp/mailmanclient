@@ -16,6 +16,7 @@
 import warnings
 
 from mailmanclient.restobjects.mailinglist import MailingList
+from mailmanclient.restobjects.templates import TemplateList
 from mailmanclient.restbase.base import RESTObject
 from mailmanclient.restbase.page import Page
 
@@ -100,3 +101,16 @@ class Domain(RESTObject):
         url = self._url + '/owners'
         response, content = self._connection.call(
             url, {'owner': owner})
+
+    @property
+    def templates(self):
+        url = self._url + '/uris'
+        return TemplateList(self._connection, url)
+
+    def set_template(self, template_name, uri, username=None, password=None):
+        url = self._url + '/uris'
+        data = {template_name: uri}
+        if username is not None and password is not None:
+            data['username'] = username
+            data['password'] = password
+        return self._connection.call(url, data, 'PATCH')[1]

@@ -23,6 +23,7 @@ from mailmanclient.restobjects.archivers import ListArchivers
 from mailmanclient.restobjects.member import Member
 from mailmanclient.restobjects.settings import Settings
 from mailmanclient.restobjects.held_message import HeldMessage
+from mailmanclient.restobjects.templates import TemplateList
 from mailmanclient.restbase.base import RESTObject
 from mailmanclient.restbase.page import Page
 
@@ -332,3 +333,16 @@ class MailingList(RESTObject):
     def header_matches(self):
         url = 'lists/{0}/header-matches'.format(self.list_id)
         return HeaderMatches(self._connection, url, self)
+
+    @property
+    def templates(self):
+        url = self._url + '/uris'
+        return TemplateList(self._connection, url)
+
+    def set_template(self, template_name, uri, username=None, password=None):
+        url = self._url + '/uris'
+        data = {template_name: uri}
+        if username is not None and password is not None:
+            data['username'] = username
+            data['password'] = password
+        return self._connection.call(url, data, 'PATCH')[1]

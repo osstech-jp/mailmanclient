@@ -31,6 +31,7 @@ from mailmanclient.restobjects.member import Member
 from mailmanclient.restobjects.preferences import Preferences
 from mailmanclient.restobjects.queue import Queue
 from mailmanclient.restobjects.user import User
+from mailmanclient.restobjects.templates import Template, TemplateList
 from mailmanclient.restbase.connection import Connection
 from mailmanclient.restbase.page import Page
 
@@ -214,3 +215,23 @@ class Client:
 
     def get_bans_page(self, count=50, page=1):
         return Page(self._connection, 'bans', BannedAddress, count, page)
+
+    @property
+    def templates(self):
+        """Get all site-context templates.
+        """
+        return TemplateList(self._connection, 'uris')
+
+    def get_templates_page(self, count=25, page=1):
+        """Get paginated site-context templates.
+        """
+        return Page(self._connection, 'uris', Template, count, page)
+
+    def set_template(self, template_name, url, username=None, password=None):
+        """Set template in site-context.
+        """
+        data = {template_name: url}
+        if username is not None and password is not None:
+            data['username'] = username
+            data['password'] = password
+        return self._connection.call('uris', data, 'PATCH')[1]

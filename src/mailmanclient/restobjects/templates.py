@@ -14,9 +14,30 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailman.client.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Module contents."""
+"""Template objects."""
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+from mailmanclient.restbase.base import RESTList, RESTObject
+
+
 __all__ = [
+    'Template',
+    'TemplateList'
 ]
+
+
+class TemplateList(RESTList):
+
+    def __init__(self, connection, url,  data=None, context=None):
+        super(RESTList, self).__init__(connection, url, data)
+        self._factory = lambda data: Template(
+            self._connection, data['self_link'], data)
+
+
+class Template(RESTObject):
+    _properties = ('self_link', 'name', 'uri', 'username', 'password')
+    _writable_properties = ['uri', 'username', 'password']
+
+    def __repr__(self):
+        return '<Template {}>'.format(self.name)

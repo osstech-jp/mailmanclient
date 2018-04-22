@@ -92,7 +92,7 @@ class BannedAddress(RESTObject):
     _writable_properties = []
 
     def __repr__(self):
-        return "<BannedAddress {!r}>".format(self.email)
+        return '<BannedAddress {!r}>'.format(self.email)
 
     def __str__(self):
         return self.email

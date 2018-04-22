@@ -51,7 +51,7 @@ class Address(RESTObject, PreferencesMixin):
                    'self_link', 'verified_on')
 
     def __repr__(self):
-        return "<Address {!r}>".format(self.email)
+        return '<Address {!r}>'.format(self.email)
 
     def __str__(self):
         return self.email

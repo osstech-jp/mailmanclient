@@ -104,6 +104,24 @@ Once you have a domain, you can create mailing lists in that domain.
     >>> print(test_one.display_name)
     Test-1
 
+You can create a mailing list with a specific list style.
+
+    >>> test_two = example.create_list('test-announce', style_name='legacy-announce')
+    >>> print(test_two.fqdn_listname)
+    test-announce@example.com
+
+You can retrieve a list of known mailing list styles along with the default
+one.
+
+    >>> styles = client.styles
+    >>> from operator import itemgetter
+    >>> for style in sorted(styles['styles'], key=itemgetter('name')):
+    ...     print('{0}: {1}'.format(style['name'], style['description']))
+    legacy-announce: Announce only mailing list style.
+    legacy-default: Ordinary discussion mailing list style.
+    >>> print(styles['default'])
+    legacy-default
+
 You can also retrieve the mailing list after the fact.
 
     >>> my_list = client.get_list('test-1@example.com')
@@ -127,6 +145,7 @@ And you can print all the known mailing lists.
     test-2@example.com
     test-3@example.com
     test-3@example.net
+    test-announce@example.com
 
 You can also select advertised lists only.
 ::
@@ -138,6 +157,7 @@ You can also select advertised lists only.
     test-2@example.com
     test-3@example.com
     test-3@example.net
+    test-announce@example.com
 
 List results can be retrieved as pages:
 
@@ -147,7 +167,7 @@ List results can be retrieved as pages:
     >>> len(page)
     2
     >>> page.total_size
-    4
+    5
     >>> for m_list in page:
     ...     print(m_list.fqdn_listname)
     test-1@example.com
@@ -176,6 +196,7 @@ object.
     test-1@example.com
     test-2@example.com
     test-3@example.com
+    test-announce@example.com
 
 It is also possible to display only advertised lists when using the domain.
 
@@ -183,6 +204,7 @@ It is also possible to display only advertised lists when using the domain.
     ...     print(mlist.fqdn_listname)
     test-2@example.com
     test-3@example.com
+    test-announce@example.com
     >>> for mlist in example.get_list_page(count=2, page=1, advertised=True):
     ...     print(mlist.fqdn_listname)
     test-2@example.com
@@ -201,7 +223,7 @@ You can also delete a list using the client instance's delete_list method.
     ...     print(mlist.fqdn_listname)
     test-1@example.com
     test-2@example.com
-
+    test-announce@example.com
 
 Membership
 ==========

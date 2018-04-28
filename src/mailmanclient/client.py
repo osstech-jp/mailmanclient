@@ -30,6 +30,7 @@ from mailmanclient.restobjects.mailinglist import MailingList
 from mailmanclient.restobjects.member import Member
 from mailmanclient.restobjects.preferences import Preferences
 from mailmanclient.restobjects.queue import Queue
+from mailmanclient.restobjects.styles import Styles
 from mailmanclient.restobjects.user import User
 from mailmanclient.restobjects.templates import Template, TemplateList
 from mailmanclient.restbase.connection import Connection
@@ -95,6 +96,10 @@ class Client:
             queues[entry['name']] = Queue(
                 self._connection, entry['self_link'], entry)
         return queues
+
+    @property
+    def styles(self):
+        return Styles(self._connection, 'lists/styles')
 
     @property
     def lists(self):

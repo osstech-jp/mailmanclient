@@ -81,10 +81,12 @@ class Domain(RESTObject):
             url += '?advertised=true'
         return Page(self._connection, url, MailingList, count, page)
 
-    def create_list(self, list_name):
+    def create_list(self, list_name, style_name=None):
         fqdn_listname = '{0}@{1}'.format(list_name, self.mail_host)
-        response, content = self._connection.call(
-            'lists', dict(fqdn_listname=fqdn_listname))
+        data = dict(fqdn_listname=fqdn_listname)
+        if style_name is not None:
+            data['style_name'] = style_name
+        response, content = self._connection.call('lists', data)
         return MailingList(self._connection, response['location'])
 
     # def remove_owner(self, owner):

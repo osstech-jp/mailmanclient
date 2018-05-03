@@ -313,6 +313,14 @@ We can also view the memberships for a single mailing list.
     Member "anna@example.com" on "test-1.example.com"
     Member "bill@example.com" on "test-1.example.com"
 
+Membership may have a name associated, this depends on whether the member ``Address``
+or ``User`` has a ``display_name`` attribute.
+
+    >>> for member in test_one.members:
+    ...     print(member.display_name)
+    Anna
+    Bill
+
 Membership lists can be paginated, to recieve only a part of the result.
 
     >>> page = client.get_member_page(count=2, page=1)
@@ -357,6 +365,8 @@ We can get a single membership too.
     Member "cris@example.com" on "test-2.example.com"
     >>> print(cris_test_two.role)
     member
+    >>> print(cris_test_two.display_name)
+    Cris
 
 A membership can also be retrieved without instantiating the list object first:
 

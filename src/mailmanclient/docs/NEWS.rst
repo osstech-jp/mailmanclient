@@ -6,11 +6,21 @@ NEWS for mailmanclient
 3.1.2 (201X-XX-XX)
 ==================
 
+Changes
+-------
+
 * Add '.pc' (patch directory) to list of ignored patterns when building the
    documentation with Sphinx.
 * `Mailinglist.add_owner` and `Mailinglist.add_moderator` now accept an
   additional `display_name` argument that allows associating display names with
   these memberships.
+
+Backwards Incompatible Changes
+-------------------------------
+
+* `MailingList.owners` and `MailingList.moderators` now returns a list of
+  `Member` objects instead of a list of emails.
+
 
 
 3.1.1 (2017-10-07)

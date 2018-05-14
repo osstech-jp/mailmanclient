@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailman.client.  If not, see <http://www.gnu.org/licenses/>.
 
-from setup_helpers import description, get_version, require_python
+from setup_helpers import get_version, require_python
 from setuptools import setup, find_packages
 
 
@@ -27,8 +27,8 @@ setup(
     name='mailmanclient',
     version=__version__,
     packages=find_packages('src'),
-    description='mailmanclient -- python library for Mailman REST API',
-    long_description=description('README.rst'),
+    description='mailmanclient -- Python bindings for Mailman REST API',
+    long_description=open('README.rst').read(),
     package_dir={'': 'src'},
     include_package_data=True,
     maintainer='Barry Warsaw',

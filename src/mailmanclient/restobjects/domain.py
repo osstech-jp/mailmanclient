@@ -17,6 +17,7 @@ import warnings
 
 from mailmanclient.restobjects.mailinglist import MailingList
 from mailmanclient.restobjects.templates import TemplateList
+from mailmanclient.restobjects.user import User
 from mailmanclient.restbase.base import RESTObject
 from mailmanclient.restbase.page import Page
 
@@ -59,7 +60,8 @@ class Domain(RESTObject):
         if 'entries' not in content:
             return []
         else:
-            return [item for item in content['entries']]
+            return [User(self._connection, entry['self_link'], entry)
+                    for entry in content['entries']]
 
     @property
     def lists(self):
@@ -89,9 +91,12 @@ class Domain(RESTObject):
         response, content = self._connection.call('lists', data)
         return MailingList(self._connection, response['location'])
 
+    # TODO: Add this when the API supports removing a single owner.
     # def remove_owner(self, owner):
-    #     TODO: add this when API supports it.
-    #     pass
+    #     url = self._url + '/owners/{}'.format(owner)
+    #     response, content = self._connection.call(
+    #         url, method='DELETE')
+    #     return response
 
     def remove_all_owners(self):
         url = self._url + '/owners'

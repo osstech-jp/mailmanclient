@@ -3,7 +3,7 @@ NEWS for mailmanclient
 =======================
 
 
-3.1.2 (201X-XX-XX)
+3.2.0 (201X-XX-XX)
 ==================
 
 Changes
@@ -22,6 +22,12 @@ Backwards Incompatible Changes
   `Member` objects instead of a list of emails.
 
 
+
+Backwards Incompatible Changes
+-------------------------------
+
+* `Domain.owners` now returns a list of `User` objects instead of just a dictionary of
+  JSON response. (!63)
 
 3.1.1 (2017-10-07)
 ==================

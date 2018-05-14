@@ -52,7 +52,9 @@ class MailingList(RESTObject):
         if 'entries' not in content:
             return []
         else:
-            return [item['email'] for item in content['entries']]
+            return [Member(self._connection, entry['self_link'], entry)
+                    for entry in sorted(content['entries'],
+                                        key=itemgetter('address'))]
 
     @property
     def moderators(self):
@@ -61,7 +63,9 @@ class MailingList(RESTObject):
         if 'entries' not in content:
             return []
         else:
-            return [item['email'] for item in content['entries']]
+            return [Member(self._connection, entry['self_link'], entry)
+                    for entry in sorted(content['entries'],
+                                        key=itemgetter('address'))]
 
     @property
     def members(self):

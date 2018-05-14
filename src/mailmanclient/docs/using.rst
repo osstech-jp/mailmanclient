@@ -763,7 +763,7 @@ Owners can be added via the ``add_owner`` method and they can have an optional
 
     >>> test_one.add_owner('foo@example.com', display_name='Foo')
     >>> for owner in test_one.owners:
-    ...     print(owner)
+    ...     print(owner.email)
     foo@example.com
 
 The owner of the list not automatically added as a member:
@@ -776,7 +776,7 @@ Moderators can be added similarly:
 
     >>> test_one.add_moderator('bar@example.com', display_name='Bar')
     >>> for moderator in test_one.moderators:
-    ...     print(moderator)
+    ...     print(moderator.email)
     bar@example.com
 
 Moderators are also not automatically added as members:

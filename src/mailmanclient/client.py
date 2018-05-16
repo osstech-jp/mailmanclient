@@ -240,3 +240,27 @@ class Client:
             data['username'] = username
             data['password'] = password
         return self._connection.call('uris', data, 'PATCH')[1]
+
+    def find_lists(self, subscriber, role=None, count=50, page=1):
+        """
+        Given a subscriber and a role, return all the list they are subscribed
+        to with given role.
+
+        If no role is specified all the related mailing lists are returned
+        without duplicates, even though there can potentially be multiple
+        memberships of a user in a single mailing list.
+
+        :param subscriber: The address of the subscriber.
+        :type subscriber: str
+        :param role: owner, moderator or subscriber
+        :type role: str
+        """
+        url = 'lists/find'
+        data = dict(subscriber=subscriber, count=count, page=page)
+        if role is not None:
+            data['role'] = role
+        response, content = self._connection.call(url, data)
+        if 'entries' not in content:
+            return []
+        return [MailingList(self._connection, entry['self_link'], entry)
+                for entry in content['entries']]

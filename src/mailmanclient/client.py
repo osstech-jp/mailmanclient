@@ -47,16 +47,17 @@ __all__ = [
 #
 
 class Client:
-    """Access the Mailman REST API root."""
+    """Access the Mailman REST API root.
+
+    :param baseurl: The base url to access the Mailman 3 REST API.
+    :param name: The Basic Auth user name.  If given, the `password` must
+        also be given.
+    :param password: The Basic Auth password.  If given the `name` must
+        also be given.
+    """
 
     def __init__(self, baseurl, name=None, password=None):
         """Initialize client access to the REST API.
-
-        :param baseurl: The base url to access the Mailman 3 REST API.
-        :param name: The Basic Auth user name.  If given, the `password` must
-            also be given.
-        :param password: The Basic Auth password.  If given the `name` must
-            also be given.
         """
         self._connection = Connection(baseurl, name, password)
 
@@ -66,30 +67,48 @@ class Client:
 
     @property
     def system(self):
+        """
+        Get the basic system information.
+        """
         return self._connection.call('system/versions')[1]
 
     @property
     def preferences(self):
+        """
+        Get all default system Preferences.
+        """
         return Preferences(self._connection, 'system/preferences')
 
     @property
     def configuration(self):
+        """
+        Get the system configuration.
+        """
         response, content = self._connection.call('system/configuration')
         return {section: Configuration(
             self._connection, section) for section in content['sections']}
 
     @property
     def pipelines(self):
+        """
+        Get a list of all Pipelines.
+        """
         response, content = self._connection.call('system/pipelines')
         return content
 
     @property
     def chains(self):
+        """
+        Get a list of all the Chains.
+        """
         response, content = self._connection.call('system/chains')
         return content
 
     @property
     def queues(self):
+        """
+        Get a list of all Queues.
+        """
         response, content = self._connection.call('queues')
         queues = {}
         for entry in content['entries']:
@@ -103,9 +122,18 @@ class Client:
 
     @property
     def lists(self):
+        """
+        Get a list of all MailingLists.
+        """
         return self.get_lists()
 
     def get_lists(self, advertised=None):
+        """Get a list of all the MailingLists.
+
+        :param advertised: If marked True, returns all MailingLists including
+                           the ones that aren't advertised.
+        :type advertised: Bool
+        """
         url = 'lists'
         if advertised:
             url += '?advertised=true'
@@ -116,6 +144,14 @@ class Client:
                 for entry in content['entries']]
 
     def get_list_page(self, count=50, page=1, advertised=None):
+        """
+        Get a list of all MailingList with pagination.
+
+        :param count: Number of entries per-page (defaults to 50).
+        :param page: The page number to return (defaults to 1).
+        :param advertised: If marked True, returns all MailingLists including
+                           the ones that aren't advertised.
+        """
         url = 'lists'
         if advertised:
             url += '?advertised=true'
@@ -123,6 +159,9 @@ class Client:
 
     @property
     def domains(self):
+        """
+        Get a list of all Domains.
+        """
         response, content = self._connection.call('domains')
         if 'entries' not in content:
             return []
@@ -132,6 +171,9 @@ class Client:
 
     @property
     def members(self):
+        """
+        Get a list of all the Members.
+        """
         response, content = self._connection.call('members')
         if 'entries' not in content:
             return []
@@ -139,6 +181,13 @@ class Client:
                 for entry in content['entries']]
 
     def get_member(self, fqdn_listname, subscriber_address):
+        """
+        Get the Member object for a given MailingList and Subsciber's Email
+        Address.
+
+        :param fqdn_listname: Fully qualified address for the MailingList.
+        :param subscriber_address: Email Address for the subscriber.
+        """
         return self.get_list(fqdn_listname).get_member(subscriber_address)
 
     def get_member_page(self, count=50, page=1):
@@ -146,6 +195,9 @@ class Client:
 
     @property
     def users(self):
+        """
+        Get all the users.
+        """
         response, content = self._connection.call('users')
         if 'entries' not in content:
             return []
@@ -154,10 +206,26 @@ class Client:
                                     key=itemgetter('self_link'))]
 
     def get_user_page(self, count=50, page=1):
+        """
+        Get all the users with pagination.
+
+        :param count: Number of entries per-page (defaults to 50).
+        :param page: The page number to return (defaults to 1).
+        """
         return Page(self._connection, 'users', User, count, page)
 
     def create_domain(self, mail_host, base_url=MISSING,
                       description=None, owner=None, alias_domain=None):
+        """
+        Create a new Domain.
+
+        :param mail_host: The Mail host for the new domain. If you want
+                          "foo@bar.com" as the address for your MailingList,
+                          use "bar.com" here.
+        :param description: A brief description for this Domain.
+        :param owner: Email address for the owner of this list.
+        :param alias_domain: Alias domain.
+        """
         if base_url is not MISSING:
             warnings.warn(
                 'The `base_url` parameter in the `create_domain()` method is '
@@ -174,11 +242,18 @@ class Client:
         return Domain(self._connection, response['location'])
 
     def delete_domain(self, mail_host):
+        """
+        Delete a Domain.
+
+        :param mail_host: The Mail host for the domain you want to delete.
+        """
         response, content = self._connection.call(
             'domains/{0}'.format(mail_host), None, 'DELETE')
 
     def get_domain(self, mail_host, web_host=MISSING):
-        """Get domain by its mail_host or its web_host."""
+        """
+        Get Domain by its mail_host.
+        """
         if web_host is not MISSING:
             warnings.warn(
                 'The `web_host` parameter in the `get_domain()` method is '
@@ -189,6 +264,13 @@ class Client:
         return Domain(self._connection, content['self_link'])
 
     def create_user(self, email, password, display_name=''):
+        """
+        Create a new User.
+
+        :param email: Email address for the new user.
+        :param password: Password for the new user.
+        :param display_name: An optional name for the new user.
+        """
         response, content = self._connection.call(
             'users', dict(email=email,
                           password=password,
@@ -196,29 +278,58 @@ class Client:
         return User(self._connection, response['location'])
 
     def get_user(self, address):
+        """
+        Given an Email Address, return the User it belongs to.
+
+        :param address: Email Address of the User.
+        """
         response, content = self._connection.call(
             'users/{0}'.format(address))
         return User(self._connection, content['self_link'], content)
 
     def get_address(self, address):
+        """
+        Given an Email Address, return the Address object.
+
+        :param address: Email address.
+        """
         response, content = self._connection.call(
             'addresses/{0}'.format(address))
         return Address(self._connection, content['self_link'], content)
 
     def get_list(self, fqdn_listname):
+        """
+        Get a MailingList object.
+
+        :param fqdn_listname: Fully qualified name of the MailingList.
+        """
         response, content = self._connection.call(
             'lists/{0}'.format(fqdn_listname))
         return MailingList(self._connection, content['self_link'], content)
 
     def delete_list(self, fqdn_listname):
+        """
+        Delete a MailingList.
+
+        :param fqdn_listname: Fully qualified name of the MailingList.
+        """
         response, content = self._connection.call(
             'lists/{0}'.format(fqdn_listname), None, 'DELETE')
 
     @property
     def bans(self):
+        """
+        Get a list of all the bans.
+        """
         return Bans(self._connection, 'bans', mlist=None)
 
     def get_bans_page(self, count=50, page=1):
+        """
+        Get a list of all the bans with pagination.
+
+        :param count: Number of entries per-page (defaults to 50).
+        :param page: The page number to return (defaults to 1).
+        """
         return Page(self._connection, 'bans', BannedAddress, count, page)
 
     @property

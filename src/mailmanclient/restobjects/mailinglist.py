@@ -350,3 +350,54 @@ class MailingList(RESTObject):
             data['username'] = username
             data['password'] = password
         return self._connection.call(url, data, 'PATCH')[1]
+
+    def _check_membership(self, address, allowed_roles):
+        """
+        Given an address and role, check if there is a membership record that
+        matches the given address with a given role for this Mailing List.
+        """
+        url = 'members/find'
+        data = {'subscriber': address,
+                'list_id': self.list_id}
+        response, content = self._connection.call(url, data=data)
+        if 'entries' not in content:
+            return False
+        for membership in content['entries']:
+            # We check for all the returned roles for this User and MailingList
+            if membership['role'] in allowed_roles:
+                return True
+        return False
+
+    def is_owner(self, address):
+        """
+        Given an address, checks if the given address is an owner of this
+        mailing list.
+        """
+        return self._check_membership(address=address,
+                                      allowed_roles=('owner',))
+
+    def is_moderator(self, address):
+        """
+        Given an address, checks if the given address is a moderator of this
+        mailing list.
+        """
+        return self._check_membership(address=address,
+                                      allowed_roles=('moderator',))
+
+    def is_member(self, address):
+        """
+        Given an address, checks if the given address is subscribed to this
+        mailing list.
+        """
+        return self._check_membership(address=address,
+                                      allowed_roles=('member',))
+
+    def is_owner_or_mod(self, address):
+        """
+        Given an address, checks if the given address is either a owner or
+        a moderator of this list.
+
+        It is possible for them to be both owner and moderator.
+        """
+        return self._check_membership(address=address,
+                                      allowed_roles=('owner', 'moderator'))

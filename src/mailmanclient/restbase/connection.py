@@ -15,10 +15,9 @@
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
 import json
 from base64 import b64encode
-from six.moves.urllib_error import HTTPError
-from six.moves.urllib_parse import urljoin, urlencode
+from urllib.error import HTTPError
+from urllib.parse import urljoin, urlencode
 
-import six
 from httplib2 import Http
 
 from mailmanclient.constants import __version__
@@ -81,10 +80,7 @@ class Connection:
             }
         data_str = None
         if data is not None:
-            for k, v in data.items():
-                if not isinstance(v, bytes):
-                    data[k] = six.text_type(v).encode('utf-8')
-            data_str = urlencode(data, doseq=True)
+            data_str = urlencode(data, doseq=True, encoding='utf-8')
             headers['Content-Type'] = 'application/x-www-form-urlencoded'
         if method is None:
             if data_str is None:
@@ -104,7 +100,7 @@ class Connection:
             if len(content) == 0:
                 return response, None
             # XXX Work around for http://bugs.python.org/issue10038
-            if isinstance(content, six.binary_type):
+            if isinstance(content, bytes):
                 content = content.decode('utf-8')
             return response, json.loads(content)
         except HTTPError:

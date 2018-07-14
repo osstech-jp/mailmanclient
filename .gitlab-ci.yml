@@ -2,16 +2,19 @@ image: maxking/mailman-ci-runner
 
 python3.5:
   script:
-  - tox -e py35
+    - tox -e py35
 
 python3.6:
   script:
-  - tox -e py36
+    - tox -e py36
 
+python3.7:
+  script:
+    - tox -e py37
 lint:
   script:
-  - tox -e lint
+    - tox -e lint
 
 docs:
   script:
-  - tox -e docs
+    - tox -e docs

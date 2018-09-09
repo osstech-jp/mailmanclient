@@ -57,8 +57,7 @@ class Client:
     """
 
     def __init__(self, baseurl, name=None, password=None):
-        """Initialize client access to the REST API.
-        """
+        """Initialize client access to the REST API."""
         self._connection = Connection(baseurl, name, password)
 
     def __repr__(self):
@@ -67,22 +66,28 @@ class Client:
 
     @property
     def system(self):
-        """
-        Get the basic system information.
+        """Get the basic system information.
+
+        :returns: System information about Mailman Core
+        :rtype: Dict[str, str]
         """
         return self._connection.call('system/versions')[1]
 
     @property
     def preferences(self):
-        """
-        Get all default system Preferences.
+        """Get all default system Preferences.
+
+        :returns: System preferences.
+        :rtype: :class:`Preferences`
         """
         return Preferences(self._connection, 'system/preferences')
 
     @property
     def configuration(self):
-        """
-        Get the system configuration.
+        """Get the system configuration.
+
+        :returns: All the system configuration.
+        :rtype: Dict[str, :class:`Configuration`]
         """
         response, content = self._connection.call('system/configuration')
         return {section: Configuration(
@@ -90,24 +95,30 @@ class Client:
 
     @property
     def pipelines(self):
-        """
-        Get a list of all Pipelines.
+        """Get a list of all Pipelines.
+
+        :returns: A list of all the pipelines in Core.
+        :rtype: List
         """
         response, content = self._connection.call('system/pipelines')
         return content
 
     @property
     def chains(self):
-        """
-        Get a list of all the Chains.
+        """Get a list of all the Chains.
+
+        :returns: A list of all the chains in Core.
+        :rtype: List
         """
         response, content = self._connection.call('system/chains')
         return content
 
     @property
     def queues(self):
-        """
-        Get a list of all Queues.
+        """Get a list of all Queues.
+
+        :returns: A list of all the queues in Core.
+        :rtype: List
         """
         response, content = self._connection.call('queues')
         queues = {}
@@ -118,21 +129,30 @@ class Client:
 
     @property
     def styles(self):
+        """All the default styles in Mailman Core.
+
+        :returns: All the styles in Core.
+        :rtype: :class:`Styles`
+        """
         return Styles(self._connection, 'lists/styles')
 
     @property
     def lists(self):
-        """
-        Get a list of all MailingLists.
+        """Get a list of all MailingLists.
+
+        :returns: All the mailing lists.
+        :rtype: list(:class:`MailingList`)
         """
         return self.get_lists()
 
-    def get_lists(self, advertised=None):
+    def get_lists(self, advertised=False):
         """Get a list of all the MailingLists.
 
         :param advertised: If marked True, returns all MailingLists including
                            the ones that aren't advertised.
-        :type advertised: Bool
+        :type advertised: bool
+        :returns: A list of mailing lists.
+        :rtype: List(:class:`MailingList`)
         """
         url = 'lists'
         if advertised:
@@ -144,8 +164,7 @@ class Client:
                 for entry in content['entries']]
 
     def get_list_page(self, count=50, page=1, advertised=None):
-        """
-        Get a list of all MailingList with pagination.
+        """Get a list of all MailingList with pagination.
 
         :param count: Number of entries per-page (defaults to 50).
         :param page: The page number to return (defaults to 1).
@@ -159,8 +178,10 @@ class Client:
 
     @property
     def domains(self):
-        """
-        Get a list of all Domains.
+        """Get a list of all Domains.
+
+        :returns: All the domains on the system.
+        :rtype: List[:class:`Domain`]
         """
         response, content = self._connection.call('domains')
         if 'entries' not in content:
@@ -171,8 +192,10 @@ class Client:
 
     @property
     def members(self):
-        """
-        Get a list of all the Members.
+        """Get a list of all the Members.
+
+        :returns: All the list memebrs.
+        :rtype: List[:class:`Member`]
         """
         response, content = self._connection.call('members')
         if 'entries' not in content:
@@ -181,22 +204,32 @@ class Client:
                 for entry in content['entries']]
 
     def get_member(self, fqdn_listname, subscriber_address):
-        """
-        Get the Member object for a given MailingList and Subsciber's Email
+        """Get the Member object for a given MailingList and Subsciber's Email
         Address.
 
-        :param fqdn_listname: Fully qualified address for the MailingList.
-        :param subscriber_address: Email Address for the subscriber.
+        :param str fqdn_listname: Fully qualified address for the MailingList.
+        :param str subscriber_address: Email Address for the subscriber.
+        :returns: A member of a list.
+        :rtype: :class:`Member`
         """
         return self.get_list(fqdn_listname).get_member(subscriber_address)
 
     def get_member_page(self, count=50, page=1):
+        """Return a paginated list of Members.
+
+        :param int count: Number of items to return.
+        :param int page: The page number.
+        :returns: Paginated lists of members.
+        :rtype: :class:`Page` of :class:`Member`.
+        """
         return Page(self._connection, 'members', Member, count, page)
 
     @property
     def users(self):
-        """
-        Get all the users.
+        """Get all the users.
+
+        :returns: All the users in Mailman Core.
+        :rtype: List[:class:`User`]
         """
         response, content = self._connection.call('users')
         if 'entries' not in content:
@@ -206,25 +239,27 @@ class Client:
                                     key=itemgetter('self_link'))]
 
     def get_user_page(self, count=50, page=1):
-        """
-        Get all the users with pagination.
+        """Get all the users with pagination.
 
-        :param count: Number of entries per-page (defaults to 50).
-        :param page: The page number to return (defaults to 1).
+        :param int count: Number of entries per-page (defaults to 50).
+        :param int page: The page number to return (defaults to 1).
+        :returns: Paginated list of users on Mailman.
+        :rtype: :class:`Page` of :class:`User`
         """
         return Page(self._connection, 'users', User, count, page)
 
     def create_domain(self, mail_host, base_url=MISSING,
                       description=None, owner=None, alias_domain=None):
-        """
-        Create a new Domain.
+        """Create a new Domain.
 
-        :param mail_host: The Mail host for the new domain. If you want
-                          "foo@bar.com" as the address for your MailingList,
-                          use "bar.com" here.
-        :param description: A brief description for this Domain.
-        :param owner: Email address for the owner of this list.
-        :param alias_domain: Alias domain.
+        :param str mail_host: The Mail host for the new domain. If you want
+            foo@bar.com" as the address for your MailingList, use "bar.com"
+            here.
+        :param str description: A brief description for this Domain.
+        :param str owner: Email address for the owner of this list.
+        :param str alias_domain: Alias domain.
+        :returns: The created Domain.
+        :rtype: :class:`Domain`
         """
         if base_url is not MISSING:
             warnings.warn(
@@ -242,18 +277,15 @@ class Client:
         return Domain(self._connection, response['location'])
 
     def delete_domain(self, mail_host):
-        """
-        Delete a Domain.
+        """Delete a Domain.
 
-        :param mail_host: The Mail host for the domain you want to delete.
+        :param str mail_host: The Mail host for the domain you want to delete.
         """
         response, content = self._connection.call(
             'domains/{0}'.format(mail_host), None, 'DELETE')
 
     def get_domain(self, mail_host, web_host=MISSING):
-        """
-        Get Domain by its mail_host.
-        """
+        """Get Domain by its mail_host."""
         if web_host is not MISSING:
             warnings.warn(
                 'The `web_host` parameter in the `get_domain()` method is '
@@ -264,12 +296,13 @@ class Client:
         return Domain(self._connection, content['self_link'])
 
     def create_user(self, email, password, display_name=''):
-        """
-        Create a new User.
+        """Create a new User.
 
-        :param email: Email address for the new user.
-        :param password: Password for the new user.
-        :param display_name: An optional name for the new user.
+        :param str email: Email address for the new user.
+        :param str password: Password for the new user.
+        :param str display_name: An optional name for the new user.
+        :returns: The created user instance.
+        :rtype: :class:`User`
         """
         response, content = self._connection.call(
             'users', dict(email=email,
@@ -278,73 +311,89 @@ class Client:
         return User(self._connection, response['location'])
 
     def get_user(self, address):
-        """
-        Given an Email Address, return the User it belongs to.
+        """Given an Email Address, return the User it belongs to.
 
-        :param address: Email Address of the User.
+        :param str address: Email Address of the User.
+        :returns: The user instance that owns the address.
+        :rtype: :class:`User`
         """
         response, content = self._connection.call(
             'users/{0}'.format(address))
         return User(self._connection, content['self_link'], content)
 
     def get_address(self, address):
-        """
-        Given an Email Address, return the Address object.
+        """Given an Email Address, return the Address object.
 
-        :param address: Email address.
+        :param str address: Email address.
+        :returns: The Address object for given email address.
+        :rtype: :class:`Address`
         """
         response, content = self._connection.call(
             'addresses/{0}'.format(address))
         return Address(self._connection, content['self_link'], content)
 
     def get_list(self, fqdn_listname):
-        """
-        Get a MailingList object.
+        """Get a MailingList object.
 
-        :param fqdn_listname: Fully qualified name of the MailingList.
+        :param str fqdn_listname: Fully qualified name of the MailingList.
+        :returns: The mailing list object of the given fqdn_listname.
+        :rtype: :class:`MailingList`
         """
         response, content = self._connection.call(
             'lists/{0}'.format(fqdn_listname))
         return MailingList(self._connection, content['self_link'], content)
 
     def delete_list(self, fqdn_listname):
-        """
-        Delete a MailingList.
+        """Delete a MailingList.
 
-        :param fqdn_listname: Fully qualified name of the MailingList.
+        :param str fqdn_listname: Fully qualified name of the MailingList.
         """
         response, content = self._connection.call(
             'lists/{0}'.format(fqdn_listname), None, 'DELETE')
 
     @property
     def bans(self):
-        """
-        Get a list of all the bans.
+        """Get a list of all the bans.
+
+        :returns: A list of all the bans.
+        :rtype: :class:`Bans`
         """
         return Bans(self._connection, 'bans', mlist=None)
 
     def get_bans_page(self, count=50, page=1):
-        """
-        Get a list of all the bans with pagination.
+        """Get a list of all the bans with pagination.
 
-        :param count: Number of entries per-page (defaults to 50).
-        :param page: The page number to return (defaults to 1).
+        :param int count: Number of entries per-page (defaults to 50).
+        :param int page: The page number to return (defaults to 1).
+        :returns: Paginated list of banned addresses.
+        :rtype: :class:`Page` of :class:`BannedAddress`
         """
         return Page(self._connection, 'bans', BannedAddress, count, page)
 
     @property
     def templates(self):
         """Get all site-context templates.
+
+        :returns: List of templates for the site context.
+        :rtype: :class:`TemplateList`
         """
         return TemplateList(self._connection, 'uris')
 
     def get_templates_page(self, count=25, page=1):
         """Get paginated site-context templates.
+
+        :returns: Paginated list of templates of site context.
+        :rtype: :class:`Page` of :class:`Template`
         """
         return Page(self._connection, 'uris', Template, count, page)
 
     def set_template(self, template_name, url, username=None, password=None):
         """Set template in site-context.
+
+        :param str template_name: The template to set.
+        :param str url: The URL to fetch the template from.
+        :param str username: Username for access to the template.
+        :param str password: Password for the ``username`` to access templates.
         """
         data = {template_name: url}
         if username is not None and password is not None:
@@ -353,18 +402,17 @@ class Client:
         return self._connection.call('uris', data, 'PATCH')[1]
 
     def find_lists(self, subscriber, role=None, count=50, page=1):
-        """
-        Given a subscriber and a role, return all the list they are subscribed
+        """Given a subscriber and a role, return all the list they are subscribed
         to with given role.
 
         If no role is specified all the related mailing lists are returned
         without duplicates, even though there can potentially be multiple
         memberships of a user in a single mailing list.
 
-        :param subscriber: The address of the subscriber.
-        :type subscriber: str
-        :param role: owner, moderator or subscriber
-        :type role: str
+        :param str subscriber: The address of the subscriber.
+        :param str role: owner, moderator or subscriber
+        :returns: A filtered list of mailing lists with given filters.
+        :rtype: List[:class:`MailingList`]
         """
         url = 'lists/find'
         data = dict(subscriber=subscriber, count=count, page=page)

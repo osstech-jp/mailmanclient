@@ -6,7 +6,9 @@ NEWS for mailmanclient
 ==================
 
 * Add support for Python 3.7
-
+* Add ``description`` as a property of ``MailingList``. Initially, this was a
+  part of ``Preferences`` object, which would mean an additional API call to get
+  the description of a Mailing List. (Closes #35)
 
 
 3.2.0 (2018-07-10)

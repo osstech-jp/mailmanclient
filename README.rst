@@ -37,7 +37,7 @@ Mailman 3 REST API.
 Requirements
 ============
 
-``mailmanclient`` requires Python 2.7 or newer.
+``mailmanclient`` requires Python 3.5 or newer.
 
 
 Documentation

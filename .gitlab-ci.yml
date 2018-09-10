@@ -1,5 +1,9 @@
 image: maxking/mailman-ci-runner
 
+variables:
+  LC_ALL: C.UTF-8
+  LANG: C.UTF-8
+
 python3.5:
   script:
     - tox -e py35

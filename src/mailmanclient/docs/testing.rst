@@ -7,98 +7,25 @@ Running Tests
 =============
 
 The test suite is run with the `tox`_ tool, which allows it to be run against
-multiple versions of Python.  There are two modes to the test suite:
+multiple versions of Python. The tests are discovered and run using `pytest`_.
 
- * *Record mode* which is used to record the HTTP traffic against a live
-   Mailman 3 REST server.
- * *Replay mode* which allows you to run the test suite off-line, without
-   running the REST server.
+To run the test suite, run::
 
-Whenever you add tests for other parts of the REST API, you need to run the
-suite once in record mode to generate the YAML file of HTTP requests and
-responses.
+  $ tox
 
-Then you can run the test suite in replay mode as often as you want, and
-Mailman 3 needn't even be installed on your system.
+To run tests for only one version of Python, you can run::
 
-Since this branch ships with a recording file, you don't need to run in record
-mode to start with.
+  $ tox -e py36
+  
+``pytest`` starts Mailman Core using ``pytest-services`` plugin and
+automatically manages it's start and stop cycle for every module.
 
 
-Replay mode
-===========
-
-To run the test suite in replay mode (the default), just run the following::
-
-    $ tox
-
-This will attempt to run the test suite against Python 2.7, 3.4, 3.5 and 3.6 or
-whatever combination of those that are available on your system.
-
-
-Record mode
-===========
-
-Start by branching the Mailman 3 code base, then you should install it into a
-virtual environment.  The easiest way to do this is with `tox`::
-
-    $ tox --notest -r
-
-Now, use the virtual environment that `tox` creates to create a template `var`
-directory in the current directory::
-
-    $ .tox/py34/bin/mailman info
-
-Now you need to modify the ``var/etc/mailman.cfg`` configuration file, so that
-it contains the following::
-
-    [devmode]
-    enabled: yes
-    testing: yes
-    recipient: you@yourdomain.com
-
-    [mta]
-    smtp_port: 9025
-    lmtp_port: 9024
-    incoming: mailman.testing.mta.FakeMTA
-
-    [webservice]
-    port: 9001
-
-    [archiver.mhonarc]
-    enable: yes
-
-    [archiver.mail_archive]
-    enable: yes
-
-    [archiver.prototype]
-    enable: yes
-
-Now you can start Mailman 3::
-
-    $ .tox/py34/bin/mailman start
-
-Back in your ``mailmanclient`` branch, run the test suite in record mode::
-
-    $ tox -e record
-
-You should now have an updated recording file (``tape.yaml``).
-
-If you find you need to re-run the test suite, you *must* first stop the
-Mailman REST server, and then delete the ``mailman.db`` file, since it
-contains state that will mess up the ``mailmanclient`` test suite::
-
-    $ cd <mailman3-branch>
-    $ .tox/py34/bin/mailman stop
-    $ rm -f var/data/mailman.db
-    $ .tox/py34/bin/mailman start
-
-    $ cd <mailmanclient-branch>
-    $ tox -e record
-
-Once you're done recording the HTTP traffic, you can stop the Mailman 3 server
-and you won't need it again.  It's a good idea to commit the ``tape.yaml``
-changes for other users of your branch.
+.. note:: Previously, we used ``vcrpy`` and ``pytest-vcr`` packages to manage
+          recorded tapes for interaction with Mailman Core. That was replaced
+          with ``pytest-services`` plugin, which instead start Core for every
+          test.
 
 
 .. _`tox`: https://testrun.org/tox/latest/
+.. _`pytest`: https://docs.pytest.org/en/latest/

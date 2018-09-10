@@ -119,6 +119,7 @@ one.
     ...     print('{0}: {1}'.format(style['name'], style['description']))
     legacy-announce: Announce only mailing list style.
     legacy-default: Ordinary discussion mailing list style.
+    private-default: Discussion mailing list style with private archives.
     >>> print(styles['default'])
     legacy-default
 
@@ -652,7 +653,7 @@ for the settings is returned which behaves much like a dictionary.
 
     >>> settings = test_one.settings
     >>> len(settings)
-    57
+    59
 
     >>> for attr in sorted(settings):
     ...     print(attr + ': ' + str(settings[attr]))

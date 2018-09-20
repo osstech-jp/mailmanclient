@@ -31,14 +31,9 @@ Backwards Incompatible Changes
 
 * `MailingList.owners` and `MailingList.moderators` now returns a list of
   `Member` objects instead of a list of emails.
-
-
-
-Backwards Incompatible Changes
--------------------------------
-
 * `Domain.owners` now returns a list of `User` objects instead of just a dictionary of
   JSON response. (!63)
+* Python 2.7 is no longer supported.
 
 3.1.1 (2017-10-07)
 ==================

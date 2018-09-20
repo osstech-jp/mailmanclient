@@ -19,7 +19,7 @@ from setup_helpers import get_version, require_python
 from setuptools import setup, find_packages
 
 
-require_python(0x20600f0)
+require_python(0x30500f0)
 __version__ = get_version('src/mailmanclient/constants.py')
 
 
@@ -40,6 +40,7 @@ setup(
         'Operating System :: POSIX',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Topic :: Internet :: WWW/HTTP ',
     ],
     install_requires=[

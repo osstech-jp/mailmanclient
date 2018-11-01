@@ -189,7 +189,7 @@ class RESTList(RESTBase, Sequence):
     returned member of the list.
     """
 
-    _factory = lambda x: x  # flake8: noqa
+    _factory = lambda x: x  # noqa: E731
 
     @property
     def rest_data(self):

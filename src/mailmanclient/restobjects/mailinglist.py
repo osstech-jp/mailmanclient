@@ -94,12 +94,13 @@ class MailingList(RESTObject):
         url = 'lists/{0}/roster/member'.format(self.fqdn_listname)
         return Page(self._connection, url, Member, count, page)
 
-    def find_members(self, address, role='member', page=None, count=50):
-        data = {
-            'subscriber': address,
-            'role': role,
-            'list_id': self.list_id,
-        }
+    def find_members(self, address=None, role=None, page=None, count=50):
+        data = {'list_id': self.list_id}
+        if address:
+            data['subscriber'] = address
+        if role:
+            data['role'] = role
+
         url = 'members/find?{}'.format(urlencode(data, doseq=True))
         if page is None:
             response, content = self._connection.call(url, data)

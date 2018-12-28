@@ -9,6 +9,10 @@ NEWS for mailmanclient
 * Add ``description`` as a property of ``MailingList``. Initially, this was a
   part of ``Preferences`` object, which would mean an additional API call to get
   the description of a Mailing List. (Closes #35)
+* ``MailingList.get_members`` no longer requires ``address`` as a mandatory
+  argument which allows searching for all memberships of of a particular role. 
+  Also, ``role`` no longer has a default argument, so that we can search for
+  all memberships of an address.
 
 
 3.2.0 (2018-07-10)

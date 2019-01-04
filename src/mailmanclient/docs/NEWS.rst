@@ -2,7 +2,7 @@
 NEWS for mailmanclient
 =======================
 
-3.2.1 (201X-XX-XX)
+3.2.1 (2019-01-04)
 ==================
 
 * Add support for Python 3.7

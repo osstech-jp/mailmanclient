@@ -43,11 +43,11 @@ source_suffix = '.rst'
 # source_encoding = 'utf-8-sig'
 
 # The master toctree document.
-master_doc = 'README'
+master_doc = 'index'
 
 # General information about the project.
 project = u'Mailman Client'
-copyright = u'2012-2017, The Free Software Foundation'
+copyright = u'2012-2019, The Free Software Foundation'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

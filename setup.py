@@ -23,18 +23,24 @@ require_python(0x30500f0)
 __version__ = get_version('src/mailmanclient/constants.py')
 
 
+def readme():
+    with open('README.rst') as fd:
+        return fd.read()
+
+
 setup(
     name='mailmanclient',
     version=__version__,
     packages=find_packages('src'),
     description='mailmanclient -- Python bindings for Mailman REST API',
-    long_description=open('README.rst').read(),
+    long_description=readme(),
+    long_description_content_type='text/x-rst',
     package_dir={'': 'src'},
     include_package_data=True,
     maintainer='Barry Warsaw',
     maintainer_email='barry@list.org',
     license='LGPLv3',
-    url='https://www.list.org/',
+    url='http://www.list.org/',
     classifiers=[
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)', # noqa
         'Operating System :: POSIX',

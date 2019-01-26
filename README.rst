@@ -46,7 +46,7 @@ Documentation
 A `simple guide`_ to using the library is available within this package, in
 the form of doctests.   The manual is also available online at:
 
-    http://mailmanclient.readthedocs.org/en/latest/
+    https://mailmanclient.readthedocs.io/en/latest/
 
 
 Project details
@@ -85,15 +85,5 @@ Many thanks to Florian Fuchs for his contribution of an initial REST
 client. Also thanks to all the contributors of Mailman Client who have
 contributed code, raised issues or devoted their time in any capacity!
 
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Table of Contents
-
-   src/mailmanclient/docs/NEWS.rst
-   src/mailmanclient/docs/using.rst
-   src/mailmanclient/docs/apiref.rst
-   src/mailmanclient/docs/testing.rst
-
-.. _`simple guide`: https://mailmanclient.readthedocs.io/en/latest/using.html
-.. _`Cheese Shop`: https://pypi.python.org/pypi/mailmanclient
+.. _`simple guide`: https://mailmanclient.readthedocs.io/en/latest/src/mailmanclient/docs/using.html
+.. _`Cheese Shop`: https://pypi.org/project/mailmanclient

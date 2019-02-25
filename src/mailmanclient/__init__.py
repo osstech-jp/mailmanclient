@@ -18,10 +18,6 @@
 
 """Package contents."""
 
-from __future__ import absolute_import, print_function, unicode_literals
-
-import six
-
 from mailmanclient.client import Client
 from mailmanclient.constants import __version__
 from mailmanclient.restbase.connection import MailmanConnectionError
@@ -64,7 +60,5 @@ __all__ = [
     '__version__',
 ]
 
-if six.PY2:
-    __all__ = [str(x) for x in __all__]
-elif six.PY3:
-    __all__ = [bytes(x, 'utf-8') for x in __all__]
+
+__all__ = [bytes(x, 'utf-8') for x in __all__]

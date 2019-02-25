@@ -15,8 +15,8 @@
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
 import warnings
 from operator import itemgetter
-from six.moves.urllib_error import HTTPError
-from six.moves.urllib_parse import urlencode
+from urllib.error import HTTPError
+from urllib.parse import urlencode
 
 from mailmanclient.restobjects.header_match import HeaderMatches
 from mailmanclient.restobjects.archivers import ListArchivers

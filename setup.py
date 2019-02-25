@@ -51,6 +51,17 @@ setup(
     ],
     install_requires=[
         'httplib2',
-        'six',
         ],
+    extras_require={
+        'testing': [
+            'requests',
+            'pytest',
+            'pytest-vcr',
+            'pytest-services',
+            'mailman',
+            ],
+        'lint': [
+            'flake8>3.0'
+        ]
+        },
     )

@@ -14,9 +14,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
 
-import six
-
-from collections import MutableMapping, Sequence
+from collections.abc import MutableMapping, Sequence
 
 __metaclass__ = type
 __all__ = [
@@ -144,9 +142,6 @@ class RESTDict(RESTBase, MutableMapping):
     def __repr__(self):
         return repr(self.rest_data)
 
-    def __unicode__(self):
-        return six.text_type(self.rest_data)
-
     def __getitem__(self, key):
         return self._get(key)
 
@@ -203,9 +198,6 @@ class RESTList(RESTBase, Sequence):
 
     def __repr__(self):
         return repr(self.rest_data)
-
-    def __unicode__(self):
-        return six.text_type(self.rest_data)
 
     def __getitem__(self, key):
         return self._factory(self.rest_data[key])

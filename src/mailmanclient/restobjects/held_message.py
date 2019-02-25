@@ -13,7 +13,6 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
-import six
 
 from mailmanclient.restbase.base import RESTObject
 
@@ -31,9 +30,6 @@ class HeldMessage(RESTObject):
     def __repr__(self):
         return '<HeldMessage {0!r} by {1}>'.format(
             self.request_id, self.sender)
-
-    def __unicode__(self):
-        return six.text_type(self.rest_data)
 
     def moderate(self, action):
         """Moderate a held message.

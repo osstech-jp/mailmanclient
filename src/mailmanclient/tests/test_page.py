@@ -21,8 +21,8 @@ from __future__ import absolute_import, print_function, unicode_literals
 import unittest
 
 import pytest
-from mock import Mock
-from six.moves.urllib_parse import urlsplit, parse_qs
+from unittest.mock import Mock
+from urllib.parse import urlsplit, parse_qs
 
 from mailmanclient.constants import DEFAULT_PAGE_ITEM_COUNT
 from mailmanclient.restbase.page import Page

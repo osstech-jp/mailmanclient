@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
-from six.moves.urllib_parse import urlencode, urlsplit, parse_qs, urlunsplit
+from urllib.parse import urlencode, urlsplit, parse_qs, urlunsplit
 
 from mailmanclient.constants import DEFAULT_PAGE_ITEM_COUNT
 

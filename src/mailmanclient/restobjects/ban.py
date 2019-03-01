@@ -69,7 +69,8 @@ class Bans(RESTList):
     def add(self, email):
         response, content = self._connection.call(self._url, dict(email=email))
         self._reset_cache()
-        return BannedAddress(self._connection, response['location'])
+        return BannedAddress(
+            self._connection, response.headers.get('location'))
 
     def find_by_email(self, email):
         for ban in self:

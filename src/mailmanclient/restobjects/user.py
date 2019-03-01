@@ -99,6 +99,6 @@ class User(RESTObject, PreferencesMixin):
         response, content = self._connection.call(url, data)
         address = {
             'email': email,
-            'self_link': response['location'],
+            'self_link': response.headers.get('location'),
         }
         return Address(self._connection, address['self_link'], address)

@@ -302,11 +302,11 @@ class MailingList(RESTObject):
         response, content = self._connection.call('members', data)
         # If a member is not immediately subscribed (i.e. verificatoin,
         # confirmation or approval need), the response content is returned.
-        if response.status == 202:
+        if response.status_code == 202:
             return content
         # I the subscription is executed immediately, a member object
         # is returned.
-        return Member(self._connection, response['location'])
+        return Member(self._connection, response.headers.get('location'))
 
     def unsubscribe(self, email):
         """Unsubscribe an email address from a mailing list.

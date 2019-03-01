@@ -274,7 +274,7 @@ class Client:
         if alias_domain is not None:
             data['alias_domain'] = alias_domain
         response, content = self._connection.call('domains', data)
-        return Domain(self._connection, response['location'])
+        return Domain(self._connection, response.headers.get('location'))
 
     def delete_domain(self, mail_host):
         """Delete a Domain.
@@ -308,7 +308,7 @@ class Client:
             'users', dict(email=email,
                           password=password,
                           display_name=display_name))
-        return User(self._connection, response['location'])
+        return User(self._connection, response.headers.get('location'))
 
     def get_user(self, address):
         """Given an Email Address, return the User it belongs to.

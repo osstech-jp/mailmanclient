@@ -89,7 +89,7 @@ class Domain(RESTObject):
         if style_name is not None:
             data['style_name'] = style_name
         response, content = self._connection.call('lists', data)
-        return MailingList(self._connection, response['location'])
+        return MailingList(self._connection, response.headers.get('location'))
 
     # TODO: Add this when the API supports removing a single owner.
     # def remove_owner(self, owner):

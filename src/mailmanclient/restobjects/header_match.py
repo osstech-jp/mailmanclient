@@ -58,7 +58,7 @@ class HeaderMatches(RESTList):
             data['action'] = action
         response, content = self._connection.call(self._url, data)
         self._reset_cache()
-        return HeaderMatch(self._connection, response['location'])
+        return HeaderMatch(self._connection, response.headers.get('location'))
 
 
 class HeaderMatch(RESTObject):

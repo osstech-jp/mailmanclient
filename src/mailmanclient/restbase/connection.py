@@ -13,12 +13,11 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
-import json
-from base64 import b64encode
+
 from urllib.error import HTTPError
 from urllib.parse import urljoin, urlencode
 
-from httplib2 import Http
+from requests import request
 
 from mailmanclient.constants import __version__
 
@@ -55,10 +54,9 @@ class Connection:
         if name is None and password is not None:
             raise TypeError('`name` is required when `password` is given')
         if name is None:
-            self.basic_auth = None
+            self.auth = None
         else:
-            auth = '{0}:{1}'.format(name, password)
-            self.basic_auth = b64encode(auth.encode('utf-8')).decode('utf-8')
+            self.auth = (name, password)
 
     def call(self, path, data=None, method=None):
         """Make a call to the Mailman REST API.
@@ -88,21 +86,23 @@ class Connection:
             else:
                 method = 'POST'
         method = method.upper()
-        if self.basic_auth:
-            headers['Authorization'] = 'Basic ' + self.basic_auth
         url = urljoin(self.baseurl, path)
         try:
-            response, content = Http().request(url, method, data_str, headers)
+            response = request(
+                url=url,
+                auth=self.auth,
+                method=method,
+                data=data_str,
+                headers=headers)
+            # content = response.content
             # If we did not get a 2xx status code, make this look like a
             # urllib2 exception, for backward compatibility.
-            if response.status // 100 != 2:
-                raise HTTPError(url, response.status, content, response, None)
-            if len(content) == 0:
+            if response.status_code // 100 != 2:
+                raise HTTPError(url, response.status_code,
+                                response.content, response, None)
+            if len(response.content) == 0:
                 return response, None
-            # XXX Work around for http://bugs.python.org/issue10038
-            if isinstance(content, bytes):
-                content = content.decode('utf-8')
-            return response, json.loads(content)
+            return response, response.json()
         except HTTPError:
             raise
         except IOError:

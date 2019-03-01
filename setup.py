@@ -50,11 +50,10 @@ setup(
         'Topic :: Internet :: WWW/HTTP ',
     ],
     install_requires=[
-        'httplib2',
+        'requests',
         ],
     extras_require={
         'testing': [
-            'requests',
             'pytest',
             'pytest-vcr',
             'pytest-services',
@@ -62,6 +61,6 @@ setup(
             ],
         'lint': [
             'flake8>3.0'
-        ]
+           ]
         },
     )

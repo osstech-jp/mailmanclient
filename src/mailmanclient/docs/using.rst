@@ -951,13 +951,13 @@ A held message can be retrieved by ID, and have attributes:
 A moderation action can be taken on them using the list methods or the held
 message's methods.
 
-    >>> print(test_one.defer_message(heldmsg.request_id)['status'])
+    >>> print(test_one.defer_message(heldmsg.request_id).status_code)
     204
 
     >>> len(test_one.held)
     1
 
-    >>> print(heldmsg.discard()['status'])
+    >>> print(heldmsg.discard().status_code)
     204
 
     >>> len(test_one.held)

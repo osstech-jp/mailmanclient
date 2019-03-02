@@ -22,3 +22,10 @@ lint:
 docs:
   script:
     - tox -e docs
+
+upstream:
+  script:
+    - tox -e dependency
+  only:
+    variables:
+      - $CORE_COMMIT_SHA

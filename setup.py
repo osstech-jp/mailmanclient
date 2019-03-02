@@ -58,6 +58,7 @@ setup(
             'pytest-vcr',
             'pytest-services',
             'mailman',
+            'falcon==1.4.1',
             ],
         'lint': [
             'flake8>3.0'

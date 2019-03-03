@@ -7,18 +7,41 @@ variables:
 python3.5:
   script:
     - tox -e py35
+  except:
+    variables:
+      - $CORE_COMMIT_SHA
 
 python3.6:
   script:
     - tox -e py36
+  except:
+    variables:
+      - $CORE_COMMIT_SHA
 
 python3.7:
   script:
     - tox -e py37
+  except:
+    variables:
+      - $CORE_COMMIT_SHA
+
 lint:
   script:
     - tox -e lint
+  except:
+    variables:
+      - $CORE_COMMIT_SHA
 
 docs:
   script:
     - tox -e docs
+  except:
+    variables:
+      - $CORE_COMMIT_SHA
+
+upstream:
+  script:
+    - tox -e py37-dependency
+  only:
+    variables:
+      - $CORE_COMMIT_SHA

@@ -163,15 +163,19 @@ class Client:
         return [MailingList(self._connection, entry['self_link'], entry)
                 for entry in content['entries']]
 
-    def get_list_page(self, count=50, page=1, advertised=None):
+    def get_list_page(self, count=50, page=1, advertised=None, mail_host=None):
         """Get a list of all MailingList with pagination.
 
         :param count: Number of entries per-page (defaults to 50).
         :param page: The page number to return (defaults to 1).
         :param advertised: If marked True, returns all MailingLists including
                            the ones that aren't advertised.
+        :param mail_host: Domain to filter results by.
         """
-        url = 'lists'
+        if mail_host:
+            url = 'domains/{0}/lists'.format(mail_host)
+        else:
+            url = 'lists'
         if advertised:
             url += '?advertised=true'
         return Page(self._connection, url, MailingList, count, page)
@@ -401,7 +405,8 @@ class Client:
             data['password'] = password
         return self._connection.call('uris', data, 'PATCH')[1]
 
-    def find_lists(self, subscriber, role=None, count=50, page=1):
+    def find_lists(self, subscriber, role=None, count=50, page=1,
+                   mail_host=None):
         """Given a subscriber and a role, return all the list they are subscribed
         to with given role.
 
@@ -410,7 +415,10 @@ class Client:
         memberships of a user in a single mailing list.
 
         :param str subscriber: The address of the subscriber.
-        :param str role: owner, moderator or subscriber
+        :param str role: owner, moderator or subscriber.
+        :param int count: Number of entries per-page (defaults to 50).
+        :param int page: The page number to return (defaults to 1).
+        :param str mail_host: Domain to filter results by.
         :returns: A filtered list of mailing lists with given filters.
         :rtype: List[:class:`MailingList`]
         """
@@ -422,4 +430,5 @@ class Client:
         if 'entries' not in content:
             return []
         return [MailingList(self._connection, entry['self_link'], entry)
-                for entry in content['entries']]
+                for entry in content['entries']
+                if not mail_host or entry['mail_host'] == mail_host]

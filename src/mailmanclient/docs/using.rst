@@ -189,8 +189,15 @@ Pages can also use the advertised filter:
     test-2@example.com
     test-3@example.com
 
-If you only want to know all lists for a specific domain, use the domain
-object.
+Pages can also limit the results by domain:
+
+    >>> page = client.get_list_page(mail_host='example.net')
+    >>> for m_list in page:
+    ...     print(m_list.fqdn_listname)
+    test-3@example.net
+
+You can also use the domain object if you only want to know all lists for a
+specific domain without pagination.
 
     >>> for mlist in example.lists:
     ...     print(mlist.fqdn_listname)
@@ -791,6 +798,8 @@ list:
     ...                          pre_confirmed=True))
     Member "bar@example.com" on "test-1.example.com"
 
+    >>> test_four_net = example_net.create_list('test-4')
+    >>> test_four_net.add_owner('foo@example.com', display_name='Foo')
     >>> for member in client.members:
     ...     print('%s: %s' % (member, member.role))
     Member "foo@example.com" on "test-1.example.com": owner
@@ -798,6 +807,31 @@ list:
     Member "bar@example.com" on "test-1.example.com": member
     Member "bill@example.com" on "test-1.example.com": member
     Member "anna@example.com" on "test-2.example.com": member
+    Member "foo@example.com" on "test-4.example.net": owner
+
+You can find the lists that a user is a member, moderator, or owner of:
+
+    >>> lists = client.find_lists('bill@example.com', 'member')
+    >>> for m_list in lists:
+    ...     print(m_list.fqdn_listname)
+    test-1@example.com
+    >>> lists = client.find_lists('bar@example.com', 'moderator')
+    >>> for m_list in lists:
+    ...     print(m_list.fqdn_listname)
+    test-1@example.com
+    >>> lists = client.find_lists('foo@example.com', 'owner')
+    >>> for m_list in lists:
+    ...     print(m_list.fqdn_listname)
+    test-1@example.com
+    test-4@example.net
+
+You can also filter those results by domain:
+
+    >>> lists = client.find_lists('foo@example.com', 'owner',
+    ...                           mail_host='example.net')
+    >>> for m_list in lists:
+    ...     print(m_list.fqdn_listname)
+    test-4@example.net
 
 Both owners and moderators can be removed:
 

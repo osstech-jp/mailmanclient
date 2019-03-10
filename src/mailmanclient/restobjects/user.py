@@ -14,8 +14,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
 
-from mailmanclient.restobjects.preferences import PreferencesMixin
 
+from mailmanclient.restobjects.preferences import PreferencesMixin
 from mailmanclient.restobjects.address import Addresses, Address
 from mailmanclient.restbase.base import RESTObject
 

@@ -7,6 +7,7 @@ NEWS for mailmanclient
 
 * Add a ``mail_host`` parameter to ``get_list_page`` and ``find_lists`` to
   support filtering the response by a list domain.
+* URL encode values in URL which are url unsafe. (Closes #44)
 
 
 3.2.2 (2019-02-09)

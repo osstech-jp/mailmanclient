@@ -13,6 +13,9 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
+
+from urllib.parse import quote_plus
+
 from mailmanclient.restobjects.preferences import PreferencesMixin
 from mailmanclient.restbase.base import RESTList, RESTObject
 
@@ -70,10 +73,14 @@ class Address(RESTObject, PreferencesMixin):
 
     def verify(self):
         self._connection.call(
-            'addresses/{0}/verify'.format(self.email), method='POST')
+            'addresses/{0}/verify'.format(quote_plus(self.email)),
+            method='POST',
+            )
         self._reset_cache()
 
     def unverify(self):
         self._connection.call(
-            'addresses/{0}/unverify'.format(self.email), method='POST')
+            'addresses/{0}/unverify'.format(quote_plus(self.email)),
+            method='POST'
+            )
         self._reset_cache()

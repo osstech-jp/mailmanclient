@@ -16,7 +16,7 @@
 import warnings
 from operator import itemgetter
 from urllib.error import HTTPError
-from urllib.parse import urlencode
+from urllib.parse import urlencode, quote_plus
 
 from mailmanclient.restobjects.header_match import HeaderMatches
 from mailmanclient.restobjects.archivers import ListArchivers
@@ -187,7 +187,8 @@ class MailingList(RESTObject):
         self.remove_role('moderator', address)
 
     def remove_role(self, role, address):
-        url = 'lists/%s/%s/%s' % (self.fqdn_listname, role, address)
+        url = 'lists/%s/%s/%s' % (
+            self.fqdn_listname, role, quote_plus(address))
         self._connection.call(url, method='DELETE')
 
     def moderate_message(self, request_id, action):
@@ -265,7 +266,8 @@ class MailingList(RESTObject):
         # the member. Incase there is no matching subscription, an
         # HTTPError is returned instead.
         try:
-            path = 'lists/{0}/member/{1}'.format(self.list_id, email)
+            path = 'lists/{0}/member/{1}'.format(
+                self.list_id, quote_plus(email))
             response, content = self._connection.call(path)
             return Member(self._connection, content['self_link'], content)
         except HTTPError:

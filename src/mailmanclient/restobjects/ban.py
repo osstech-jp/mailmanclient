@@ -13,7 +13,9 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
+
 from urllib.error import HTTPError
+from urllib.parse import quote_plus
 
 from mailmanclient.restobjects.mailinglist import MailingList
 from mailmanclient.restbase.base import RESTList, RESTObject
@@ -57,7 +59,7 @@ class Bans(RESTList):
             # Avoid getting the whole list just to check membership
             try:
                 response, content = self._connection.call(
-                    '{}/{}'.format(self._url, item))
+                    '{}/{}'.format(self._url, quote_plus(item)))
             except HTTPError as e:
                 if e.code == 404:
                     return False

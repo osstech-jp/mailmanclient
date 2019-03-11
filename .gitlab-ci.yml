@@ -41,7 +41,7 @@ docs:
 
 upstream:
   script:
-    - tox -e py37-dependency
+    - tox -e dependency
   only:
     variables:
       - $CORE_COMMIT_SHA

@@ -440,6 +440,30 @@ If you try to unsubscribe an address which is not a member address
     ...
     ValueError: nomember@example.com is not a member address of test-1@example.com
 
+If we want to mass unsubscribe users.
+
+    >>> print(test_one.subscribe('jack@example.com', 'Jack',
+    ...                          pre_verified=True,
+    ...                          pre_confirmed=True))
+    Member "jack@example.com" on "test-1.example.com"
+
+    >>> print(test_one.subscribe('jill@example.com', 'Jill',
+    ...                          pre_verified=True,
+    ...                          pre_confirmed=True))
+    Member "jill@example.com" on "test-1.example.com"
+
+    >>> print(test_one.subscribe('hans@example.com', 'Hans',
+    ...                          pre_verified=True,
+    ...                          pre_confirmed=True))
+    Member "hans@example.com" on "test-1.example.com"
+
+    >>> email_list = ['jack@example.com','hans@example.com','jill@example.com','bully@example.com']
+    >>> ();test_one.mass_unsubscribe(email_list);() # doctest: +ELLIPSIS
+    (...)
+    >>> for member in test_one.members:
+    ...     print(member)
+    Member "bill@example.com" on "test-1.example.com"
+
 
 Non-Members
 ===========
@@ -472,6 +496,9 @@ access the clients user property.
     Anna
     Bill
     Cris
+    Jack
+    Jill
+    Hans
 
 The list of users can also be paginated:
 
@@ -479,8 +506,7 @@ The list of users can also be paginated:
     >>> page.nr
     1
     >>> page.total_size
-    5
-
+    8
     >>> for user in page:
     ...     print(user.display_name)
     Unverified
@@ -497,6 +523,9 @@ You can get the next or previous pages without calling ``get_userpage`` again.
     >>> for user in page:
     ...     print(user.display_name)
     Cris
+    Jack
+    Jill
+    Hans
 
     >>> page = page.previous
     >>> page.nr

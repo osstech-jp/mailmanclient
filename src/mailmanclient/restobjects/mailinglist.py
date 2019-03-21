@@ -315,9 +315,6 @@ class MailingList(RESTObject):
 
         :param address: The address to unsubscribe.
         """
-        # In order to get the member object we need to
-        # iterate over the existing member list
-
         try:
             path = 'lists/{0}/member/{1}'.format(self.list_id, email)
             self._connection.call(path, method='DELETE')
@@ -325,6 +322,22 @@ class MailingList(RESTObject):
             # The member link does not exist, i.e. he is not a member
             raise ValueError('%s is not a member address of %s' %
                              (email, self.fqdn_listname))
+
+    def mass_unsubscribe(self, email_list):
+        """Unsubscribe a list of emails from a mailing list.
+
+        This function return a json of emails mapped to booleans based
+        on whether they were unsubscribed or not, for whatever reasons
+
+        :param email_list: list of emails to unsubscribe
+        """
+        try:
+            path = 'lists/{}/roster/member'.format(self.list_id)
+            response, content = self._connection.call(
+                path, {'emails': email_list}, 'DELETE')
+            return content
+        except HTTPError as e:
+            raise ValueError(str(e))
 
     @property
     def bans(self):

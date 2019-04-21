@@ -98,8 +98,18 @@ class Connection:
             # If we did not get a 2xx status code, make this look like a
             # urllib2 exception, for backward compatibility.
             if response.status_code // 100 != 2:
+                try:
+                    err = response.json()
+                    # If this fails, a ValueError is raised. It means either
+                    # the response is malformed JSON or None.
+                    error_msg = err['description']
+                    # This can fail if the error message does not container
+                    # description field.
+                except (KeyError, ValueError):
+                    error_msg = response.text
+
                 raise HTTPError(url, response.status_code,
-                                response.content, response, None)
+                                error_msg, response, None)
             if len(response.content) == 0:
                 return response, None
             return response, response.json()

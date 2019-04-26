@@ -254,7 +254,7 @@ New members can be easily added; users are automatically registered.
     >>> print(test_two.settings['subscription_policy'])
     confirm
 
-Email addresses need to be verified first, so if we try to subscribe a 
+Email addresses need to be verified first, so if we try to subscribe a
 user, we get a response with a token:
 
     >>> data = test_one.subscribe('unverified@example.com', 'Unverified')
@@ -263,10 +263,10 @@ user, we get a response with a token:
     >>> print(data['token_owner'])
     subscriber
 
-If we know the email address to be valid, we can set the 
-``pre_verified`` flag. However, the list's subscription policy is 
-"confirm", so if we try to subscribe a user, we will also get a token 
-back: 
+If we know the email address to be valid, we can set the
+``pre_verified`` flag. However, the list's subscription policy is
+"confirm", so if we try to subscribe a user, we will also get a token
+back:
 
     >>> data = test_one.subscribe('unconfirmed@example.com',
     ...                           'Unconfirmed',
@@ -276,13 +276,13 @@ back:
     >>> print(data['token_owner'])
     subscriber
 
-If we know the user originated the subscription (for example if she or 
-he has been authenticated elsewhere), we can set the ``pre_confirmed`` 
+If we know the user originated the subscription (for example if she or
+he has been authenticated elsewhere), we can set the ``pre_confirmed``
 flag.
 
-The ``pre_approved`` flag is used for lists that require moderator 
-approval and should only be used if the subscription is initiated by a 
-moderator or admin. 
+The ``pre_approved`` flag is used for lists that require moderator
+approval and should only be used if the subscription is initiated by a
+moderator or admin.
 
     >>> print(test_one.subscribe('anna@example.com', 'Anna',
     ...                          pre_verified=True,
@@ -592,6 +592,34 @@ and preferences. In case of conflict, Chris' original preferences will prevail.
     cris@example.com
     dana@example.org
 
+Users can have one preferred address, which they can use for subscriptions. By
+default, a User has no preferred address.
+
+    >>> print(cris.preferred_address)
+    None
+
+A User can have a preferred address, but before that, the address needs to be
+verified::
+
+    >>> address = client.get_address('cris.person@example.org')
+    >>> address.verify()
+    >>> print(address.verified)
+    True
+    >>> cris.preferred_address = 'cris.person@example.org'
+    >>> print(cris.preferred_address)
+    cris.person@example.org
+
+A User can change their preferred address.
+
+    >>> cris.preferred_address = 'cris@example.com'
+    >>> print(cris.preferred_address)
+    cris@example.com
+
+A User can also unset their preferred address by setting it to ``None``.
+
+    >>> cris.preferred_address = None
+    >>> print(cris.preferred_address)
+    None
 
 Addresses
 =========
@@ -880,8 +908,8 @@ Moderation
 Subscription Moderation
 -----------------------
 
-Subscription requests can be accessed through the list object's 
-`request` property. So let's create a non-open list first. 
+Subscription requests can be accessed through the list object's
+`request` property. So let's create a non-open list first.
 
     >>> confirm_first = example_dot_com.create_list('confirm-first')
     >>> settings = confirm_first.settings
@@ -892,8 +920,8 @@ Subscription requests can be accessed through the list object's
     >>> print(confirm_first.settings['subscription_policy'])
     moderate
 
-Initially there are no requests, so let's to subscribe someone to the 
-list. We'll get a token back. 
+Initially there are no requests, so let's to subscribe someone to the
+list. We'll get a token back.
 
     >>> confirm_first.requests
     []
@@ -923,7 +951,7 @@ Now the request shows up in the list of requests:
 
 Subscription requests can be accepted, deferred, rejected or
 discarded using the request token.
-    
+
     >>> data = confirm_first.subscribe('harpo@example.com',
     ...                                pre_verified=True,
     ...                                pre_confirmed=True)
@@ -1130,7 +1158,7 @@ Each list object has an ``archivers`` attribute.
     >>> print(archivers)
     Archivers on test-1.example.com
 
-The activation status of each available archiver can be accessed like a 
+The activation status of each available archiver can be accessed like a
 key in a dictionary.
 
     >>> archivers = test_one.archivers
@@ -1150,8 +1178,8 @@ They can also be set like items in dictionary.
     >>> archivers['mail-archive'] = False
     >>> archivers['mhonarc'] = False
 
-So if we get a new ``archivers`` object from the API (by accessing the 
-list's archiver attribute again), we can see that the archiver stati 
+So if we get a new ``archivers`` object from the API (by accessing the
+list's archiver attribute again), we can see that the archiver stati
 have now been set.
 
     >>> archivers = test_one.archivers
@@ -1313,7 +1341,8 @@ configuration options are read-only.
     webservice
 
 
-Each configuration object is a dictionary and you can iterate over them:
+Each configuration object is a dictionary and you can iterate over them
+::
 
      >>> for key in sorted(cfg['mailman']):
      ...     print('{} : {}'.format(key, cfg['mailman'][key]))
@@ -1326,8 +1355,8 @@ Each configuration object is a dictionary and you can iterate over them:
      listname_chars : [-_.0-9a-z]
      noreply_address : noreply
      pending_request_life : 3d
-     post_hook : 
-     pre_hook : 
+     post_hook :
+     pre_hook :
      self_link : http://localhost:9001/3.1/system/configuration/mailman
      sender_headers : from from_ reply-to sender
      site_owner : changeme@example.com

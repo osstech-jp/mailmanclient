@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
 
+from urllib.error import HTTPError
 
 from mailmanclient.restobjects.preferences import PreferencesMixin
 from mailmanclient.restobjects.address import Addresses, Address
@@ -36,6 +37,7 @@ class User(RESTObject, PreferencesMixin):
         super(User, self).__init__(connection, url, data)
         self._subscriptions = None
         self._subscription_list_ids = None
+        self._preferred_address = None
 
     def __repr__(self):
         return '<User {0!r} ({1})>'.format(self.display_name, self.user_id)
@@ -102,3 +104,45 @@ class User(RESTObject, PreferencesMixin):
             'self_link': response.headers.get('location'),
         }
         return Address(self._connection, address['self_link'], address)
+
+    @property
+    def preferred_address(self):
+        """Preferred address of a User.
+
+        .. versionadded:: 3.2.3
+
+        :returns: Address or None.
+        """
+        if self._preferred_address:
+            return self._preferred_address
+        url = '{}/preferred_address'.format(self._url)
+        try:
+            response, content = self._connection.call(url)
+        except HTTPError as e:
+            if e.code == 404:
+                return None
+            else:
+                raise
+        self._preferred_address = Address(
+            self._connection, content['self_link'], content)
+        return self._preferred_address
+
+    @preferred_address.setter
+    def preferred_address(self, email):
+        """Set a User's preferred address.
+
+        .. versionadded:: 3.2.3
+
+        :param email: Email to be set as the User's preferred address. If this
+            address is not linked to the user, it will be linked to the user
+            unless it is linked to an other user.
+            If email is None, preferred address would be unset.
+        """
+        url = '{}/preferred_address'.format(self._url)
+        if email is None:
+            response, content = self._connection.call(url, method='DELETE')
+        else:
+            response, content = self._connection.call(url, {'email': email})
+        # Unset the preferred address we have so that we GET is next time
+        # someone tries to call the attribute.
+        self._preferred_address = None

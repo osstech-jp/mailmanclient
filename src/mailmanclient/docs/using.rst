@@ -1209,8 +1209,9 @@ Header matches can be added using the ``add()`` method. The arguments are:
 - the regular expression to use for filtering (``str``)
 - the action to take when the header matches the pattern. This can be
   ``'accept'``, ``'discard'``, ``'reject'``, or ``'hold'``.
+- the tag (``str``) to group a set of header matches.
 
-    >>> print(header_matches.add('Subject', '^test: ', 'discard'))
+    >>> print(header_matches.add('Subject', '^test: ', 'discard', 'sometag'))
     Header match on "subject"
     >>> print(header_matches)
     Header matches for "test-1.example.com"
@@ -1219,6 +1220,12 @@ Header matches can be added using the ``add()`` method. The arguments are:
     >>> for hm in list(header_matches):
     ...     print(hm)
     Header match on "subject"
+
+Header matches can be filtered using ``.find()`` method to query a set
+of HeaderMatches::
+
+  >>> header_matches.find(tag='sometag')
+  [<HeaderMatch on 'subject'>]
 
 You can delete a header match by deleting it from the ``header_matches``
 collection.

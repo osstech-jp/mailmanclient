@@ -10,6 +10,8 @@ NEWS for mailmanclient
 * URL encode values in URL which are url unsafe. (Closes #44)
 * Add support to mass unsubscribe memebrs from a Mailing List. (Closes #43)
 * Add support to set a user's preferred address. (See !99)
+* Add a new ``tag`` attribute to HeaderMatches and support to find a set
+	of matches based on tag.
 
 3.2.2 (2019-02-09)
 ==================

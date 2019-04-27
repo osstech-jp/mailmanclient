@@ -13,6 +13,9 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
+
+from urllib.error import HTTPError
+
 from mailmanclient.restbase.base import RESTList, RESTObject
 
 __metaclass__ = type
@@ -43,8 +46,9 @@ class HeaderMatches(RESTList):
     def __str__(self):
         return 'Header matches for "{}"'.format(self._mlist.list_id)
 
-    def add(self, header, pattern, action=None):
-        """
+    def add(self, header, pattern, action=None, tag=None):
+        """Add a new HeaderMatch rule to the MailingList.
+
         :param header: The header to consider.
         :type  header: str
         :param pattern: The regular expression to use for filtering.
@@ -56,15 +60,43 @@ class HeaderMatches(RESTList):
         data = dict(header=header, pattern=pattern)
         if action is not None:
             data['action'] = action
+        if tag is not None:
+            data['tag'] = tag
         response, content = self._connection.call(self._url, data)
         self._reset_cache()
         return HeaderMatch(self._connection, response.headers.get('location'))
 
+    def find(self, header=None, tag=None, action=None):
+        """Find a set of HeaderMatch rules.
+
+        :param header: The header to consider.
+        :type header: str
+        :param tag: The tag associated with header.
+        :type tag: str
+        :param action: The action to take when the header matches the pattern.
+            This can be 'accept', 'discard', 'reject', or 'hold'.
+        :type  action: str
+        """
+        url = self._url + '/find'
+        data = dict(header=header, tag=tag, action=action)
+        data = {key: value for key, value in data.items() if value}
+        if not data:
+            return []
+        try:
+            response, content = self._connection.call(url, data)
+        except HTTPError as e:
+            if e.code == 404:
+                return []
+            raise
+        return [HeaderMatch(self._connection, entry['self_link'], entry)
+                for entry in content['entries']]
+
 
 class HeaderMatch(RESTObject):
 
-    _properties = ('header', 'pattern', 'position', 'action', 'self_link')
-    _writable_properties = ('header', 'pattern', 'position', 'action')
+    _properties = ('header', 'pattern', 'position', 'action', 'tag',
+                   'self_link')
+    _writable_properties = ('header', 'pattern', 'position', 'action', 'tag')
 
     def __repr__(self):
         return '<HeaderMatch on {0!r}>'.format(self.header)

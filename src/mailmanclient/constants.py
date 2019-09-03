@@ -15,7 +15,7 @@
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
 
 
-__version__ = '3.2.3a3'
+__version__ = '3.3.0'
 
 DEFAULT_PAGE_ITEM_COUNT = 50
 MISSING = object()

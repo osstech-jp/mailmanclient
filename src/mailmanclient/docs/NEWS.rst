@@ -2,7 +2,7 @@
 NEWS for mailmanclient
 =======================
 
-3.2.3 (2019-XX-XX)
+3.3.0 (2019-09-03)
 ==================
 
 * Add a ``mail_host`` parameter to ``get_list_page`` and ``find_lists`` to

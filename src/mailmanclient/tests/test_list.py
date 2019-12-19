@@ -16,7 +16,7 @@
 
 """Tests for Mailing List."""
 
-from __future__ import absolute_import, print_function, unicode_literals
+import time
 
 from urllib.error import HTTPError
 from unittest import TestCase
@@ -114,3 +114,89 @@ class TestMailingListMembershipTests(TestCase):
         subscriber_addr = 'subscriber@example.com'
         self.mlist.subscribe(subscriber_addr)
         self.assertFalse(self.mlist.is_owner_or_mod(subscriber_addr))
+
+
+class TestHeldMessage(TestCase):
+
+    def setUp(self):
+        self._client = Client(
+            'http://localhost:9001/3.1', 'restadmin', 'restpass')
+
+        try:
+            self.domain = self._client.create_domain('example.com')
+        except HTTPError:
+            self.domain = self._client.get_domain('example.com')
+
+        self.mlist = self.domain.create_list('foo')
+        # Test that a held message can be moderated.
+        msg = """\
+From: nonmember@example.com
+To: foo@example.com
+Subject: Hello World
+Message-ID: <msgid>
+
+Hello!
+"""
+        self._inject_message(msg, self.mlist)
+        # Wait for the message to appear in the held queue for 10 seconds max.
+        self._wait_for_message_in_held_queue(self.mlist, 30)
+
+    def tearDown(self):
+        self.domain.delete()
+
+    def _inject_message(self, msg, mlist):
+        inq = self._client.queues['in']
+        inq.inject('foo.example.com', msg)
+
+    def _wait_for_message_in_held_queue(self, mlist, timeout):
+        """Wait for held message in mlist for timeout seconds."""
+        start_time = time.time()
+        while True:
+            # if (start_time + timeout > time.time()):
+            #     print('timeout trying to wait for message')
+            #     break
+            all_held = mlist.held
+            if len(all_held) > 0:
+                print('Total time to wait for message:')
+                print(time.time() - start_time)
+                break
+            time.sleep(0.1)
+
+    def test_held_message_moderation(self):
+        # Test that message was held and not timed out.
+        self.assertEqual(len(self.mlist.held), 1)
+        held = self.mlist.held[0]
+        held_message = self.mlist.get_held_message(held.request_id)
+        virginq = self._client.queues['virgin']
+        virginq_msgs = len(virginq.files)
+        # Now, let's try to reject this message with a reason.
+        response = self.mlist.reject_message(held_message.request_id,
+                                             reason='You shall not pass.')
+        self.assertEqual(response.status_code, 204)
+        # Make sure that the message was rejected.
+        self.assertEqual(len(self.mlist.held), 0)
+        # Test that virgin queue has a rejection notice
+        all_msgs = virginq.files
+        self.assertEqual(len(all_msgs), virginq_msgs + 1)
+        # For now, there is no way to fetch a message from a queue to test for
+        # the content, so I stop here.
+
+    def test_held_message_moderation_message_object(self):
+        # The only difference between this and the above test is that we use
+        # the `held_message.reject` API, which for some reason as different
+        # code to make the same API call.
+        self.assertEqual(len(self.mlist.held), 1)
+        held = self.mlist.held[0]
+        held_message = self.mlist.get_held_message(held.request_id)
+        virginq = self._client.queues['virgin']
+        virginq_msgs = len(virginq.files)
+        # Now, let's try to reject this message with a reason.
+        response = held_message.reject(reason='You shall not pass.')
+        self.assertEqual(response.status_code, 204)
+        # Make sure that the message was rejected.
+        self.assertEqual(len(self.mlist.held), 0)
+        # Test that virgin queue has a rejection notice
+        all_msgs = virginq.files
+        self.assertEqual(len(all_msgs), virginq_msgs + 1)
+        # For now, there is no way to fetch a message from a queue to test for
+        # the content, so I stop here.

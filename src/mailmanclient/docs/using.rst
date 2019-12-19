@@ -1256,6 +1256,7 @@ configuration options are read-only.
     >>> cfg = client.configuration
     >>> for key in sorted(cfg):
     ...     print(cfg[key].name)
+    ARC
     antispam
     archiver.mail_archive
     archiver.master

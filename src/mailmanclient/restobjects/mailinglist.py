@@ -191,34 +191,53 @@ class MailingList(RESTObject):
             self.fqdn_listname, role, quote_plus(address))
         self._connection.call(url, method='DELETE')
 
-    def moderate_message(self, request_id, action):
+    def moderate_message(self, request_id, action, comment=None):
         """Moderate a held message.
 
         :param request_id: Id of the held message.
         :type request_id: Int.
         :param action: Action to perform on held message.
         :type action: String.
+        :param comment: The reason for action, only supported for rejection.
+        :type comment: str
         """
+        data = dict(action=action)
+        if comment is not None:
+            data['comment'] = comment
+
         path = 'lists/{0}/held/{1}'.format(
             self.fqdn_listname, str(request_id))
         response, content = self._connection.call(
-            path, dict(action=action), 'POST')
+            path, data, 'POST')
         return response
 
     def discard_message(self, request_id):
-        """Shortcut for moderate_message."""
+        """Shortcut for moderate_message.
+
+        :param str request_id: The request_id of the held message.
+        """
         return self.moderate_message(request_id, 'discard')
 
-    def reject_message(self, request_id):
-        """Shortcut for moderate_message."""
-        return self.moderate_message(request_id, 'reject')
+    def reject_message(self, request_id, reason=None):
+        """Shortcut for moderate_message.
+
+        :param str request_id: The request_id of the held message.
+        :param str reason: An optional reason for rejection of the message.
+        """
+        return self.moderate_message(request_id, 'reject', reason)
 
     def defer_message(self, request_id):
-        """Shortcut for moderate_message."""
+        """Shortcut for moderate_message.
+
+        :param str request_id: The request_id of the held message.
+        """
         return self.moderate_message(request_id, 'defer')
 
     def accept_message(self, request_id):
-        """Shortcut for moderate_message."""
+        """Shortcut for moderate_message.
+
+        :param str request_id: The request_id of the held message.
+        """
         return self.moderate_message(request_id, 'accept')
 
     def moderate_request(self, request_id, action):

@@ -115,7 +115,7 @@ def find_doctests(start='.', extension='.txt'):
     :rtype: list
     """
     doctests = []
-    for dirpath, dirnames, filenames in os.walk(start):
+    for dirpath, _, filenames in os.walk(start):
         doctests.extend(os.path.join(dirpath, filename)
                         for filename in filenames
                         if filename.endswith(extension))

@@ -61,7 +61,8 @@ setup(
             'falcon==1.4.1',
             ],
         'lint': [
-            'flake8>3.0'
+            'flake8>3.0',
+            'flake8-bugbear',
            ]
         },
     )

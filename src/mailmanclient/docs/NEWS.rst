@@ -5,6 +5,9 @@ NEWS for mailmanclient
 3.3.1 (20XX-XX-XX)
 ==================
 
+- Held message moderation now supports an optional keyword, ``reason`` to
+  specify the reason to reject the message. (Closes #49)
+
 
 3.3.0 (2019-09-03)
 ==================

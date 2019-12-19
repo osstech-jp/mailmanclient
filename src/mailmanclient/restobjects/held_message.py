@@ -31,23 +31,30 @@ class HeldMessage(RESTObject):
         return '<HeldMessage {0!r} by {1}>'.format(
             self.request_id, self.sender)
 
-    def moderate(self, action):
+    def moderate(self, action, comment=None):
         """Moderate a held message.
 
         :param action: Action to perform on held message.
         :type action: String.
         """
+        data = dict(action=action)
+        if comment is not None:
+            data['comment'] = comment
+
         response, content = self._connection.call(
-            self._url, dict(action=action), 'POST')
+            self._url, data, 'POST')
         return response
 
     def discard(self):
         """Shortcut for moderate."""
         return self.moderate('discard')
 
-    def reject(self):
-        """Shortcut for moderate."""
-        return self.moderate('reject')
+    def reject(self, reason=None):
+        """Shortcut for moderate.
+
+        :param reason: An optional reason for rejecting the held message.
+        """
+        return self.moderate('reject', comment=reason)
 
     def defer(self):
         """Shortcut for moderate."""

@@ -25,6 +25,13 @@ python3.7:
     variables:
       - $CORE_COMMIT_SHA
 
+python3.8:
+  script:
+    - tox -e py38
+  except:
+    variables:
+      - $CORE_COMMIT_SHA
+
 lint:
   script:
     - tox -e lint

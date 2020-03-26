@@ -45,7 +45,3 @@ docs:
   except:
     variables:
       - $CORE_COMMIT_SHA
-
-upstream:
-  script:
-    - tox -e py37

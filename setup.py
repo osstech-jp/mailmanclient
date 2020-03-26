@@ -55,7 +55,6 @@ setup(
     extras_require={
         'testing': [
             'pytest',
-            'pytest-vcr',
             'pytest-services',
             'mailman',
             'falcon==1.4.1',

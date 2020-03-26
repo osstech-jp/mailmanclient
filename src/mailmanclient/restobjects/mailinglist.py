@@ -312,8 +312,9 @@ class MailingList(RESTObject):
         data = dict(
             list_id=self.list_id,
             subscriber=address,
-            display_name=display_name,
         )
+        if display_name:
+            data['display_name'] = display_name
         if pre_verified:
             data['pre_verified'] = True
         if pre_confirmed:

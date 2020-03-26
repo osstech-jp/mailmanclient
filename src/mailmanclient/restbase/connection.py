@@ -115,5 +115,6 @@ class Connection:
             return response, response.json()
         except HTTPError:
             raise
-        except IOError:
-            raise MailmanConnectionError('Could not connect to Mailman API')
+        except IOError as e:
+            raise MailmanConnectionError(
+                'Could not connect to Mailman API: ', repr(e))

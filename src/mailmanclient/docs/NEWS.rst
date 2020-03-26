@@ -7,7 +7,9 @@ NEWS for mailmanclient
 
 - Held message moderation now supports an optional keyword, ``reason`` to
   specify the reason to reject the message. (Closes #49)
-
+- Fix a bug where missing ``display_name`` attribute with
+  ``MalingList.subscribe`` would subscribe the user with a display name of
+  "None". (Fixes #52)
 
 3.3.0 (2019-09-03)
 ==================

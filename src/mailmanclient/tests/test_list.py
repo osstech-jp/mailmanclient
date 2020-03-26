@@ -200,3 +200,35 @@ Hello!
         self.assertEqual(len(all_msgs), virginq_msgs + 1)
         # For now, there is no way to fetch a message from a queue to test for
         # the content, so I stop here.
+
+
+class TestMailingList(TestCase):
+
+    def setUp(self):
+        self._client = Client(
+            'http://localhost:9001/3.1', 'restadmin', 'restpass')
+        try:
+            self.domain = self._client.create_domain('example.com')
+        except HTTPError:
+            self.domain = self._client.get_domain('example.com')
+        self.mlist = self.domain.create_list('foo')
+
+    def tearDown(self):
+        self.domain.delete()
+
+    def test_subscribe_without_display_name(self):
+        self.mlist.subscribe('aperson@example.com',
+                             pre_verified=True,
+                             pre_confirmed=True,
+                             pre_approved=True)
+        users = self.mlist.members[0]
+        self.assertEqual(users.display_name, '')
+
+    def test_subscribe_with_display_name(self):
+        self.mlist.subscribe('bperson@example.com',
+                             display_name='B Person',
+                             pre_verified=True,
+                             pre_confirmed=True,
+                             pre_approved=True)
+        users = self.mlist.members[0]
+        self.assertEqual(users.display_name, 'B Person')

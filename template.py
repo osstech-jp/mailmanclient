@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2019 by the Free Software Foundation, Inc.
+# Copyright (C) 2020 by the Free Software Foundation, Inc.
 #
 # This file is part of mailman.client.
 #
@@ -15,8 +15,6 @@
 # along with mailman.client.  If not, see <http://www.gnu.org/licenses/>.
 
 """Module contents."""
-
-from __future__ import absolute_import, print_function, unicode_literals
 
 __all__ = [
 ]

@@ -15,22 +15,11 @@
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
 
 """Wrappers for doctests to run with pytest"""
-
-from __future__ import absolute_import, print_function, unicode_literals
-
 import pytest
 
 from mailmanclient.testing.documentation import dump
 
 
-def pytest_collection_modifyitems(items):
-    for item in items:
-        item.add_marker(pytest.mark.vcr)
-
-
 @pytest.fixture(autouse=True)
 def import_stuff(doctest_namespace):
-    doctest_namespace['absolute_import'] = absolute_import
-    doctest_namespace['print_function'] = print_function
-    doctest_namespace['unicode_literals'] = unicode_literals
     doctest_namespace['dump'] = dump

@@ -15,12 +15,8 @@
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
 
 """Test Page corner cases."""
-
-from __future__ import absolute_import, print_function, unicode_literals
-
 import unittest
 
-import pytest
 from unittest.mock import Mock
 from urllib.parse import urlsplit, parse_qs
 
@@ -33,7 +29,6 @@ __all__ = [
     ]
 
 
-@pytest.mark.vcr()
 class TestPage(unittest.TestCase):
 
     def test_url_simple(self):

@@ -15,12 +15,7 @@
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
 
 """Test domain corner cases."""
-
-from __future__ import absolute_import, print_function, unicode_literals
-
-
 import unittest
-import pytest
 
 from mailmanclient import Client
 from six.moves.urllib_error import HTTPError
@@ -32,7 +27,6 @@ __all__ = [
     ]
 
 
-@pytest.mark.vcr()
 class TestDomains(unittest.TestCase):
     def setUp(self):
         self._client = Client(

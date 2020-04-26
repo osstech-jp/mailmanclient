@@ -167,19 +167,13 @@ Hello!
         self.assertEqual(len(self.mlist.held), 1)
         held = self.mlist.held[0]
         held_message = self.mlist.get_held_message(held.request_id)
-        virginq = self._client.queues['virgin']
-        virginq_msgs = len(virginq.files)
+
         # Now, let's try to reject this message with a reason.
         response = self.mlist.reject_message(held_message.request_id,
                                              reason='You shall not pass.')
         self.assertEqual(response.status_code, 204)
         # Make sure that the message was rejected.
         self.assertEqual(len(self.mlist.held), 0)
-        # Test that virgin queue has a rejection notice
-        all_msgs = virginq.files
-        self.assertEqual(len(all_msgs), virginq_msgs + 1)
-        # For now, there is no way to fetch a message from a queue to test for
-        # the content, so I stop here.
 
     def test_held_message_moderation_message_object(self):
         # The only difference between this and the above test is that we use
@@ -188,18 +182,12 @@ Hello!
         self.assertEqual(len(self.mlist.held), 1)
         held = self.mlist.held[0]
         held_message = self.mlist.get_held_message(held.request_id)
-        virginq = self._client.queues['virgin']
-        virginq_msgs = len(virginq.files)
+
         # Now, let's try to reject this message with a reason.
         response = held_message.reject(reason='You shall not pass.')
         self.assertEqual(response.status_code, 204)
         # Make sure that the message was rejected.
         self.assertEqual(len(self.mlist.held), 0)
-        # Test that virgin queue has a rejection notice
-        all_msgs = virginq.files
-        self.assertEqual(len(all_msgs), virginq_msgs + 1)
-        # For now, there is no way to fetch a message from a queue to test for
-        # the content, so I stop here.
 
 
 class TestMailingList(TestCase):

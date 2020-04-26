@@ -718,6 +718,7 @@ for the settings is returned which behaves much like a dictionary.
     >>> settings = test_one.settings
     >>> for attr in sorted(settings):
     ...     print(attr + ': ' + str(settings[attr]))
+    accept_these_nonmembers: []
     acceptable_aliases: []
     ...
     volume: 1

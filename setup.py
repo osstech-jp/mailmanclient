@@ -56,7 +56,7 @@ setup(
         'testing': [
             'pytest',
             'pytest-services',
-            'mailman',
+            'mailman>=3.3.1',
             'falcon==1.4.1',
             ],
         'lint': [

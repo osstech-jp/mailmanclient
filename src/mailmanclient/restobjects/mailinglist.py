@@ -35,9 +35,9 @@ __all__ = [
 
 class MailingList(RESTObject):
 
-    _properties = ('display_name', 'fqdn_listname', 'list_id', 'list_name',
-                   'mail_host', 'member_count', 'volume', 'self_link',
-                   'description')
+    _properties = ('advertised', 'display_name', 'fqdn_listname', 'list_id',
+                   'list_name', 'mail_host', 'member_count', 'volume',
+                   'self_link', 'description')
 
     def __init__(self, connection, url, data=None):
         super(MailingList, self).__init__(connection, url, data)

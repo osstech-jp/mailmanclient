@@ -10,6 +10,7 @@ NEWS for mailmanclient
 - Fix a bug where missing ``display_name`` attribute with
   ``MalingList.subscribe`` would subscribe the user with a display name of
   "None". (Fixes #52)
+- Add ``advertised`` flag to ``MailingList`` object. (See !115)
 
 3.3.0 (2019-09-03)
 ==================

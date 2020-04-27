@@ -11,6 +11,8 @@ NEWS for mailmanclient
   ``MalingList.subscribe`` would subscribe the user with a display name of
   "None". (Fixes #52)
 - Add ``advertised`` flag to ``MailingList`` object. (See !115)
+- ``MailingList.nonmembers`` now uses ``roster/nonmembers`` resource instead of
+  the ``find/`` API for consistency.
 
 3.3.0 (2019-09-03)
 ==================

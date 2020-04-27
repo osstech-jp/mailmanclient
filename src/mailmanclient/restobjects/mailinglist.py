@@ -80,10 +80,8 @@ class MailingList(RESTObject):
 
     @property
     def nonmembers(self):
-        url = 'members/find'
-        data = {'role': 'nonmember',
-                'list_id': self.list_id}
-        response, content = self._connection.call(url, data)
+        url = 'lists/{0}/roster/nonmember'.format(self.fqdn_listname)
+        response, content = self._connection.call(url)
         if 'entries' not in content:
             return []
         return [Member(self._connection, entry['self_link'], entry)

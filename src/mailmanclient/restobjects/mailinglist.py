@@ -273,23 +273,40 @@ class MailingList(RESTObject):
         """Shortcut to defer a subscription request."""
         return self.moderate_request(request_id, 'defer')
 
-    def get_member(self, email):
+    def _get_membership(self, email, role):
         """Get a membership.
 
         :param address: The email address of the member for this list.
+        :param role: The membership role.
         :return: A member proxy object.
         """
         # In order to get the member object we query the REST API for
         # the member. Incase there is no matching subscription, an
         # HTTPError is returned instead.
         try:
-            path = 'lists/{0}/member/{1}'.format(
-                self.list_id, quote_plus(email))
+            path = 'lists/{0}/{1}/{2}'.format(
+                self.list_id, role, quote_plus(email))
             response, content = self._connection.call(path)
             return Member(self._connection, content['self_link'], content)
         except HTTPError:
-            raise ValueError('%s is not a member address of %s' %
-                             (email, self.fqdn_listname))
+            raise ValueError('%s is not a %s address of %s' %
+                             (email, role, self.fqdn_listname))
+
+    def get_member(self, email):
+        """Get a membership.
+
+        :param address: The email address of the member for this list.
+        :return: A member proxy object.
+        """
+        return self._get_membership(email, 'member')
+
+    def get_nonmember(self, email):
+        """Get a non-member of the list.
+
+        :param address: The email address of the non-member for this list.
+        :return: A member proxy object.
+        """
+        return self._get_membership(email, 'nonmember')
 
     def subscribe(self, address, display_name=None, pre_verified=False,
                   pre_confirmed=False, pre_approved=False):

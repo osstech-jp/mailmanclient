@@ -13,6 +13,8 @@ NEWS for mailmanclient
 - Add ``advertised`` flag to ``MailingList`` object. (See !115)
 - ``MailingList.nonmembers`` now uses ``roster/nonmembers`` resource instead of
   the ``find/`` API for consistency.
+- Add ``Client.get_nonmember`` and ``MailingList.get_nonmember`` to get a
+  non-member by address. (Fixes #47)
 
 3.3.0 (2019-09-03)
 ==================

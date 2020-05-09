@@ -29,7 +29,8 @@ class Member(RESTObject, PreferencesMixin):
     _writable_properties = ('address', 'delivery_mode', 'moderation_action')
 
     def __repr__(self):
-        return '<Member {0!r} on {1!r}>'.format(self.email, self.list_id)
+        return '<Member {0!r} on {1!r} with role {2!r}>'.format(
+            self.email, self.list_id, self.role)
 
     def __str__(self):
         return 'Member "{0}" on "{1}"'.format(self.email, self.list_id)

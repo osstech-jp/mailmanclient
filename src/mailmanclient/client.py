@@ -218,6 +218,16 @@ class Client:
         """
         return self.get_list(fqdn_listname).get_member(subscriber_address)
 
+    def get_nonmember(self, fqdn_listname, nonmember_address):
+        """Get the Member object for a given MailingList and Non-member's Email.
+
+        :param str fqdn_listname: Fully qualified address for the MailingList.
+        :param str subscriber_address: Email Address for the non-member.
+        :returns: A member of a list.
+        :rtype: :class:`Member`
+        """
+        return self.get_list(fqdn_listname).get_nonmember(nonmember_address)
+
     def get_member_page(self, count=50, page=1):
         """Return a paginated list of Members.
 

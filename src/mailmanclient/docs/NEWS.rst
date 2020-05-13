@@ -2,6 +2,14 @@
 NEWS for mailmanclient
 =======================
 
+3.3.2
+=====
+
+- Add two new ``get_requests()`` and ``get_requests_count()`` to
+  get pending subscription requests``MailingList``. ``get_requests`` is the
+  new API to fetch pending requests and supersedes the previous ``requests``
+  property.
+
 
 3.3.1rc1 (2020-05-09)
 =====================

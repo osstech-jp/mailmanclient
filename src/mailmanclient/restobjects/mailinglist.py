@@ -137,9 +137,23 @@ class MailingList(RESTObject):
 
     @property
     def requests(self):
-        """Return a list of dicts with subscription requests."""
-        response, content = self._connection.call(
-            'lists/{0}/requests'.format(self.fqdn_listname), None, 'GET')
+        """See :meth:`get_requests`."""
+        return self.get_requests()
+
+    def get_requests(self, token_owner=None):
+        """Return a list of dicts with subscription requests.
+
+        This is the new API for requests which allows filtering via
+        `token_owner` since it isn't possible to do so via the property
+        requests.
+
+        :param token_owner: Who owns the pending requests?  Should be one in
+            'no_one', 'moderator' and 'subscriber'.
+        """
+        url = 'lists/{0}/requests'.format(self.fqdn_listname)
+        if token_owner:
+            url += '?token_owner={}'.format(token_owner)
+        response, content = self._connection.call(url, None, 'GET')
         if 'entries' not in content:
             return []
         else:
@@ -152,6 +166,22 @@ class MailingList(RESTObject):
                                request_date=entry['when'])
                 entries.append(request)
         return entries
+
+    def get_requests_count(self, token_owner=None):
+        """Return a total count of pending subscription requests.
+
+        This should be a faster query when *all* the requests aren't needed and
+        only a count is needed to display on the badge in List's settings page.
+
+        :param token_owner: Who owns the pending requests?  Should be one in
+            'no_one', 'moderator' and 'subscriber'.
+        :returns: The count of pending requests.
+        """
+        url = 'lists/{}/requests/count'.format(self.fqdn_listname)
+        if token_owner:
+            url += '?token_owner={}'.format(token_owner)
+        response, json = self._connection.call(url)
+        return json['count']
 
     @property
     def archivers(self):

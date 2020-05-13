@@ -914,12 +914,12 @@ Subscription requests can be accessed through the list object's
 
     >>> confirm_first = example_dot_com.create_list('confirm-first')
     >>> settings = confirm_first.settings
-    >>> settings['subscription_policy'] = 'moderate'
+    >>> settings['subscription_policy'] = 'confirm_then_moderate'
     >>> settings.save()
 
     >>> confirm_first = client.get_list('confirm-first.example.com')
     >>> print(confirm_first.settings['subscription_policy'])
-    moderate
+    confirm_then_moderate
 
 Initially there are no requests, so let's to subscribe someone to the
 list. We'll get a token back.
@@ -935,7 +935,7 @@ list. We'll get a token back.
 Now the request shows up in the list of requests:
 
     >>> import time; time.sleep(5)
-    >>> len(confirm_first.requests)
+    >>> confirm_first.get_requests_count()
     1
 
     >>> request_1 = confirm_first.requests[0]
@@ -950,23 +950,48 @@ Now the request shows up in the list of requests:
     >>> print(request_1['list_id'])
     confirm-first.example.com
 
-Subscription requests can be accepted, deferred, rejected or
-discarded using the request token.
+It is possible to filter subscription requests based on who is it pending an
+action from using ``token_owner`` parameter::
 
     >>> data = confirm_first.subscribe('harpo@example.com',
     ...                                pre_verified=True,
     ...                                pre_confirmed=True)
     >>> data = confirm_first.subscribe('zeppo@example.com',
     ...                                pre_verified=True,
-    ...                                pre_confirmed=True)
+    ...                                pre_confirmed=False)
 
-    >>> len(confirm_first.requests)
+    >>> confirm_first.get_requests_count()
     3
+
+
+Possible values for ``token_owner`` include:
+- ``subscriber``
+- ``moderator``
+- ``no_one``
+
+
+All these are pending an approval from moderator::
+
+    >>> confirm_first.get_requests_count(token_owner='moderator')
+    2
+
+Subscriptions which aren't ``pre_confirmed`` first require confirmation from
+the user if list's subscription policy is ``confirm`` or
+``confirm_then_moderate``::
+
+    >>> confirm_first.get_requests_count(token_owner='subscriber')
+    1
+    >>> data = confirm_first.get_requests(token_owner='subscriber')[0]
+    >>> print(data['email'])
+    zeppo@example.com
+
+Subscription requests can be accepted, deferred, rejected or
+discarded using the request token.
 
 Let's accept Groucho:
 
     >>> response = confirm_first.moderate_request(request_1['token'], 'accept')
-    >>> len(confirm_first.requests)
+    >>> confirm_first.get_requests_count()
     2
 
     >>> request_2 = confirm_first.requests[0]
@@ -980,13 +1005,13 @@ Let's accept Groucho:
 Let's reject Harpo:
 
     >>> response = confirm_first.moderate_request(request_2['token'], 'reject')
-    >>> len(confirm_first.requests)
+    >>> confirm_first.get_requests_count()
     1
 
 Let's discard Zeppo's request:
 
     >>> response = confirm_first.moderate_request(request_3['token'], 'discard')
-    >>> len(confirm_first.requests)
+    >>> confirm_first.get_requests_count()
     0
 
 

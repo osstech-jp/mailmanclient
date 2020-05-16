@@ -9,6 +9,8 @@ NEWS for mailmanclient
   get pending subscription requests``MailingList``. ``get_requests`` is the
   new API to fetch pending requests and supersedes the previous ``requests``
   property.
+- Add a new ``get_held_count()`` API to get a count of held messages for a
+  ``MailingList``.
 
 
 3.3.1rc1 (2020-05-09)

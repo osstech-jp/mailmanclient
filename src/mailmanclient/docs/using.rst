@@ -1043,13 +1043,13 @@ It might take a few moments for the message to show up in the moderation
 queue.
 
     >>> while True:
-    ...     all_held = test_one.held
-    ...     if len(all_held) > 0:
+    ...     if test_one.get_held_count() > 0:
     ...         break
     ...     time.sleep(0.1)
 
 Messages held for moderation can be listed on a per list basis.
 
+    >>> all_held = test_one.held
     >>> print(all_held[0].request_id)
     1
 

@@ -131,6 +131,12 @@ class MailingList(RESTObject):
         url = 'lists/{0}/held'.format(self.fqdn_listname)
         return Page(self._connection, url, HeldMessage, count, page)
 
+    def get_held_count(self):
+        """Get a count of held messages."""
+        response, json = self._connection.call(
+            'lists/{}/held/count'.format(self.fqdn_listname), None, 'GET')
+        return json['count']
+
     def get_held_message(self, held_id):
         url = 'lists/{0}/held/{1}'.format(self.fqdn_listname, held_id)
         return HeldMessage(self._connection, url)

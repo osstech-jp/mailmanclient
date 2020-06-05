@@ -5,16 +5,18 @@ NEWS for mailmanclient
 3.3.2
 =====
 
-- Add two new ``get_requests()`` and ``get_requests_count()`` to
-  get pending subscription requests``MailingList``. ``get_requests`` is the
-  new API to fetch pending requests and supersedes the previous ``requests``
-  property.
+- Add two new ``get_requests()`` and ``get_requests_count()`` to get pending
+  subscription requests``MailingList.get_requests`` is the new API to fetch
+  pending requests and supersedes the previous ``requests`` property. (See
+  !121)
+- Add ``Member.subscription_mode`` to determine if a User is subscribed or an
+  Address. (See !121)
 - Add a new ``get_held_count()`` API to get a count of held messages for a
-  ``MailingList``.
+  ``MailingList``. (See !122)
 
 
-3.3.1rc1 (2020-05-09)
-=====================
+3.3.1 (2020-06-01)
+==================
 
 - Held message moderation now supports an optional keyword, ``reason`` to
   specify the reason to reject the message. (Closes #49)

@@ -13,6 +13,7 @@ NEWS for mailmanclient
   Address. (See !121)
 - Add a new ``get_held_count()`` API to get a count of held messages for a
   ``MailingList``. (See !122)
+- Add ``display_name`` to the pending subscription requests. (Fixes #55)
 
 
 3.3.1 (2020-06-01)

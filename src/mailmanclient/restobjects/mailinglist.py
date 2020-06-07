@@ -167,6 +167,7 @@ class MailingList(RESTObject):
             for entry in content['entries']:
                 request = dict(email=entry['email'],
                                token=entry['token'],
+                               display_name=entry['display_name'],
                                token_owner=entry['token_owner'],
                                list_id=entry['list_id'],
                                request_date=entry['when'])

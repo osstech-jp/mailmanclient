@@ -24,8 +24,9 @@ __all__ = [
 
 class Member(RESTObject, PreferencesMixin):
 
-    _properties = ('delivery_mode', 'email', 'list_id', 'moderation_action',
-                   'display_name', 'role', 'self_link', 'subscription_mode')
+    _properties = ('address', 'delivery_mode', 'email', 'list_id',
+                   'moderation_action', 'display_name', 'role', 'self_link',
+                   'subscription_mode')
     _writable_properties = ('address', 'delivery_mode', 'moderation_action')
 
     def __repr__(self):

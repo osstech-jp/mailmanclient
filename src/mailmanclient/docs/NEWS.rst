@@ -15,8 +15,7 @@ NEWS for mailmanclient
   ``MailingList``. (See !122)
 - Add ``display_name`` to the pending subscription requests. (Fixes #55)
 - Allow setting a ``Member``'s ``address`` attribute. (See !128)
-
-
+- Add support for inviting an email address to join a list.
 
 3.3.1 (2020-06-01)
 ==================

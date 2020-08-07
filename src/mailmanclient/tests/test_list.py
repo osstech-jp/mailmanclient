@@ -220,3 +220,14 @@ class TestMailingList(TestCase):
                              pre_approved=True)
         users = self.mlist.members[0]
         self.assertEqual(users.display_name, 'B Person')
+
+    def test_invite(self):
+        data = self.mlist.subscribe('cperson@example.com',
+                                    invitation=True)
+        # cperson is not a member yet.
+        self.assertRaisesRegex(ValueError,
+                               'not a member',
+                               self.mlist.get_member,
+                               'cperson@example.com')
+        # But we got a token for the invitation.
+        self.assertEqual(data['token_owner'], 'subscriber')

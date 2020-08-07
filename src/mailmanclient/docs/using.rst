@@ -263,6 +263,18 @@ user, we get a response with a token:
     >>> print(data['token_owner'])
     subscriber
 
+We can also invite an email address to join the list.  This will send an
+invitation email to the address for the user to accept.  Here again we get a
+response with a token:
+
+    >>> data = test_one.subscribe('invitee@example.com',
+    ...                           'Invitee',
+    ...                           invitation=True)
+    >>> data['token'] is not None
+    True
+    >>> print(data['token_owner'])
+    subscriber
+
 If we know the email address to be valid, we can set the
 ``pre_verified`` flag. However, the list's subscription policy is
 "confirm", so if we try to subscribe a user, we will also get a token
@@ -492,6 +504,7 @@ access the clients user property.
     >>> for user in client.users:
     ...     print(user.display_name)
     Unverified
+    Invitee
     Unconfirmed
     Anna
     Bill
@@ -506,13 +519,13 @@ The list of users can also be paginated:
     >>> page.nr
     1
     >>> page.total_size
-    8
+    9
     >>> for user in page:
     ...     print(user.display_name)
     Unverified
+    Invitee
     Unconfirmed
     Anna
-    Bill
 
 You can get the next or previous pages without calling ``get_userpage`` again.
 
@@ -522,10 +535,10 @@ You can get the next or previous pages without calling ``get_userpage`` again.
 
     >>> for user in page:
     ...     print(user.display_name)
+    Bill
     Cris
     Jack
     Jill
-    Hans
 
     >>> page = page.previous
     >>> page.nr
@@ -534,9 +547,9 @@ You can get the next or previous pages without calling ``get_userpage`` again.
     >>> for user in page:
     ...     print(user.display_name)
     Unverified
+    Invitee
     Unconfirmed
     Anna
-    Bill
 
 A single user can be retrieved using their email address.
 

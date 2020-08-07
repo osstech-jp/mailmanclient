@@ -346,7 +346,7 @@ class MailingList(RESTObject):
         return self._get_membership(email, 'nonmember')
 
     def subscribe(self, address, display_name=None, pre_verified=False,
-                  pre_confirmed=False, pre_approved=False):
+                  pre_confirmed=False, pre_approved=False, invitation=False):
         """Subscribe an email address to a mailing list.
 
         :param address: Email address to subscribe to the list.
@@ -358,6 +358,8 @@ class MailingList(RESTObject):
         :type pre_confirmed: bool
         :param pre_approved: True if membership is moderator-approved.
         :type pre_approved: bool
+        :param invitation: True if this is an invitation to join the list.
+        :type invitation: bool
         :type display_name: str
         :return: A member proxy object.
         """
@@ -373,12 +375,14 @@ class MailingList(RESTObject):
             data['pre_confirmed'] = True
         if pre_approved:
             data['pre_approved'] = True
+        if invitation:
+            data['invitation'] = True
         response, content = self._connection.call('members', data)
         # If a member is not immediately subscribed (i.e. verificatoin,
         # confirmation or approval need), the response content is returned.
         if response.status_code == 202:
             return content
-        # I the subscription is executed immediately, a member object
+        # If the subscription is executed immediately, a member object
         # is returned.
         return Member(self._connection, response.headers.get('location'))
 

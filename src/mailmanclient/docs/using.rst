@@ -707,7 +707,8 @@ Passwords can be changed as well:
 User Subscriptions
 ------------------
 
-A User's subscriptions can be access through their ``subscriptions`` property.
+A User's subscriptions can be accessed through the User's ``subscriptions``
+property.
 
     >>> bill = client.get_user('bill@example.com')
     >>> for subscription in bill.subscriptions:
@@ -861,7 +862,7 @@ Moderators are also not automatically added as members:
     ...     print(m)
     Member "bill@example.com" on "test-1.example.com"
 
-Members and owners/moderators are separate entries in in the general members
+Members and owners/moderators are separate entries in the general members
 list:
 
     >>> print(test_one.subscribe('bar@example.com', 'Bar',
@@ -934,7 +935,7 @@ Subscription requests can be accessed through the list object's
     >>> print(confirm_first.settings['subscription_policy'])
     confirm_then_moderate
 
-Initially there are no requests, so let's to subscribe someone to the
+Initially there are no requests, so let's subscribe someone to the
 list. We'll get a token back.
 
     >>> confirm_first.requests

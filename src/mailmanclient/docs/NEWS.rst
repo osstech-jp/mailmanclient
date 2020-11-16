@@ -66,13 +66,13 @@ Changes
 -------
 
 * Add '.pc' (patch directory) to list of ignored patterns when building the
-   documentation with Sphinx.
+  documentation with Sphinx.
 * `Mailinglist.add_owner` and `Mailinglist.add_moderator` now accept an
   additional `display_name` argument that allows associating display names with
   these memberships.
 * Add a new API ``Client.find_lists`` which allows filtering mailing lists
-	related to a subscriber. It optionally allows a role, which filters the lists
-	that the address is subscribed to with that role.
+  related to a subscriber. It optionally allows a role, which filters the lists
+  that the address is subscribed to with that role.
 
 Backwards Incompatible Changes
 -------------------------------

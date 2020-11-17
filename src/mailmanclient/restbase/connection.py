@@ -15,7 +15,7 @@
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
 
 from urllib.error import HTTPError
-from urllib.parse import urljoin, urlencode
+from urllib.parse import urljoin, urlencode, urlparse, urlunparse
 
 from requests import request
 
@@ -58,6 +58,21 @@ class Connection:
         else:
             self.auth = (name, password)
 
+    def rewrite_url(self, url):
+        """rewrite url component with self.baseurl prefix "scheme://netloc"
+
+        :param url: the URL to rewrite
+        :type url: str
+        :return: modified URL
+        :rtype: str
+        """
+        # rewrite url component with self.baseurl prefix "scheme://netloc"
+        pbaseurl = urlparse(self.baseurl)
+        parsed = urlparse(url)
+        parsed = parsed._replace(scheme=pbaseurl.scheme,
+                                 netloc=pbaseurl.netloc)
+        return urlunparse(parsed)
+
     def call(self, path, data=None, method=None):
         """Make a call to the Mailman REST API.
 
@@ -87,6 +102,7 @@ class Connection:
                 method = 'POST'
         method = method.upper()
         url = urljoin(self.baseurl, path)
+        url = self.rewrite_url(url)
         try:
             response = request(
                 url=url,

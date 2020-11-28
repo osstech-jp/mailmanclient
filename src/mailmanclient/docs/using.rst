@@ -24,6 +24,11 @@ We can retrieve basic information about the server.
     python_version: ...
     self_link: http://localhost:9001/3.1/system/versions
 
+.. note::
+    The content accessible via mailmanclient depends heavily on the version
+    of the mailman core REST API it's connecting to. See `Core REST API
+    docs`_ for more details.
+
 To start with, there are no known mailing lists.
 
     >>> client.lists
@@ -1398,9 +1403,11 @@ Each configuration object is a dictionary and you can iterate over them
      default_language : en
      email_commands_max_lines : 10
      filtered_messages_are_preservable : no
+     hold_digest : no
      html_to_plain_text_command : /usr/bin/lynx -dump $filename
      layout : here
      listname_chars : [-_.0-9a-z]
+     masthead_threshold : 4
      noreply_address : noreply
      pending_request_life : 3d
      post_hook :
@@ -1413,3 +1420,5 @@ Each configuration object is a dictionary and you can iterate over them
      ...    domain.delete()
      >>> for user in client.users:
      ...    user.delete()
+
+.. _`Core REST API docs`: https://docs.mailman3.org/projects/mailman/en/latest/src/mailman/rest/docs/rest.html

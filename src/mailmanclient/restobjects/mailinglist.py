@@ -190,6 +190,16 @@ class MailingList(RESTObject):
         response, json = self._connection.call(url)
         return json['count']
 
+    def get_request(self, token):
+        """Get an individual pending request for the given token.
+
+        :param token: The token for the request.
+        :returns: The request dictionary.
+        """
+        url = 'lists/{}/requests/{}'.format(self.fqdn_listname, token)
+        response, json = self._connection.call(url)
+        return json
+
     @property
     def archivers(self):
         url = 'lists/{0}/archivers'.format(self.list_id)

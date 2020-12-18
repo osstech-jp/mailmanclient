@@ -231,3 +231,11 @@ class TestMailingList(TestCase):
                                'cperson@example.com')
         # But we got a token for the invitation.
         self.assertEqual(data['token_owner'], 'subscriber')
+
+    def test_get_individual_pending_request(self):
+        data = self.mlist.subscribe('aperson@example.com', pre_confirmed=False)
+        self.assertEqual(data['token_owner'], 'subscriber')
+        # Now get the individual request object.
+        json = self.mlist.get_request(data['token'])
+        self.assertEqual(json['token_owner'], data['token_owner'])
+        self.assertEqual(json['token'], data['token'])

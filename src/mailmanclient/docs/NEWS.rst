@@ -19,7 +19,8 @@ NEWS for mailmanclient
 - Rewrite urls according to the ``baseurl`` used to instantiate ``Client``
   instead of relying on ``self_link``. (Fixes #22)
 - Add ``get_request`` API to MailingList to get individual request objects.
-
+- Add ``send_welcome_message`` parameter to MailingList.subscribe() to suppress
+  welcome message. (Closes #61)
 
 3.3.1 (2020-06-01)
 ==================

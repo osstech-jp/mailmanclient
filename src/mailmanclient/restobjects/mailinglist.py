@@ -356,12 +356,14 @@ class MailingList(RESTObject):
         return self._get_membership(email, 'nonmember')
 
     def subscribe(self, address, display_name=None, pre_verified=False,
-                  pre_confirmed=False, pre_approved=False, invitation=False):
+                  pre_confirmed=False, pre_approved=False, invitation=False,
+                  send_welcome_message=None):
         """Subscribe an email address to a mailing list.
 
         :param address: Email address to subscribe to the list.
         :type address: str
         :param display_name: The real name of the new member.
+        :type display_name: str
         :param pre_verified: True if the address has been verified.
         :type pre_verified: bool
         :param pre_confirmed: True if membership has been approved by the user.
@@ -370,7 +372,8 @@ class MailingList(RESTObject):
         :type pre_approved: bool
         :param invitation: True if this is an invitation to join the list.
         :type invitation: bool
-        :type display_name: str
+        :param send_welcome_message: True if welcome message should be sent.
+        :type send_welcome_message: bool
         :return: A member proxy object.
         """
         data = dict(
@@ -387,6 +390,11 @@ class MailingList(RESTObject):
             data['pre_approved'] = True
         if invitation:
             data['invitation'] = True
+        # Even if it is False, we should send this value because it means we
+        # should suppress welcome message, so check for None value to skip the
+        # parameter.
+        if send_welcome_message is not None:
+            data['send_welcome_message'] = send_welcome_message
         response, content = self._connection.call('members', data)
         # If a member is not immediately subscribed (i.e. verificatoin,
         # confirmation or approval need), the response content is returned.

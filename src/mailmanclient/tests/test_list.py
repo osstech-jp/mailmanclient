@@ -115,6 +115,16 @@ class TestMailingListMembershipTests(TestCase):
         self.mlist.subscribe(subscriber_addr)
         self.assertFalse(self.mlist.is_owner_or_mod(subscriber_addr))
 
+    def test_list_unsubscribe(self):
+        # Tests MailingList.unsubscribe
+        subscriber_addr = 'subscriber@example.com'
+        self.mlist.subscribe(subscriber_addr, pre_verified=True,
+                             pre_confirmed=True, pre_approved=True)
+        self.assertTrue(self.mlist.is_member(subscriber_addr))
+        self.mlist.unsubscribe(subscriber_addr, pre_confirmed=True,
+                               pre_approved=True)
+        self.assertFalse(self.mlist.is_member(subscriber_addr))
+
 
 class TestHeldMessage(TestCase):
 

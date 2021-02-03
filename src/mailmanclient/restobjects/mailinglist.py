@@ -404,14 +404,25 @@ class MailingList(RESTObject):
         # is returned.
         return Member(self._connection, response.headers.get('location'))
 
-    def unsubscribe(self, email):
+    def unsubscribe(self, email, pre_confirmed=None,
+                    pre_approved=None):
         """Unsubscribe an email address from a mailing list.
 
-        :param address: The address to unsubscribe.
+        :param address: Email address to unsubscribe.
+        :type address: str
+        :param pre_confirmed: True if unsubscribe is approved by the user.
+        :type pre_confirmed: bool
+        :param pre_approved: True if unsubscribe is moderator-approved.
+        :type pre_approved: bool
         """
+        data = dict()
+        if pre_confirmed is not None:
+            data['pre_confirmed'] = pre_confirmed
+        if pre_approved is not None:
+            data['pre_approved'] = pre_approved
         try:
             path = 'lists/{0}/member/{1}'.format(self.list_id, email)
-            self._connection.call(path, method='DELETE')
+            self._connection.call(path, data, method='DELETE')
         except HTTPError:
             # The member link does not exist, i.e. he is not a member
             raise ValueError('%s is not a member address of %s' %

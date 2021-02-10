@@ -48,6 +48,7 @@ class MailingList(RESTObject):
 
     @property
     def owners(self):
+        """All MailingList owners."""
         url = self._url + '/roster/owner'
         response, content = self._connection.call(url)
         if 'entries' not in content:
@@ -59,6 +60,7 @@ class MailingList(RESTObject):
 
     @property
     def moderators(self):
+        """All MailingList moderators."""
         url = self._url + '/roster/moderator'
         response, content = self._connection.call(url)
         if 'entries' not in content:
@@ -70,6 +72,7 @@ class MailingList(RESTObject):
 
     @property
     def members(self):
+        """All MailingList members."""
         url = 'lists/{0}/roster/member'.format(self.fqdn_listname)
         response, content = self._connection.call(url)
         if 'entries' not in content:
@@ -80,6 +83,7 @@ class MailingList(RESTObject):
 
     @property
     def nonmembers(self):
+        """All MailingList non-members."""
         url = 'lists/{0}/roster/nonmember'.format(self.fqdn_listname)
         response, content = self._connection.call(url)
         if 'entries' not in content:
@@ -88,11 +92,28 @@ class MailingList(RESTObject):
                 for entry in sorted(content['entries'],
                                     key=itemgetter('address'))]
 
-    def get_member_page(self, count=50, page=1):
+    def get_member_page(self, count=50, page=1, fields=None):
+        """Return a paginated list of MailingList's members.
+
+        :param int count: Count of members in one page.
+        :param int page: The page number.
+        """
         url = 'lists/{0}/roster/member'.format(self.fqdn_listname)
         return Page(self._connection, url, Member, count, page)
 
-    def find_members(self, address=None, role=None, page=None, count=50):
+    def find_members(
+            self, address=None, role=None, page=None, count=50):
+        """Find a Mailinglist's members.
+
+        This provides a filtering API for list's Members including,
+        non-members, owners and moderators by speciying the role.
+
+        :param str address: Member's address.
+        :param str role: Member's role.
+        :param int page: Page number for paginated results.
+        :param int count: Number of results per-page for paginated results.
+
+        """
         data = {'list_id': self.list_id}
         if address:
             data['subscriber'] = address
@@ -111,6 +132,7 @@ class MailingList(RESTObject):
 
     @property
     def settings(self):
+        """All MailingList settings."""
         if self._settings is None:
             self._settings = Settings(
                 self._connection,
@@ -119,7 +141,7 @@ class MailingList(RESTObject):
 
     @property
     def held(self):
-        """Return a list of dicts with held message information."""
+        """Held messages of a MailingList.."""
         response, content = self._connection.call(
             'lists/{0}/held'.format(self.fqdn_listname), None, 'GET')
         if 'entries' not in content:
@@ -128,16 +150,25 @@ class MailingList(RESTObject):
                 for entry in content['entries']]
 
     def get_held_page(self, count=50, page=1):
+        """Paginated list of held messages for the MailingList.
+
+        :param int page: Page number for paginated results.
+        :param int count: Number of results per-page for paginated results.
+        """
         url = 'lists/{0}/held'.format(self.fqdn_listname)
         return Page(self._connection, url, HeldMessage, count, page)
 
     def get_held_count(self):
-        """Get a count of held messages."""
+        """Get a count of held messages for the MailingList."""
         response, json = self._connection.call(
             'lists/{}/held/count'.format(self.fqdn_listname), None, 'GET')
         return json['count']
 
     def get_held_message(self, held_id):
+        """Get a single held message for MailingList.
+
+        :param int held_id: Held message id to get.
+        """
         url = 'lists/{0}/held/{1}'.format(self.fqdn_listname, held_id)
         return HeldMessage(self._connection, url)
 
@@ -202,6 +233,7 @@ class MailingList(RESTObject):
 
     @property
     def archivers(self):
+        """Get a list of MailingList archivers."""
         url = 'lists/{0}/archivers'.format(self.list_id)
         return ListArchivers(self._connection, url, self)
 
@@ -213,12 +245,28 @@ class MailingList(RESTObject):
         archivers.save()
 
     def add_owner(self, address, display_name=None):
+        """Add a list owner.
+
+        :param str address: Email address of the owner.
+        :param str display_name: Display name of the Owner.
+        """
         self.add_role('owner', address, display_name)
 
     def add_moderator(self, address, display_name=None):
+        """Add a list moderator.
+
+        :param str address: Email address of the moderator.
+        :param str display_name: Display name of the moderator.
+        """
         self.add_role('moderator', address, display_name)
 
     def add_role(self, role, address, display_name=None):
+        """Add a new Member with a specific role.
+
+        :param str role: The role for the new member.
+        :param str address: A valid email address for the new Member.
+        :param str display_name: An optional display name for the Member.
+        """
         data = dict(list_id=self.list_id,
                     subscriber=address,
                     display_name=display_name,
@@ -226,12 +274,25 @@ class MailingList(RESTObject):
         self._connection.call('members', data)
 
     def remove_owner(self, address):
+        """Remove a list owner.
+
+        :param str address: Email address of the owner to remove.
+        """
         self.remove_role('owner', address)
 
     def remove_moderator(self, address):
+        """Remove a list moderator.
+
+        :param str address: Email address of the moderator to remove.
+        """
         self.remove_role('moderator', address)
 
     def remove_role(self, role, address):
+        """Remove a list Member with a specific Role.
+
+        :param str role: The role for the new member.
+        :param str address: A valid email address for the new Member.
+        """
         url = 'lists/%s/%s/%s' % (
             self.fqdn_listname, role, quote_plus(address))
         self._connection.call(url, method='DELETE')
@@ -446,26 +507,41 @@ class MailingList(RESTObject):
 
     @property
     def bans(self):
+        """A list of banned addresses for this MailingList."""
         from mailmanclient.restobjects.ban import Bans
         url = 'lists/{0}/bans'.format(self.list_id)
         return Bans(self._connection, url, mlist=self)
 
     def get_bans_page(self, count=50, page=1):
+        """Get a paginated list of bans for this MailingList.
+
+        :param int page: Page number for paginated results.
+        :param int count: Number of results per-page for paginated results.
+        """
         from mailmanclient.restobjects.ban import BannedAddress
         url = 'lists/{0}/bans'.format(self.list_id)
         return Page(self._connection, url, BannedAddress, count, page)
 
     @property
     def header_matches(self):
+        """A list of header-match rules for the MailingList."""
         url = 'lists/{0}/header-matches'.format(self.list_id)
         return HeaderMatches(self._connection, url, self)
 
     @property
     def templates(self):
+        """Get a list of MailingList templates."""
         url = self._url + '/uris'
         return TemplateList(self._connection, url)
 
     def set_template(self, template_name, uri, username=None, password=None):
+        """Set a MailingList template URI.
+
+        :param str template_name: The name of the template.
+        :param str uri: The URI to fetch the template.
+        :param str username: Username for fetching template from uri.
+        :param str password: Password for fetching template from uri.
+        """
         url = self._url + '/uris'
         data = {template_name: uri}
         if username is not None and password is not None:

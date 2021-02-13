@@ -177,7 +177,12 @@ class MailingList(RESTObject):
         """See :meth:`get_requests`."""
         return self.get_requests()
 
-    def get_requests(self, token_owner=None):
+    @property
+    def unsubscription_requests(self):
+        """Get a list of subscription requests pending moderator Approval."""
+        return self.get_requests(request_type='unsubscription')
+
+    def get_requests(self, token_owner=None, request_type='subscription'):
         """Return a list of dicts with subscription requests.
 
         This is the new API for requests which allows filtering via
@@ -186,10 +191,17 @@ class MailingList(RESTObject):
 
         :param token_owner: Who owns the pending requests?  Should be one in
             'no_one', 'moderator' and 'subscriber'.
+        :param request_type: The type of pending request. Value should be in
+            'subscription' or 'unsubscription'. Defaults to 'subscription'.
         """
         url = 'lists/{0}/requests'.format(self.fqdn_listname)
+        fragments = []
         if token_owner:
-            url += '?token_owner={}'.format(token_owner)
+            fragments.append('token_owner={}'.format(token_owner))
+        if request_type:
+            fragments.append('request_type={}'.format(request_type))
+        if fragments:
+            url += '?{}'.format('&'.join(fragments))
         response, content = self._connection.call(url, None, 'GET')
         if 'entries' not in content:
             return []
@@ -485,7 +497,7 @@ class MailingList(RESTObject):
             path = 'lists/{0}/member/{1}'.format(self.list_id, email)
             self._connection.call(path, data, method='DELETE')
         except HTTPError:
-            # The member link does not exist, i.e. he is not a member
+            # The member link does not exist, i.e. they are not a member
             raise ValueError('%s is not a member address of %s' %
                              (email, self.fqdn_listname))
 

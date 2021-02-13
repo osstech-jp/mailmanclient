@@ -21,6 +21,7 @@ import time
 from urllib.error import HTTPError
 from unittest import TestCase
 from mailmanclient import Client
+from mailmanclient.restobjects.member import Member
 
 
 class TestMailingListMembershipTests(TestCase):
@@ -249,3 +250,20 @@ class TestMailingList(TestCase):
         json = self.mlist.get_request(data['token'])
         self.assertEqual(json['token_owner'], data['token_owner'])
         self.assertEqual(json['token'], data['token'])
+
+    def test_get_unsubscription_requests(self):
+        member = self.mlist.subscribe(
+            'aperson@example.com',
+            pre_confirmed=True, pre_verified=True, pre_approved=True)
+        self.assertTrue(isinstance(member, Member))
+        self.assertEqual(len(self.mlist.members), 1)
+        settings = self.mlist.settings
+        settings['unsubscription_policy'] = 'moderate'
+        settings.save()
+        # try to unsubscribe a user.
+        self.mlist.unsubscribe('aperson@example.com', pre_approved=False)
+        self.assertEqual(len(self.mlist.members), 1)
+        self.assertEqual(len(self.mlist.unsubscription_requests), 1)
+        unsub_req = self.mlist.unsubscription_requests[0]
+        self.assertEqual(unsub_req['token_owner'], 'moderator')
+        self.assertEqual(unsub_req['email'], 'aperson@example.com')

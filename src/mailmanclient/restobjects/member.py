@@ -26,7 +26,7 @@ class Member(RESTObject, PreferencesMixin):
 
     _properties = ('address', 'delivery_mode', 'email', 'list_id',
                    'moderation_action', 'display_name', 'role', 'self_link',
-                   'subscription_mode')
+                   'subscription_mode', 'member_id')
     _writable_properties = ('address', 'delivery_mode', 'moderation_action')
 
     def __repr__(self):

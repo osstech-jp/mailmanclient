@@ -12,6 +12,8 @@ NEWS for mailmanclient
 - Add support to fetch pending unsubscription requests. (Closes #63)
 - Add ``member_id`` as a property of ``Member`` object. (Closes #64)
 - Return pending token when a Member is unsubscribed. (Closes #65)
+- Allow specifying a reason when handling subscription requests (Closes #66)
+
 
 .. _news-3.3.2:
 

@@ -358,15 +358,20 @@ class MailingList(RESTObject):
         """
         return self.moderate_message(request_id, 'accept')
 
-    def moderate_request(self, request_id, action):
+    def moderate_request(self, request_id, action, reason=None):
         """
         Moderate a subscription request.
 
         :param action: accept|reject|discard|defer
         :type action: str.
+        :param reason: The reason associated with rejections.
+        :type reason: str
         """
         path = 'lists/{0}/requests/{1}'.format(self.list_id, request_id)
-        response, content = self._connection.call(path, {'action': action})
+        data = {'action': action}
+        if reason:
+            data['reason'] = reason
+        response, content = self._connection.call(path, data)
         return response
 
     def manage_request(self, token, action):

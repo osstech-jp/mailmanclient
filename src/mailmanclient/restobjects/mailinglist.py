@@ -495,7 +495,9 @@ class MailingList(RESTObject):
             data['pre_approved'] = pre_approved
         try:
             path = 'lists/{0}/member/{1}'.format(self.list_id, email)
-            self._connection.call(path, data, method='DELETE')
+            response, json = self._connection.call(path, data, method='DELETE')
+            if response.status_code == 202:
+                return json
         except HTTPError:
             # The member link does not exist, i.e. they are not a member
             raise ValueError('%s is not a member address of %s' %

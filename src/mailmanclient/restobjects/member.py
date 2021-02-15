@@ -36,9 +36,6 @@ class Member(RESTObject, PreferencesMixin):
     def __str__(self):
         return 'Member "{0}" on "{1}"'.format(self.email, self.list_id)
 
-    def __unicode__(self):
-        return u'Member "{0}" on "{1}"'.format(self.email, self.list_id)
-
     @property
     def address(self):
         from mailmanclient.restobjects.address import Address
@@ -50,7 +47,7 @@ class Member(RESTObject, PreferencesMixin):
         return User(self._connection, self.rest_data['user'])
 
     def unsubscribe(self):
-        """Unsubscribe the member from a mailing list.
-        """
-        # TODO: call .delete() instead?
-        self._connection.call(self.self_link, method='DELETE')
+        """Unsubscribe the member from a mailing list."""
+        response, json = self._connection.call(self.self_link, method='DELETE')
+        if response.status_code == 202:
+            return json

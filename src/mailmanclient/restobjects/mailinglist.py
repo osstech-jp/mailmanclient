@@ -49,7 +49,31 @@ class MailingList(RESTObject):
     @property
     def owners(self):
         """All MailingList owners."""
-        url = self._url + '/roster/owner'
+        return self.get_roster('owner')
+
+    def get_roster(self, roster, fields=None):
+        """Get roster of the MailingList.
+
+        If the fields is specified without `self_link` and `address`, they are
+        added since it is required for returning the response.
+
+        :param str roster: One of the Membership rosters from
+           'owner', 'moderator', 'member' and 'nonmember'.
+        :param List[str] fields: List of Member's fields to fetch from the
+           API. Skipping certain fields can speed up the API response
+           when they aren't required since they need to be fetched from
+           database individually.
+        """
+        url = self._url + '/roster/{}'.format(roster)
+        if fields is not None:
+            # We cannot instantiate Member object without address and
+            # self_link objects, so just add them too. They don't add
+            # a lot of overhead.
+            if 'address' not in fields:
+                fields.append('address')
+            if 'self_link' not in fields:
+                fields.append('self_link')
+            url += '?' + '&'.join('fields={}'.format(each) for each in fields)
         response, content = self._connection.call(url)
         if 'entries' not in content:
             return []
@@ -61,36 +85,17 @@ class MailingList(RESTObject):
     @property
     def moderators(self):
         """All MailingList moderators."""
-        url = self._url + '/roster/moderator'
-        response, content = self._connection.call(url)
-        if 'entries' not in content:
-            return []
-        else:
-            return [Member(self._connection, entry['self_link'], entry)
-                    for entry in sorted(content['entries'],
-                                        key=itemgetter('address'))]
+        return self.get_roster('moderator')
 
     @property
     def members(self):
         """All MailingList members."""
-        url = 'lists/{0}/roster/member'.format(self.fqdn_listname)
-        response, content = self._connection.call(url)
-        if 'entries' not in content:
-            return []
-        return [Member(self._connection, entry['self_link'], entry)
-                for entry in sorted(content['entries'],
-                                    key=itemgetter('address'))]
+        return self.get_roster('member')
 
     @property
     def nonmembers(self):
         """All MailingList non-members."""
-        url = 'lists/{0}/roster/nonmember'.format(self.fqdn_listname)
-        response, content = self._connection.call(url)
-        if 'entries' not in content:
-            return []
-        return [Member(self._connection, entry['self_link'], entry)
-                for entry in sorted(content['entries'],
-                                    key=itemgetter('address'))]
+        return self.get_roster('nonmember')
 
     def get_member_page(self, count=50, page=1, fields=None):
         """Return a paginated list of MailingList's members.
@@ -399,7 +404,7 @@ class MailingList(RESTObject):
         return self.moderate_request(request_id, 'defer')
 
     def _get_membership(self, email, role):
-        """Get a membership.
+        """Get a single membership resource.
 
         :param address: The email address of the member for this list.
         :param role: The membership role.
@@ -418,7 +423,7 @@ class MailingList(RESTObject):
                              (email, role, self.fqdn_listname))
 
     def get_member(self, email):
-        """Get a membership.
+        """Get a Member of the list.
 
         :param address: The email address of the member for this list.
         :return: A member proxy object.

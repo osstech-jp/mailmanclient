@@ -13,7 +13,7 @@ NEWS for mailmanclient
 - Add ``member_id`` as a property of ``Member`` object. (Closes #64)
 - Return pending token when a Member is unsubscribed. (Closes #65)
 - Allow specifying a reason when handling subscription requests (Closes #66)
-
+- Add support to specify fields when fetching a roster. (Closes #67)
 
 .. _news-3.3.2:
 

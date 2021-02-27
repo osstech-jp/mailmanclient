@@ -13,7 +13,6 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailmanclient.  If not, see <http://www.gnu.org/licenses/>.
-
 from urllib.error import HTTPError
 from urllib.parse import urljoin, urlencode, urlparse, urlunparse
 
@@ -35,7 +34,7 @@ class MailmanConnectionError(Exception):
 class Connection:
     """A connection to the REST client."""
 
-    def __init__(self, baseurl, name=None, password=None):
+    def __init__(self, baseurl, name=None, password=None, request_hooks=None):
         """Initialize a connection to the REST API.
 
         :param baseurl: The base url to access the Mailman 3 REST API.
@@ -43,6 +42,8 @@ class Connection:
             also be given.
         :param password: The Basic Auth password.  If given the `name` must
             also be given.
+        :param request_hooks: A list of callables that can receive the request
+            parameters and return them with some changes or unchanged.
         """
         if baseurl[-1] != '/':
             baseurl += '/'
@@ -57,6 +58,19 @@ class Connection:
             self.auth = None
         else:
             self.auth = (name, password)
+        self.request_hooks = request_hooks
+
+    def add_hooks(self, request_hooks):
+        """Add a list of hooks to an existing connection object.
+
+        :param request_hooks: A list of Request hook which receive the request
+            parameters.
+        :type request_hooks: List[callables]
+        """
+        if self.request_hooks is None:
+            self.request_hooks = request_hooks
+        else:
+            self.request_hooks.extend(request_hooks)
 
     def rewrite_url(self, url):
         """rewrite url component with self.baseurl prefix "scheme://netloc"
@@ -72,6 +86,22 @@ class Connection:
         parsed = parsed._replace(scheme=pbaseurl.scheme,
                                  netloc=pbaseurl.netloc)
         return urlunparse(parsed)
+
+    def _process_request_hooks(self, params):
+        """Given the request parameters, pass them through the list of hooks.
+
+        Hooks are simple callables that are provided with request parameters
+        and return the same parameters, possibly with some modification or not.
+
+        :param params: The HTTP request parameters.
+        :returns: The HTTP request parameters.
+        """
+        for hook in self.request_hooks:
+            try:
+                params = hook(params)
+            except Exception:
+                print('[DEBUG] Failed to run hook {hook}')
+        return params
 
     def call(self, path, data=None, method=None):
         """Make a call to the Mailman REST API.
@@ -103,13 +133,15 @@ class Connection:
         method = method.upper()
         url = urljoin(self.baseurl, path)
         url = self.rewrite_url(url)
+        request_params = dict(url=url,
+                              auth=self.auth,
+                              method=method,
+                              data=data_str,
+                              headers=headers)
+        if self.request_hooks:
+            request_params = self._process_request_hooks(request_params)
         try:
-            response = request(
-                url=url,
-                auth=self.auth,
-                method=method,
-                data=data_str,
-                headers=headers)
+            response = request(**request_params)
             # content = response.content
             # If we did not get a 2xx status code, make this look like a
             # urllib2 exception, for backward compatibility.

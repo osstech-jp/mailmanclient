@@ -34,7 +34,7 @@ python3.9:
 
 lint:
   script:
-    - tox -e lint
+    - tox -e qa
   except:
     variables:
       - $CORE_COMMIT_SHA

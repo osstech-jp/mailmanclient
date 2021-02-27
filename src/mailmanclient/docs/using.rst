@@ -1400,8 +1400,10 @@ Each configuration object is a dictionary and you can iterate over them
      >>> for key in sorted(cfg['mailman']):
      ...     print('{} : {}'.format(key, cfg['mailman'][key]))
      cache_life : 7d
+     check_max_size_on_filtered_message : no
      default_language : en
      email_commands_max_lines : 10
+     filter_report : no
      filtered_messages_are_preservable : no
      hold_digest : no
      html_to_plain_text_command : /usr/bin/lynx -dump $filename

@@ -91,7 +91,7 @@ class Client:
            parameters. ``params`` is the list of request parameters before the
            request is made.
         """
-        self._connection.add_hook(request_hooks=request_hooks)
+        self._connection.add_hooks(request_hooks=request_hooks)
 
     @property
     def system(self):

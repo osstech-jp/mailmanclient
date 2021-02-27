@@ -65,3 +65,42 @@ class TestUrlencodedPaths(unittest.TestCase):
                 address='somperson?123@example.com', role='moderator')
         except HTTPError:
             self.fail('Unexpected HTTPError.')
+
+
+class TestHooks(unittest.TestCase):
+
+    def test_initialize_with_hooks(self):
+        # Test that we can initialize mailmanclient with hooks.
+        calls = []
+
+        def store_calls(params):
+            calls.append(params)
+            return params
+        client = Client(
+            'http://localhost:9001/3.1', 'restadmin', 'restpass',
+            request_hooks=[store_calls])
+        # Make *any* API call.
+        client.domains
+        # Now make sure the call was stored.
+        self.assertEqual(len(calls), 1)
+        params = calls[0]
+        self.assertEqual(
+            params.get('url'), 'http://localhost:9001/3.1/domains')
+
+    def test_add_hooks(self):
+        calls = []
+
+        def store_calls(params):
+            calls.append(params)
+            return params
+        client = Client(
+            'http://localhost:9001/3.1', 'restadmin', 'restpass')
+        # Make *any* API call.
+        client.domains
+        # Now make sure the call was not stored.
+        self.assertEqual(len(calls), 0)
+        client.add_hooks([store_calls])
+        # Now make another API call.
+        client.lists
+        params = calls[0]
+        self.assertEqual(params.get('url'), 'http://localhost:9001/3.1/lists')

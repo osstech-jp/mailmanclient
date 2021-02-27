@@ -14,6 +14,8 @@ NEWS for mailmanclient
 - Return pending token when a Member is unsubscribed. (Closes :issue:`65`)
 - Allow specifying a reason when handling subscription requests (Closes :issue:`66`)
 - Add support to specify fields when fetching a roster. (Closes :issue:`67`)
+- Add a mechanism to hook into the request parameters. (Closes :issue:`68`)
+
 
 .. _news-3.3.2:
 

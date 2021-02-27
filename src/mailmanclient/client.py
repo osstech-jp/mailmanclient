@@ -16,8 +16,6 @@
 
 """Client code."""
 
-from __future__ import absolute_import, unicode_literals
-
 import warnings
 from operator import itemgetter
 
@@ -50,19 +48,50 @@ class Client:
     """Access the Mailman REST API root.
 
     :param baseurl: The base url to access the Mailman 3 REST API.
+    :type baseurl: str
     :param name: The Basic Auth user name.  If given, the `password` must
         also be given.
+    :type name: str
     :param password: The Basic Auth password.  If given the `name` must
         also be given.
+    :type password: str
+    :param request_hooks: Callable hooks to process request parameters before
+        being sent to Core's API.
+    :type request_hooks: List[callables]
     """
 
-    def __init__(self, baseurl, name=None, password=None):
+    def __init__(self, baseurl, name=None, password=None, request_hooks=None):
         """Initialize client access to the REST API."""
-        self._connection = Connection(baseurl, name, password)
+        self._connection = Connection(baseurl, name, password, request_hooks)
 
     def __repr__(self):
         return '<Client ({0.name}:{0.password}) {0.baseurl}>'.format(
             self._connection)
+
+    def add_hooks(self, request_hooks):
+        """Add a hook to process connections to Mailman's API.
+
+        Hooks are callables that are passed in the parameters of HTTP call made
+        to Mailman Core' RESt API and are expected to return the same number of
+        parameters back. This can be useful to manipulate parameters and update
+        them, or simply log each call to API.
+        ::
+
+            from mailmanclient.client import Client
+            client = Client('http://localhost:8001/3.1', <user>, <password>)
+
+            def sample_hook(params):
+                print(f'Request params are {params}')
+                return params
+
+            client.add_hook([sample_hook])
+
+
+        :param request_hooks: A list of callables that take in a dictionary of
+           parameters. ``params`` is the list of request parameters before the
+           request is made.
+        """
+        self._connection.add_hook(request_hooks=request_hooks)
 
     @property
     def system(self):

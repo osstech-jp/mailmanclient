@@ -61,6 +61,11 @@ setup(
             'falcon>1.4.1',
             'httpx',
             ],
+        'docs': [
+            'sphinx',
+            'sphinx-rtd-theme',
+            'sphinx-issues',
+        ],
         'lint': [
             'flake8>3.0',
             'flake8-bugbear',

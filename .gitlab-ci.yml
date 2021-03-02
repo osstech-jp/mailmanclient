@@ -39,9 +39,9 @@ lint:
     variables:
       - $CORE_COMMIT_SHA
 
-async:
+mypy:
   script:
-    - tox -e async
+    - tox -e mypy
   except:
     variables:
       - $CORE_COMMIT_SHA

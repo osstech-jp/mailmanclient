@@ -39,6 +39,13 @@ lint:
     variables:
       - $CORE_COMMIT_SHA
 
+async:
+  script:
+    - tox -e async
+  except:
+    variables:
+      - $CORE_COMMIT_SHA
+
 docs:
   script:
     - tox -e docs

@@ -15,6 +15,7 @@ NEWS for mailmanclient
 - Allow specifying a reason when handling subscription requests (Closes :issue:`66`)
 - Add support to specify fields when fetching a roster. (Closes :issue:`67`)
 - Add a mechanism to hook into the request parameters. (Closes :issue:`68`)
+- Add basic support for async client for Mailman API.
 
 
 .. _news-3.3.2:

@@ -15,7 +15,7 @@ To run the test suite, run::
 
 To run tests for only one version of Python, you can run::
 
-  $ tox -e py36
+  $ tox -e py39
   
 ``pytest`` starts Mailman Core using ``pytest-services`` plugin and
 automatically manages it's start and stop cycle for every module.

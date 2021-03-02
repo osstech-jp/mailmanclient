@@ -103,21 +103,7 @@ class Connection:
                 print('[DEBUG] Failed to run hook {hook}')
         return params
 
-    def call(self, path, data=None, method=None):
-        """Make a call to the Mailman REST API.
-
-        :param path: The url path to the resource.
-        :type path: str
-        :param data: Data to send, implies POST (default) or PUT.
-        :type data: dict
-        :param method: The HTTP method to call.  Defaults to GET when `data`
-            is None or POST if `data` is given.
-        :type method: str
-        :return: The response content, which will be None, a dictionary, or a
-            list depending on the actual JSON type returned.
-        :rtype: None, list, dict
-        :raises HTTPError: when a non-2xx status code is returned.
-        """
+    def _prepare_request(self, path, data, method):
         headers = {
             'User-Agent': 'GNU Mailman REST client v{0}'.format(__version__),
             }
@@ -133,15 +119,30 @@ class Connection:
         method = method.upper()
         url = urljoin(self.baseurl, path)
         url = self.rewrite_url(url)
-        request_params = dict(url=url,
-                              auth=self.auth,
-                              method=method,
-                              data=data_str,
-                              headers=headers)
+        return dict(url=url, method=method, data=data_str,
+                    headers=headers)
+
+    def call(self, path, data=None, method=None):
+        """Make a call to the Mailman REST API.
+
+        :param path: The url path to the resource.
+        :type path: str
+        :param data: Data to send, implies POST (default) or PUT.
+        :type data: dict
+        :param method: The HTTP method to call.  Defaults to GET when `data`
+            is None or POST if `data` is given.
+        :type method: str
+        :return: The response content, which will be None, a dictionary, or a
+            list depending on the actual JSON type returned.
+        :rtype: None, list, dict
+        :raises HTTPError: when a non-2xx status code is returned.
+        """
+        params = self._prepare_request(path, data, method)
         if self.request_hooks:
-            request_params = self._process_request_hooks(request_params)
+            params = self._process_request_hooks(params)
+
         try:
-            response = request(**request_params)
+            response = request(**params, auth=self.auth)
             # content = response.content
             # If we did not get a 2xx status code, make this look like a
             # urllib2 exception, for backward compatibility.
@@ -156,7 +157,7 @@ class Connection:
                 except (KeyError, ValueError):
                     error_msg = response.text
 
-                raise HTTPError(url, response.status_code,
+                raise HTTPError(params.get('url'), response.status_code,
                                 error_msg, response, None)
             if len(response.content) == 0:
                 return response, None

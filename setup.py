@@ -51,13 +51,15 @@ setup(
     ],
     install_requires=[
         'requests',
+        'typing_extensions;python_version<"3.8"',
         ],
     extras_require={
         'testing': [
             'pytest',
             'pytest-services',
             'mailman>=3.3.1',
-            'falcon==1.4.1',
+            'falcon>1.4.1',
+            'httpx',
             ],
         'lint': [
             'flake8>3.0',

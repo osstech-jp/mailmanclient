@@ -62,12 +62,22 @@ JSON_CONTENT_TYPE = 'application/json'
 
 
 class AsyncClient:
-    """Provide an Idiomatic API for Mailman Core
+    """Provide an Idiomatic API for Mailman Core.
+
+
+    It requires an HTTP client instance as the first argument. You can use any
+    client which has a ``.request()`` method and accepts named parameters
+    ``url``, ``path``, ``auth``, ``method`` and ``data``. ``data`` is supposed
+    to be a dictionary of parameters to be passed to the HTTP request and the
+    rest are string parameters with their usual meaning.
+
+    The parameters are based off on httpx python library.
 
     :param client: Http client object with an async request method.
     :param base_url: Base URL to Core's API.
     :param user: Core admin username.
     :param password: Core admin password.
+
     """
 
     def __init__(

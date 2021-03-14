@@ -440,7 +440,8 @@ class MailingList(RESTObject):
 
     def subscribe(self, address, display_name=None, pre_verified=False,
                   pre_confirmed=False, pre_approved=False, invitation=False,
-                  send_welcome_message=None):
+                  send_welcome_message=None, delivery_mode=None,
+                  delivery_status=None):
         """Subscribe an email address to a mailing list.
 
         :param address: Email address to subscribe to the list.
@@ -457,6 +458,12 @@ class MailingList(RESTObject):
         :type invitation: bool
         :param send_welcome_message: True if welcome message should be sent.
         :type send_welcome_message: bool
+        :param delivery_mode: Delivery mode of the Member.
+        :type delivery_mode: str. One between 'regular', 'plaintext_digests',
+            'mime_digests', 'summary_digests'.
+        :param delivery_status: Delivery status of the Member.
+        :type delivery_status: str. One between 'enabled', 'by_owner',
+            'by_moderator', 'by_user'.
         :return: A member proxy object.
         """
         data = dict(
@@ -473,6 +480,10 @@ class MailingList(RESTObject):
             data['pre_approved'] = True
         if invitation:
             data['invitation'] = True
+        if delivery_mode:
+            data['delivery_mode'] = delivery_mode
+        if delivery_status:
+            data['delivery_status'] = delivery_status
         # Even if it is False, we should send this value because it means we
         # should suppress welcome message, so check for None value to skip the
         # parameter.

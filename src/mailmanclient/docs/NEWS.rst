@@ -16,7 +16,8 @@ NEWS for mailmanclient
 - Add support to specify fields when fetching a roster. (Closes :issue:`67`)
 - Add a mechanism to hook into the request parameters. (Closes :issue:`68`)
 - Add basic support for async client for Mailman API.
-
+- Allow specifying ``delivery_mode`` and ``delivery_status`` when subscribing
+  a Member. (Closes :issue:`78`)
 
 .. _news-3.3.2:
 
@@ -63,7 +64,7 @@ NEWS for mailmanclient
 * Add support to mass unsubscribe memebrs from a Mailing List. (Closes :issue:`43`)
 * Add support to set a user's preferred address. (See :pr:`99`)
 * Add a new ``tag`` attribute to HeaderMatches and support to find a set
-	of matches based on tag.
+    of matches based on tag.
 
 3.2.2 (2019-02-09)
 ==================
@@ -77,7 +78,7 @@ NEWS for mailmanclient
   part of ``Preferences`` object, which would mean an additional API call to get
   the description of a Mailing List. (Closes :issue:`35`)
 * ``MailingList.get_members`` no longer requires ``address`` as a mandatory
-  argument which allows searching for all memberships of of a particular role. 
+  argument which allows searching for all memberships of of a particular role.
   Also, ``role`` no longer has a default argument, so that we can search for
   all memberships of an address.
 

@@ -472,7 +472,7 @@ class Client:
                 for entry in content['entries']
                 if not mail_host or entry['mail_host'] == mail_host]
 
-    def find_users(self, query, count=50, page=1):
+    def find_users(self, query):
         """Find users with query string matching display name and emails.
 
         :param str query: The string to search for. The search string is case
@@ -486,3 +486,14 @@ class Client:
             return []
         return [User(self._connection, entry['self_link'], entry)
                 for entry in content['entries']]
+
+    def find_users_page(self, query, count, page):
+        """Same as :py:meth:`find_users` but allows for pagination.
+
+        :param str query: The string to search for. The search string is case
+            insensitive as core doens't care about the case.
+        :param int count: Number of entries per-page (defaults to 50).
+        :param int page: The page number to return (defaults to 1).
+        """
+        url = 'users/find?q={}'.format(query)
+        return Page(self._connection, url, User, count, page)

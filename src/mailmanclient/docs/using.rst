@@ -1365,6 +1365,7 @@ configuration options are read-only.
     logging.runner
     logging.smtp
     logging.subscribe
+    logging.task
     logging.vette
     mailman
     mta
@@ -1388,6 +1389,7 @@ configuration options are read-only.
     runner.rest
     runner.retry
     runner.shunt
+    runner.task
     runner.virgin
     shell
     styles
@@ -1399,6 +1401,7 @@ Each configuration object is a dictionary and you can iterate over them
 
      >>> for key in sorted(cfg['mailman']):
      ...     print('{} : {}'.format(key, cfg['mailman'][key]))
+     anonymous_list_keep_headers : ...
      cache_life : 7d
      check_max_size_on_filtered_message : no
      default_language : en
@@ -1410,10 +1413,12 @@ Each configuration object is a dictionary and you can iterate over them
      layout : here
      listname_chars : [-_.0-9a-z]
      masthead_threshold : 4
+     moderator_request_life : 180d
      noreply_address : noreply
      pending_request_life : 3d
      post_hook :
      pre_hook :
+     run_tasks_every : 1h
      self_link : http://localhost:9001/3.1/system/configuration/mailman
      sender_headers : from from_ reply-to sender
      site_owner : changeme@example.com

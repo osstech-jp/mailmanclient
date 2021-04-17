@@ -471,3 +471,18 @@ class Client:
         return [MailingList(self._connection, entry['self_link'], entry)
                 for entry in content['entries']
                 if not mail_host or entry['mail_host'] == mail_host]
+
+    def find_users(self, query, count=50, page=1):
+        """Find users with query string matching display name and emails.
+
+        :param str query: The string to search for. The search string is case
+            insensitive as core doens't care about the case.
+        :param int count: Number of entries per-page (defaults to 50).
+        :param int page: The page number to return (defaults to 1).
+        """
+        url = 'users/find?q={}'.format(query)
+        response, content = self._connection.call(url)
+        if 'entries' not in content:
+            return []
+        return [User(self._connection, entry['self_link'], entry)
+                for entry in content['entries']]

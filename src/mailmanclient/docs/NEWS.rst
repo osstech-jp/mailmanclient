@@ -18,6 +18,8 @@ NEWS for mailmanclient
 - Add basic support for async client for Mailman API.
 - Allow specifying ``delivery_mode`` and ``delivery_status`` when subscribing
   a Member. (Closes :issue:`78`)
+- Add a new ``Client.find_users`` API which allows searching for the
+  users. (Closes :issue:`71`)
 
 .. _news-3.3.2:
 

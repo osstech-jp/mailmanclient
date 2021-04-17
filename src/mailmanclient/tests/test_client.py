@@ -32,6 +32,8 @@ class TestUrlencodedPaths(unittest.TestCase):
 
     def tearDown(self):
         self.domain.delete()
+        for user in self._client.users:
+            user.delete()
 
     def test_bans_paths_are_urlencoded_when_needed(self):
         # Test that we can ban regular expressions.
@@ -104,3 +106,28 @@ class TestHooks(unittest.TestCase):
         client.lists
         params = calls[0]
         self.assertEqual(params.get('url'), 'http://localhost:9001/3.1/lists')
+
+
+class TestFindUsers(unittest.TestCase):
+
+    def setUp(self):
+        self._client = Client(
+            'http://localhost:9001/3.1', 'restadmin', 'restpass')
+
+    def tearDown(self):
+        for user in self._client.users:
+            user.delete()
+
+    def test_find_users(self):
+        self._client.create_user('anne@example.com', 'xxx', 'Anne Person')
+        self._client.create_user('bart@example.com', 'xxx', 'Bee Person')
+        # Make sure the users are created.
+        self.assertEqual(len(self._client.users), 2)
+        # Now search for the user.
+        users = self._client.find_users('bee')
+        self.assertEqual(len(users), 1)
+        self.assertEqual(users[0].display_name, 'Bee Person')
+        # search for the email.
+        users = self._client.find_users('ne@ex')
+        self.assertEqual(len(users), 1)
+        self.assertEqual(users[0].display_name, 'Anne Person')

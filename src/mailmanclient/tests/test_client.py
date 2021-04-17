@@ -113,14 +113,14 @@ class TestFindUsers(unittest.TestCase):
     def setUp(self):
         self._client = Client(
             'http://localhost:9001/3.1', 'restadmin', 'restpass')
+        self._client.create_user('anne@example.com', 'xxx', 'Anne Person')
+        self._client.create_user('bart@example.com', 'xxx', 'Bee Person')
 
     def tearDown(self):
         for user in self._client.users:
             user.delete()
 
     def test_find_users(self):
-        self._client.create_user('anne@example.com', 'xxx', 'Anne Person')
-        self._client.create_user('bart@example.com', 'xxx', 'Bee Person')
         # Make sure the users are created.
         self.assertEqual(len(self._client.users), 2)
         # Now search for the user.
@@ -130,4 +130,14 @@ class TestFindUsers(unittest.TestCase):
         # search for the email.
         users = self._client.find_users('ne@ex')
         self.assertEqual(len(users), 1)
+        self.assertEqual(users[0].display_name, 'Anne Person')
+
+    def test_find_user_page(self):
+        self.assertEqual(len(self._client.users), 2)
+        # Now search for the user.
+        users = self._client.find_users_page('person', count=1, page=1)
+        # We should've got only single user with count=1.
+        self.assertEqual(len(users), 1)
+        # Total results should be 2.
+        self.assertEqual(users.total_size, 2)
         self.assertEqual(users[0].display_name, 'Anne Person')

@@ -5,7 +5,7 @@ NEWS for mailmanclient
 
 .. _news-3.3.3:
 
-3.3.3 (2021-XX-XX)
+3.3.3 (2021-09-02)
 ==================
 - Add ``pre_confirmed`` and ``pre_approved`` parameters to
   ``MailingList.unsubscribe``. (Fixes :issue:`62`)

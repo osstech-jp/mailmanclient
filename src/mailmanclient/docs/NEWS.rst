@@ -20,6 +20,7 @@ NEWS for mailmanclient
   a Member. (Closes :issue:`78`)
 - Add a new ``Client.find_users`` API which allows searching for the
   users. (Closes :issue:`71`)
+- Add bounce parameters in Member resource.
 
 .. _news-3.3.2:
 

@@ -1314,6 +1314,7 @@ configuration options are read-only.
     dmarc
     language.ar
     language.ast
+    language.bg
     language.ca
     language.cs
     language.da

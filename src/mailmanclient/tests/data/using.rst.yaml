@@ -4579,7 +4579,7 @@ interactions:
     body: {string: '{"http_etag": "\"d0de6b8bc582d17d16b96c7cecd7316bce83604f\"",
         "sections": ["antispam", "archiver.mail_archive", "archiver.master", "archiver.mhonarc",
         "archiver.prototype", "bounces", "database", "devmode", "digests", "dmarc",
-        "language.ar", "language.ast", "language.ca", "language.cs", "language.da",
+        "language.ar", "language.ast", "language.bg", "language.ca", "language.cs", "language.da",
         "language.de", "language.el", "language.en", "language.es", "language.et",
         "language.eu", "language.fi", "language.fr", "language.gl", "language.he",
         "language.hr", "language.hu", "language.ia", "language.it", "language.ja",

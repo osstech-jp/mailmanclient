@@ -65,6 +65,7 @@ setup(
             'sphinx',
             'sphinx-rtd-theme',
             'sphinx-issues',
+            'pydoctor',
         ],
         'lint': [
             'flake8>3.0',

@@ -10,3 +10,4 @@ Contents
    :maxdepth: 2
 
    src/mailmanclient/docs/*
+   src/mailmanclient/docs/api/index

@@ -1,4 +1,3 @@
-import sys
 import httpx
 import pytest
 import pytest_asyncio
@@ -8,7 +7,7 @@ from mailmanclient.asynclient import AsyncClient
 from mailmanclient import Client
 
 
-if sys.hexversion < 0x30700a0:
+if pytest_asyncio.__version__ < '0.17':
     pytest_asyncio.fixture = pytest.fixture
 
 

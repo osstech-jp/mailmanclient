@@ -3,6 +3,12 @@ NEWS for mailmanclient
 =======================
 
 
+.. _news-3-3-4:
+
+3.3.4 (xxxx-xx-xx)
+==================
+- URL quote the query in find_user* methods. (Fixes :issue:`75`)
+
 .. _news-3.3.3:
 
 3.3.3 (2021-09-02)

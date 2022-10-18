@@ -18,6 +18,7 @@
 
 import warnings
 from operator import itemgetter
+from urllib.parse import quote
 
 from mailmanclient.constants import (MISSING)
 from mailmanclient.restobjects.address import Address
@@ -248,7 +249,8 @@ class Client:
         return self.get_list(fqdn_listname).get_member(subscriber_address)
 
     def get_nonmember(self, fqdn_listname, nonmember_address):
-        """Get the Member object for a given MailingList and Non-member's Email.
+        """Get the Member object for a given MailingList and Non-member's
+        Email.
 
         :param str fqdn_listname: Fully qualified address for the MailingList.
         :param str subscriber_address: Email Address for the non-member.
@@ -446,8 +448,8 @@ class Client:
 
     def find_lists(self, subscriber, role=None, count=50, page=1,
                    mail_host=None):
-        """Given a subscriber and a role, return all the list they are subscribed
-        to with given role.
+        """Given a subscriber and a role, return all the list they are
+        subscribed to with given role.
 
         If no role is specified all the related mailing lists are returned
         without duplicates, even though there can potentially be multiple
@@ -480,7 +482,7 @@ class Client:
         :param int count: Number of entries per-page (defaults to 50).
         :param int page: The page number to return (defaults to 1).
         """
-        url = 'users/find?q={}'.format(query)
+        url = 'users/find?q={}'.format(quote(query))
         response, content = self._connection.call(url)
         if 'entries' not in content:
             return []
@@ -495,5 +497,5 @@ class Client:
         :param int count: Number of entries per-page (defaults to 50).
         :param int page: The page number to return (defaults to 1).
         """
-        url = 'users/find?q={}'.format(query)
+        url = 'users/find?q={}'.format(quote(query))
         return Page(self._connection, url, User, count, page)

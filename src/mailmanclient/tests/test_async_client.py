@@ -1,12 +1,18 @@
+import sys
 import httpx
 import pytest
+import pytest_asyncio
 import concurrent.futures
 
 from mailmanclient.asynclient import AsyncClient
 from mailmanclient import Client
 
 
-@pytest.fixture(autouse=True)
+if sys.hexversion < 0x30700a0:
+    pytest_asyncio.fixture = pytest.fixture
+
+
+@pytest_asyncio.fixture(autouse=True)
 def setup():
     """Setup for testing. Create test data."""
     client = Client('http://localhost:9001/3.1', 'restadmin', 'restpass')
@@ -43,7 +49,7 @@ def setup():
     domain.delete()
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def client():
     async with httpx.AsyncClient() as conn:
         client = AsyncClient(

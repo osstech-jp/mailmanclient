@@ -15,11 +15,11 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with mailman.client.  If not, see <http://www.gnu.org/licenses/>.
 
+from setuptools import find_packages, setup
+
 from setup_helpers import get_version, require_python
-from setuptools import setup, find_packages
 
-
-require_python(0x30500f0)
+require_python(0x30600f0)
 __version__ = get_version('src/mailmanclient/constants.py')
 
 
@@ -44,9 +44,10 @@ setup(
     classifiers=[
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)', # noqa
         'Operating System :: POSIX',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Topic :: Internet :: WWW/HTTP ',
     ],
     install_requires=[

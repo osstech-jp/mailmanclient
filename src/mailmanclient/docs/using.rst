@@ -424,9 +424,9 @@ The membership object's ``user`` attribute will return a User object:
 
 If you use an address which is not a member of test_two `ValueError` is raised:
 
-    >>> test_two.unsubscribe('nomember@example.com')
-    Traceback (most recent call last):
-    ...
+    >>> from mailmanclient.testing.documentation import print_exception
+    >>> with print_exception():
+    ...     test_two.unsubscribe('nomember@example.com')
     ValueError: nomember@example.com is not a member address of test-2@example.com
 
 After a while, Anna decides to unsubscribe from the Test One mailing list,
@@ -452,9 +452,8 @@ A little later, Cris decides to unsubscribe from the Test Two mailing list.
 If you try to unsubscribe an address which is not a member address
 `ValueError` is raised:
 
-    >>> test_one.unsubscribe('nomember@example.com')
-    Traceback (most recent call last):
-    ...
+    >>> with print_exception():
+    ...     test_one.unsubscribe('nomember@example.com')
     ValueError: nomember@example.com is not a member address of test-1@example.com
 
 If we want to mass unsubscribe users.
@@ -591,10 +590,9 @@ Trying to add an existing address will raise an error:
     ...                           display_name='Dana')
     >>> print(dana.display_name)
     Dana
-    >>> cris.add_address('dana@example.org')  # doctest: +IGNORE_EXCEPTION_DETAIL
-    Traceback (most recent call last):
-    ...
-    HTTPError: HTTP Error 400: Address already exists
+    >>> with print_exception():
+    ...     cris.add_address('dana@example.org')  # doctest: +IGNORE_EXCEPTION_DETAIL
+    HTTPError: HTTP Error 400: Address belongs to other user
 
 This can be overridden by using the ``absorb_existing`` flag:
 

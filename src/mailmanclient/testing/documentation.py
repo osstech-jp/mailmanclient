@@ -17,9 +17,8 @@
 
 """Harness for testing Mailman's documentation."""
 
-from __future__ import absolute_import, print_function, unicode_literals
+from contextlib import contextmanager
 
-__metaclass__ = type
 __all__ = [
     'dump',
     ]
@@ -38,3 +37,11 @@ def dump(results):
                     print('    {0}: {1}'.format(entry_key, entry[entry_key]))
         else:
             print('{0}: {1}'.format(key, results[key]))
+
+
+@contextmanager
+def print_exception(*args, **kw):
+    try:
+        yield
+    except Exception as ex:
+        print(f'{type(ex).__name__}: {ex}')

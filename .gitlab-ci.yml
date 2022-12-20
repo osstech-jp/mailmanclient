@@ -32,9 +32,16 @@ python3.9:
     variables:
       - $CORE_COMMIT_SHA
 
+# python3.11:
+#   script:
+#     - tox -e py311
+#   except:
+#     variables:
+#       - $CORE_COMMIT_SHA
+
 lint:
   script:
-    - tox -e qa
+    - tox -e lint
   except:
     variables:
       - $CORE_COMMIT_SHA

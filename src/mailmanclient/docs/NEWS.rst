@@ -9,6 +9,7 @@ NEWS for mailmanclient
 ==================
 - URL quote the query in find_user* methods. (Fixes :issue:`75`)
 - Add support for Python 3.10 and drops support for 3.6.
+- Add support for Python 3.11.
 
 .. _news-3.3.3:
 

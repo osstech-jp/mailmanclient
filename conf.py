@@ -12,10 +12,9 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
 import os
 import pathlib
-
+import sys
 
 # Configure intersphinx magic
 intersphinx_mapping = {
@@ -43,7 +42,6 @@ sys.path.insert(0, APP_ROOT)
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.viewcode',
-              'sphinx_rtd_theme',
               'sphinx_issues',
               'sphinx.ext.intersphinx',
               'pydoctor.sphinx_ext.build_apidocs',
@@ -70,7 +68,8 @@ copyright = u'2012-2019, The Free Software Foundation'
 # built documents.
 #
 # The short X.Y version.
-from setup_helpers import get_version                           # noqa
+from setup_helpers import get_version  # noqa
+
 _version = get_version('src/mailmanclient/constants.py')
 version = '.'.join(_version.split('.')[0:2])
 # The full version, including alpha/beta/rc tags.
@@ -135,7 +134,7 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'furo'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

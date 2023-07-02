@@ -1356,6 +1356,7 @@ configuration options are read-only.
     logging.debug
     logging.error
     logging.fromusenet
+    logging.gunicorn
     logging.http
     logging.locks
     logging.mischief

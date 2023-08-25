@@ -11,20 +11,6 @@ python3.10:
     variables:
       - $CORE_COMMIT_SHA
 
-python3.7:
-  script:
-    - tox -e py37
-  except:
-    variables:
-      - $CORE_COMMIT_SHA
-
-python3.8:
-  script:
-    - tox -e py38
-  except:
-    variables:
-      - $CORE_COMMIT_SHA
-
 python3.9:
   script:
     - tox -e py39

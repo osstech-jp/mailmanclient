@@ -7,6 +7,7 @@ NEWS for mailmanclient
 3.3.5 (2023-01-04)
 ==================
 - Add support for Python 3.11.
+- Remove support for Python 3.7 & 3.8. (See !181)
 
 
 .. _news-3-3-4:

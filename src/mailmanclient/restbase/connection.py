@@ -18,6 +18,11 @@ from urllib.parse import urljoin, urlencode, urlparse, urlunparse
 
 from requests import request
 
+import requests_unixsocket
+import urllib.parse
+if 'http+unix' not in urllib.parse.uses_relative:
+    urllib.parse.uses_relative.append('http+unix')
+
 from mailmanclient.constants import __version__
 
 __metaclass__ = type
@@ -142,7 +147,11 @@ class Connection:
             params = self._process_request_hooks(params)
 
         try:
-            response = request(**params, auth=self.auth)
+            if params.get('url', '').startswith('http+unix:'):
+                session = requests_unixsocket.Session()
+                response = session.request(**params, auth=self.auth)
+            else:
+                response = request(**params, auth=self.auth)
             # content = response.content
             # If we did not get a 2xx status code, make this look like a
             # urllib2 exception, for backward compatibility.
